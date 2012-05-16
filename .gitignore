@@ -1,4 +1,5 @@
 *.out
 .htconfig.php
 #*
+favicon.*
 
