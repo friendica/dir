@@ -52,6 +52,8 @@ function directory_content(&$a) {
 	if($forums)
 		$sql_extra .= " and comm = 1 "; 
 
+	$sql_extra = str_replace('%','%%',$sql_extra);
+
 	$r = q("SELECT COUNT(*) AS `total` FROM `profile` WHERE `censored` = 0 $sql_extra ");
 	if(count($r))
 		$a->set_pager_total($r[0]['total']);
@@ -90,11 +92,11 @@ function directory_content(&$a) {
 			}
 
 			if(strlen($rr['gender']))
-				$details .= '<br />' . t('Gender: ') . t($rr['gender']) ;
+				$details .= '<br />' . t('Gender: ') . $rr['gender'] ;
 
 			$o .= replace_macros($tpl,array(
 				'$id' => $rr['id'],
-				'$mod' => '<div class="moderate"><a href="flag/' . $rr['id'] . '" title="Flag this entry" ><img src="images/shield_2_16.png" alt="Flag this entry" title="Flag this entry"></a></div>',
+				'$mod' => '<div class="moderate"><a href="flag/' . $rr['id'] . '" title="' . t('Flag this entry') . '" ><img src="images/shield_2_16.png" alt="' . t('Flag this entry') . '" title="' . t('Flag this entry') . '"></a></div>',
 				'$star' => (($rr['tags']) ? '<div class="star" title="' . strip_tags($rr['tags']) . '"></div>' : ''),
 				'$profile-link' => zrl($rr['homepage']),
 				'$photo' => (($rr['photo']) ? $rr['photo'] : $a->get_baseurl() . '/photo/' . $rr['id']),
@@ -103,7 +105,7 @@ function directory_content(&$a) {
 				'$pclass' => (($rr['comm']) ? ' group' : ''),
 				'$pgroup' => (($rr['comm']) ? '<div class="directory-group">' . t('[Public Group]') . '</div>' : ''),
 				'$details' => $pdesc . $details,
-				'$marital' => ((strlen($rr['marital'])) ? '<div class="marital"><span class="marital-label"><span class="heart">&hearts;</span> Status: </span><span class="marital-text">' . $rr['marital'] . '</span></div>' : '')
+				'$marital' => ((strlen($rr['marital'])) ? '<div class="marital"><span class="marital-label"><span class="heart">&hearts;</span> ' . t('Status:') . ' </span><span class="marital-text">' . $rr['marital'] . '</span></div>' : '')
   
 
 

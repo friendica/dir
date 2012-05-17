@@ -1,0 +1,569 @@
+# FRIENDICA Global Directory
+# Copyright (C) 2010-2012 the Friendica Project
+# This file is distributed under the same license as the Friendica Directory package.
+# Mike Macgirvin, 2010
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-05-16 18:26-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../mod/siteinfo.php:37
+msgid "Site Name"
+msgstr ""
+
+#: ../../mod/siteinfo.php:38
+msgid "Registration"
+msgstr ""
+
+#: ../../mod/siteinfo.php:39
+msgid "Additional Info"
+msgstr ""
+
+#: ../../mod/siteinfo.php:40
+msgid "Version"
+msgstr ""
+
+#: ../../mod/siteinfo.php:41
+msgid "Plugins Installed"
+msgstr ""
+
+#: ../../mod/siteinfo.php:42
+msgid "Site Administrator"
+msgstr ""
+
+#: ../../mod/siteinfo.php:43
+msgid "Record Updated (UTC)"
+msgstr ""
+
+#: ../../mod/settings.php:7 ../../mod/settings.php:19
+#: ../../mod/settings.php:23 ../../mod/settings.php:163
+#: ../../mod/viewcontacts.php:14 ../../mod/profile_photo.php:20
+#: ../../mod/profile_photo.php:141 ../../mod/wall_upload.php:8
+#: ../../index.php:84
+msgid "Permission denied."
+msgstr ""
+
+#: ../../mod/settings.php:33
+msgid "Passwords do not match. Password unchanged."
+msgstr ""
+
+#: ../../mod/settings.php:38
+msgid "Empty passwords are not allowed. Password unchanged."
+msgstr ""
+
+#: ../../mod/settings.php:48
+msgid "Password changed."
+msgstr ""
+
+#: ../../mod/settings.php:50
+msgid "Password update failed. Please try again."
+msgstr ""
+
+#: ../../mod/settings.php:82
+msgid " Please use a shorter name."
+msgstr ""
+
+#: ../../mod/settings.php:84
+msgid " Name too short."
+msgstr ""
+
+#: ../../mod/settings.php:89
+msgid " Not valid email."
+msgstr ""
+
+#: ../../mod/settings.php:95
+msgid " This email address is already registered."
+msgstr ""
+
+#: ../../mod/settings.php:151
+msgid "Settings updated."
+msgstr ""
+
+#: ../../mod/settings.php:222
+msgid "Default Post Permissions"
+msgstr ""
+
+#: ../../mod/viewcontacts.php:18
+msgid "View Contacts"
+msgstr ""
+
+#: ../../mod/viewcontacts.php:30
+msgid "No contacts."
+msgstr ""
+
+#: ../../mod/viewcontacts.php:42
+msgid "Visit "
+msgstr ""
+
+#: ../../mod/viewcontacts.php:42
+msgid "'s profile"
+msgstr ""
+
+#: ../../mod/profile_photo.php:29
+msgid "Image uploaded but image cropping failed."
+msgstr ""
+
+#: ../../mod/profile_photo.php:57 ../../mod/profile_photo.php:64
+#: ../../mod/profile_photo.php:113 ../../mod/profile_photo.php:122
+msgid "Profile Photos"
+msgstr ""
+
+#: ../../mod/profile_photo.php:60
+msgid "Image size reduction (175) failed."
+msgstr ""
+
+#: ../../mod/profile_photo.php:67
+msgid "Image size reduction (80) failed."
+msgstr ""
+
+#: ../../mod/profile_photo.php:92 ../../mod/wall_upload.php:23
+msgid "Unable to process image."
+msgstr ""
+
+#: ../../mod/profile_photo.php:116
+msgid "Image uploaded successfully."
+msgstr ""
+
+#: ../../mod/profile_photo.php:118 ../../mod/wall_upload.php:40
+msgid "Image upload failed."
+msgstr ""
+
+#: ../../mod/profile_photo.php:125
+msgid "Image size reduction (640) failed."
+msgstr ""
+
+#: ../../mod/wall_upload.php:37 ../../mod/wall_upload.php:46
+#: ../../mod/wall_upload.php:53
+msgid "Wall Photos"
+msgstr ""
+
+#: ../../mod/directory.php:25 ../../mod/directory.php:38
+msgid "Clear"
+msgstr ""
+
+#: ../../mod/directory.php:37
+msgid "Find"
+msgstr ""
+
+#: ../../mod/directory.php:40
+msgid "Show People"
+msgstr ""
+
+#: ../../mod/directory.php:40
+msgid "Show Community Forums"
+msgstr ""
+
+#: ../../mod/directory.php:41
+msgid "Updated order"
+msgstr ""
+
+#: ../../mod/directory.php:41
+msgid "Alphabetic order"
+msgstr ""
+
+#: ../../mod/directory.php:44
+msgid "Search for: "
+msgstr ""
+
+#: ../../mod/directory.php:93 ../../mod/moderate.php:109
+msgid "Gender: "
+msgstr ""
+
+#: ../../mod/directory.php:104 ../../mod/moderate.php:120
+msgid "[Public Group]"
+msgstr ""
+
+#: ../../mod/directory.php:118
+msgid "No matching entries."
+msgstr ""
+
+#: ../../view/contact_selectors.php:28
+msgid "Unknown | Not categorised"
+msgstr ""
+
+#: ../../view/contact_selectors.php:29
+msgid "Block immediately"
+msgstr ""
+
+#: ../../view/contact_selectors.php:30
+msgid "Shady, spammer, self-marketer"
+msgstr ""
+
+#: ../../view/contact_selectors.php:31
+msgid "Known to me, but no opinion"
+msgstr ""
+
+#: ../../view/contact_selectors.php:32
+msgid "OK, probably harmless"
+msgstr ""
+
+#: ../../view/contact_selectors.php:33
+msgid "Reputable, has my trust"
+msgstr ""
+
+#: ../../view/contact_selectors.php:51
+msgid "Frequently"
+msgstr ""
+
+#: ../../view/contact_selectors.php:52
+msgid "Hourly"
+msgstr ""
+
+#: ../../view/contact_selectors.php:53
+msgid "Twice daily"
+msgstr ""
+
+#: ../../view/contact_selectors.php:54
+msgid "Daily"
+msgstr ""
+
+#: ../../view/contact_selectors.php:55
+msgid "Weekly"
+msgstr ""
+
+#: ../../view/contact_selectors.php:56
+msgid "Monthly"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Male"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Female"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Transsexual"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Hermaphrodite"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Neuter"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Other"
+msgstr ""
+
+#: ../../view/profile_selectors.php:5
+msgid "Undecided"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Males"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Females"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Bisexual"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Autosexual"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Abstinent"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Virgin"
+msgstr ""
+
+#: ../../view/profile_selectors.php:17
+msgid "Nonsexual"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Single"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Lonely"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Available"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Unavailable"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Dating"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Unfaithful"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Sex Addict"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Friends"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Friends/Benefits"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Casual"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Engaged"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Married"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Partners"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Cohabiting"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Happy"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Not Looking"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Swinger"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Betrayed"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Separated"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Unstable"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Divorced"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Widowed"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Uncertain"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Complicated"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Don't care"
+msgstr ""
+
+#: ../../view/profile_selectors.php:30
+msgid "Ask me"
+msgstr ""
+
+#: ../../view/acl_selectors.php:99
+msgid "Visible To:"
+msgstr ""
+
+#: ../../view/acl_selectors.php:103 ../../view/acl_selectors.php:118
+msgid "Groups"
+msgstr ""
+
+#: ../../view/acl_selectors.php:107 ../../view/acl_selectors.php:122
+#: ../../include/nav.php:32
+msgid "Contacts"
+msgstr ""
+
+#: ../../view/acl_selectors.php:114
+msgid "Except For:"
+msgstr ""
+
+#: ../../include/widget.php:10
+msgid "Trending Interests"
+msgstr ""
+
+#: ../../include/widget.php:26
+msgid "Locations"
+msgstr ""
+
+#: ../../include/group.php:128
+msgid "Create a new group"
+msgstr ""
+
+#: ../../include/group.php:129
+msgid "Everybody"
+msgstr ""
+
+#: ../../include/nav.php:4
+msgid "Logout"
+msgstr ""
+
+#: ../../include/nav.php:7
+msgid "Login"
+msgstr ""
+
+#: ../../include/nav.php:15
+msgid "Network"
+msgstr ""
+
+#: ../../include/nav.php:19
+msgid "Home"
+msgstr ""
+
+#: ../../include/nav.php:21
+msgid "Notifications"
+msgstr ""
+
+#: ../../include/nav.php:24
+msgid "Messages"
+msgstr ""
+
+#: ../../include/nav.php:28
+msgid "Settings"
+msgstr ""
+
+#: ../../include/nav.php:30
+msgid "Profiles"
+msgstr ""
+
+#: ../../include/auth.php:14
+msgid "Logged out."
+msgstr ""
+
+#: ../../include/auth.php:43
+msgid "Login failed."
+msgstr ""
+
+#: ../../include/auth.php:51
+msgid "Welcome back "
+msgstr ""
+
+#: ../../include/datetime.php:129
+msgid "less than a second ago"
+msgstr ""
+
+#: ../../include/datetime.php:132
+msgid "year"
+msgstr ""
+
+#: ../../include/datetime.php:132
+msgid "years"
+msgstr ""
+
+#: ../../include/datetime.php:133
+msgid "month"
+msgstr ""
+
+#: ../../include/datetime.php:133
+msgid "months"
+msgstr ""
+
+#: ../../include/datetime.php:134
+msgid "week"
+msgstr ""
+
+#: ../../include/datetime.php:134
+msgid "weeks"
+msgstr ""
+
+#: ../../include/datetime.php:135
+msgid "day"
+msgstr ""
+
+#: ../../include/datetime.php:135
+msgid "days"
+msgstr ""
+
+#: ../../include/datetime.php:136
+msgid "hour"
+msgstr ""
+
+#: ../../include/datetime.php:136
+msgid "hours"
+msgstr ""
+
+#: ../../include/datetime.php:137
+msgid "minute"
+msgstr ""
+
+#: ../../include/datetime.php:137
+msgid "minutes"
+msgstr ""
+
+#: ../../include/datetime.php:138
+msgid "second"
+msgstr ""
+
+#: ../../include/datetime.php:138
+msgid "seconds"
+msgstr ""
+
+#: ../../include/datetime.php:145
+msgid " ago"
+msgstr ""
+
+#: ../../include/rockstar.php:127 ../../include/rockstar.php:133
+#: ../../include/poller.php:143 ../../include/poller.php:146
+msgid "Contact Photos"
+msgstr ""
+
+#: ../../boot.php:348
+msgid "prev"
+msgstr ""
+
+#: ../../boot.php:350
+msgid "first"
+msgstr ""
+
+#: ../../boot.php:379
+msgid "last"
+msgstr ""
+
+#: ../../boot.php:382
+msgid "next"
+msgstr ""
+
+#: ../../index.php:52
+msgid "Not Found"
+msgstr ""
+
+#: ../../index.php:53
+msgid "Page not found"
+msgstr ""
+
+#: ../../index.php:83
+msgid "Permission denied"
+msgstr ""
