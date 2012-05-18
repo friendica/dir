@@ -1,4 +1,4 @@
-<h1>Global Directory</h1>
+<h1>$header</h1>
 
 $finding
 

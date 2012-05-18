@@ -7,6 +7,6 @@
 <![endif]-->
 <script type="text/javascript" src="$baseurl/include/jquery.js" ></script>
 <script type="text/javascript" src="$baseurl/include/main.js" ></script>
-<link rel="search" type="application/opensearchdescription+xml" title="Friendika Global Directory" href="$baseurl/opensearch" />
+<link rel="search" type="application/opensearchdescription+xml" title="Friendica Global Directory" href="$baseurl/opensearch" />
 
 

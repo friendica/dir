@@ -34,6 +34,7 @@ function directory_content(&$a) {
 
 	$o .= replace_macros($tpl, array(
 		'$search' => $search,
+		'$header' => t('Global Directory'),
 		'$submit' => t('Find'),
 		'$clear' => t('Clear'),
 		'$forum' => $a->get_baseurl() . (($forums) ? '' : '/directory/forum' ),
