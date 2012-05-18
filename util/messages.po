@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-16 18:26-0700\n"
+"POT-Creation-Date: 2012-05-17 20:53-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,43 +146,55 @@ msgstr ""
 msgid "Wall Photos"
 msgstr ""
 
-#: ../../mod/directory.php:25 ../../mod/directory.php:38
+#: ../../mod/directory.php:25 ../../mod/directory.php:39
 msgid "Clear"
 msgstr ""
 
 #: ../../mod/directory.php:37
+msgid "Global Directory"
+msgstr ""
+
+#: ../../mod/directory.php:38
 msgid "Find"
 msgstr ""
 
-#: ../../mod/directory.php:40
+#: ../../mod/directory.php:41
 msgid "Show People"
 msgstr ""
 
-#: ../../mod/directory.php:40
+#: ../../mod/directory.php:41
 msgid "Show Community Forums"
 msgstr ""
 
-#: ../../mod/directory.php:41
+#: ../../mod/directory.php:42
 msgid "Updated order"
 msgstr ""
 
-#: ../../mod/directory.php:41
+#: ../../mod/directory.php:42
 msgid "Alphabetic order"
 msgstr ""
 
-#: ../../mod/directory.php:44
+#: ../../mod/directory.php:45
 msgid "Search for: "
 msgstr ""
 
-#: ../../mod/directory.php:93 ../../mod/moderate.php:109
+#: ../../mod/directory.php:96 ../../mod/moderate.php:109
 msgid "Gender: "
 msgstr ""
 
-#: ../../mod/directory.php:104 ../../mod/moderate.php:120
+#: ../../mod/directory.php:100
+msgid "Flag this entry"
+msgstr ""
+
+#: ../../mod/directory.php:107 ../../mod/moderate.php:120
 msgid "[Public Group]"
 msgstr ""
 
-#: ../../mod/directory.php:118
+#: ../../mod/directory.php:109
+msgid "Status:"
+msgstr ""
+
+#: ../../mod/directory.php:121
 msgid "No matching entries."
 msgstr ""
 
