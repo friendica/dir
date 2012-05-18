@@ -29,6 +29,11 @@ img {
 	box-shadow: 3px 3px 10px 0 #000000;
 }
 
+input {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
 .moderate {
 	opacity: 0.3;
 	filter:alpha(opacity=30);
