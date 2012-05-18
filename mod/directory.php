@@ -100,7 +100,9 @@ function directory_content(&$a) {
 				'$mod' => '<div class="moderate"><a href="flag/' . $rr['id'] . '" title="' . t('Flag this entry') . '" ><img src="images/shield_2_16.png" alt="' . t('Flag this entry') . '" title="' . t('Flag this entry') . '"></a></div>',
 				'$star' => (($rr['tags']) ? '<div class="star" title="' . strip_tags($rr['tags']) . '"></div>' : ''),
 				'$profile-link' => zrl($rr['homepage']),
-				'$photo' => (($rr['photo']) ? $rr['photo'] : $a->get_baseurl() . '/photo/' . $rr['id']),
+				'$photo' => $a->get_baseurl() . '/photo/' . $rr['id'],
+
+//				'$photo' => (($rr['photo']) ? $rr['photo'] : $a->get_baseurl() . '/photo/' . $rr['id']),
 				'$alt-text' => $rr['name'] . ' ' . '(' . $rr['homepage'] . ')',
 				'$name' => $rr['name'],
 				'$pclass' => (($rr['comm']) ? ' group' : ''),
