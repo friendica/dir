@@ -20,10 +20,22 @@ a:hover {
 
 img {
 	border: none;
+
 }
+
+.directory-photo-img {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	box-shadow: 3px 3px 10px 0 #000000;
+}
+
 
 img.group {
 	border: 2px solid red;
+}
+
+.widget ul {
+	list-style: none;
 }
 
 #sysmsg {
@@ -98,7 +110,7 @@ aside {
 	width: 250px;
 	margin-left: 20px;
 	margin-right: 0px;
-	font-size: 0.9em;
+
 }
 section {
 	position: absolute;
