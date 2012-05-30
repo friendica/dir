@@ -10,14 +10,19 @@ function updatesites_content(&$a) {
 	if(count($r)) {
 		foreach($r as $rr) {
 			$s = '';
-			$s = fetch_url($rr['url'] . '/friendika/json');
+			$s = fetch_url($rr['url'] . '/friendica/json');
 			if($s)
 				$j = json_decode($s);
 			else
 				continue;
 			if($j) {
 				$plugs = (array) $j->plugins;
+				if(in_array('testdrive',$plugs)) {
+					$j->site_name = '!!! Test/Demo ONLY. !!! ' . $j->site_name;
+					$j->info = 'Accounts are temporary, expiration is enabled. ' . $j->info;
+				}
 				asort($plugs);
+
 				q("UPDATE site set
 					name = '%s',
 					url = '%s', 
