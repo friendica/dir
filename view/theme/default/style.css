@@ -9,9 +9,18 @@ a:hover {
 	text-decoration: underline;
 }
 
-#logo a, #logo a:visited, #logo a:hover {
+#logo, #logo:visited, #logo:hover {
 	color: #A8A8A8;
 	text-decoration: none;
+}
+
+#logo a, #logo a:visited {
+	color: #A8A8A8;
+	text-decoration: none;
+}
+
+#slogan {
+	margin-top: 15px;
 }
 
 #alpha-link {
@@ -91,11 +100,12 @@ img.photo {
 }
 
 #logo {
-	float: left;
+	margin-top: 6px;
+
 	font-size: 150%;
 	color: #A8A8A8;
 	font-weight: bold;
-	margin-left: 250px;
+
 }
 
 .heart {
@@ -119,7 +129,7 @@ img.photo {
 aside {
 	position: absolute;
 	left: 0px;
-	top: 60px;
+	top: 20px;
 	right: 250px;
 	width: 250px;
 	margin-left: 20px;
@@ -129,7 +139,7 @@ aside {
 section {
 	position: absolute;
 	left: 270px;
-	top: 60px;
+	top: 20px;
 	margin-left: 20px;
 	margin-right: 20px;
 	right: 0px;
@@ -142,10 +152,10 @@ nav {
 	color: #888888;
 	position: absolute;
 	top: 0px;
-	height: 30px;
+	height: 0px;
 	left: 0px;
 	right: 0px;
-	margin-top: 20px;
+	margin-top: 0px;
 }
 
 footer {

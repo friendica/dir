@@ -19,7 +19,7 @@ $db = new dba($db_host, $db_user, $db_pass, $db_data);
 	unset($db_host, $db_user, $db_pass, $db_data);
 
 $a->init_pagehead();
-$a->page['nav'] .= '<div id="logo"><img src="images/friendica-32.png" alt="friendica logo" /> <a href="http://friendica.com">Friendica</a></div>';
+$a->page['aside'] .= '<div id="logo"><img src="images/friendica-32.png" alt="friendica logo" /> <a href="http://friendica.com">Friendica</a></div><div id="slogan">Your friends. Your web.</div>';
 
 require_once("session.php");
 
