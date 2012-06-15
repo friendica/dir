@@ -31,14 +31,15 @@ function submit_content(&$a) {
 	$parms = scrape_dfrn($url);
 	
 
-	if((! count($parms)) || (validate_dfrn($parms)))
+	if((! count($parms)) || (validate_dfrn($parms))) {
 		exit;
+	}
 
 	if((x($parms,'hide')) || (! (x($parms,'fn')) && (x($parms,'photo')))) {
 		if($profile_exists) {
 			nuke_record($url);
 		}
-		return;
+		exit;
 	}
 
 	$photo = $parms['photo'];
@@ -103,11 +104,23 @@ function submit_content(&$a) {
 		);
 		logger('Insert returns: ' . $r);
 
-		$r = q("SELECT `id` FROM `profile` WHERE `homepage` = '%s' LIMIT 1",
-			dbesc($url)
+		$r = q("SELECT `id` FROM `profile` WHERE ( `homepage` = '%s' or `nurl` = '%s' ) order by id asc",
+			dbesc($url),
+			dbesc($nurl)
 		);
+
 		if(count($r))
-			$profile_id = $r[0]['id'];
+			$profile_id = $r[count($r) - 1]['id'];
+
+		if(count($r) > 1)
+			q("DELETE FROM `photo` WHERE `profile-id` = %d LIMIT 1",
+				intval($r[0]['id'])
+			);
+			q("DELETE FROM `profile` WHERE `id` = %d LIMIT 1",
+				intval($r[0]['id'])
+			);
+
+
 	}
 
 	if($parms['tags']) {

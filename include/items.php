@@ -241,3 +241,4 @@ function post_remote($a,$arr) {
 
 	return $current_post;
 }
+
