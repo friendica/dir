@@ -112,14 +112,14 @@ function submit_content(&$a) {
 		if(count($r))
 			$profile_id = $r[count($r) - 1]['id'];
 
-		if(count($r) > 1)
+		if(count($r) > 1) {
 			q("DELETE FROM `photo` WHERE `profile-id` = %d LIMIT 1",
 				intval($r[0]['id'])
 			);
 			q("DELETE FROM `profile` WHERE `id` = %d LIMIT 1",
 				intval($r[0]['id'])
 			);
-
+		}
 
 	}
 
