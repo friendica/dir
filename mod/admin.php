@@ -7,7 +7,7 @@ function admin_content(&$a) {
 		return;
 	}
 
-	$r = q("SELECT COUNT (*) FROM `flag` as `ftotal` WHERE 1");
+	$r = q("SELECT COUNT(*) FROM `flag` as `ftotal` WHERE 1");
 	if(count($r))
 		$a->set_pager_total($r[0]['ftotal']);
 
