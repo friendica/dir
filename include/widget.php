@@ -32,3 +32,12 @@ function country_widget() {
 	}
 	return $o;
 }
+
+
+function get_taglist($limit = 50) {
+	$r = q("select distinct(term), count(term) as total from tag group by term order by count(term) desc limit %d",
+		intval($limit)
+	);
+
+	return $r;
+}
