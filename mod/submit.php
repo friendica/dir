@@ -9,6 +9,8 @@ function submit_content(&$a) {
 	if(! strlen($url))
 		exit;
 
+
+
 	logger('Updating: ' . $url);
 
 	$nurl = str_replace(array('https:','//www.'), array('http:','//'), $url);
@@ -30,6 +32,7 @@ function submit_content(&$a) {
 	
 	$parms = scrape_dfrn($url);
 	
+//	logger('dir_submit: ' . print_r($parms,true));
 
 	if((! count($parms)) || (validate_dfrn($parms))) {
 		exit;
