@@ -33,7 +33,7 @@ function import_post(&$a)
   
   //Per batch setting.
   $perPage = 200;
-  $perBatch = 10;
+  $perBatch = 2;
   
   if($batch){
     
@@ -62,7 +62,7 @@ function import_post(&$a)
     
     for($i=0; $i<$perBatch; $i++){
       if($url = array_shift($list)){
-        set_time_limit(20);
+        set_time_limit(15);
         $_SESSION['import_total']++;
         $_SESSION['import_failed']++;
         try{
@@ -77,16 +77,16 @@ function import_post(&$a)
     
     $left = count($list);
     
+    $s = $_SESSION['import_success'];
+    $total = $_SESSION['import_total'];
+    $errors = $_SESSION['import_failed'];
     if($left > 0){
-      notice("$left items left in batch.");
+      notice("$left items left in batch.<br>Stats: $s / $total success, $errors errors.");
       file_put_contents($file, implode("\r\n", $list));
       $fid = uniqid('autosubmit_');
       echo '<form method="POST" id="'.$fid.'"><input type="hidden" name="batch_submit" value="1"></form>'.
         '<script type="text/javascript">setTimeout(function(){ document.getElementById("'.$fid.'").submit(); }, 500);</script>';
     } else {
-      $s = $_SESSION['import_success'];
-      $total = $_SESSION['import_total'];
-      $errors = $_SESSION['import_failed'];
       notice("Completed batch! $s / $total success. $errors errors.");
       unlink($file);
       unset($_SESSION['import_progress']);

@@ -12,10 +12,13 @@ function attribute_contains($attr,$s) {
 
 
 if(! function_exists('scrape_dfrn')) {
-function scrape_dfrn($url) {
-
+function scrape_dfrn($url, $max_nodes=5000) {
+	
+	$minNodes = 100; //Lets do at least 100 nodes per type.
+	$timeout = 10; //Timeout will affect batch processing.
+	
 	$ret = array();
-	$s = fetch_url($url);
+	$s = fetch_url($url, $timeout);
 
 	if(! $s) 
 		return $ret;
@@ -29,7 +32,7 @@ function scrape_dfrn($url) {
 	$items = $dom->getElementsByTagName('meta');
 
 	// get DFRN link elements
-
+	$nodes_left = max(intval($max_nodes), $minNodes);
 	foreach($items as $item) {
 		$x = $item->getAttribute('name');
 		if($x == 'dfrn-global-visibility') {
@@ -47,20 +50,26 @@ function scrape_dfrn($url) {
 			if(strlen($z))
 				$ret['tags'] = $z;
 		}
+		$nodes_left--;
+		if($nodes_left <= 0) break;
 	}
 
 	$items = $dom->getElementsByTagName('link');
 
 	// get DFRN link elements
-
+	
+	$nodes_left = max(intval($max_nodes), $minNodes);
 	foreach($items as $item) {
 		$x = $item->getAttribute('rel');
 		if(substr($x,0,5) == "dfrn-")
 			$ret[$x] = $item->getAttribute('href');
+		$nodes_left--;
+		if($nodes_left <= 0) break;
 	}
 
 	// Pull out hCard profile elements
-
+	
+	$nodes_left = max(intval($max_nodes), $minNodes);
 	$items = $dom->getElementsByTagName('*');
 	foreach($items as $item) {
 		if(attribute_contains($item->getAttribute('class'), 'vcard')) {
@@ -89,6 +98,8 @@ function scrape_dfrn($url) {
 		}
 		if(attribute_contains($item->getAttribute('class'),'marital-text'))
 			$ret['marital'] = $item->textContent;
+		$nodes_left--;
+		if($nodes_left <= 0) break;
 	}
 	return $ret;
 }}
