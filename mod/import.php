@@ -5,7 +5,7 @@ function import_init(&$a)
   
   if(! $_SESSION['uid']) {
     notice("Permission denied.");
-    return;
+    goaway($a->get_baseurl());
   }
   
 }
