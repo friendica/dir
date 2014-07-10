@@ -1601,3 +1601,13 @@ input#dfrn-url {
 	height:320px;
 	text-align:center;
 }
+
+.flagged-entries{
+	max-height:500px;
+	overflow:auto;
+}
+
+.profile-moderate-preview{
+	width:80%;
+	min-height:700px;
+}

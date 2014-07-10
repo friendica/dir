@@ -68,7 +68,7 @@ function moderate_content(&$a) {
 		$id = intval($a->argv[1]);
 	if($a->argc > 2)
 		$reason = $a->argv[2];
-
+	
 	if($id) {
 		$r = q("SELECT * FROM `profile` WHERE `id` = %d LIMIT 1",
 			intval($id)
@@ -80,6 +80,8 @@ function moderate_content(&$a) {
 			);
 			goaway($a->get_baseurl() . '/admin');
 		}
+	}else{
+		goaway($a->get_baseurl() . '/admin');
 	}
 	
 	$c .= "<h1>Moderate/delete profile</h1>";
@@ -129,7 +131,7 @@ function moderate_content(&$a) {
 
 		$o .= "<div class=\"directory-end\" ></div>\r\n";
 
-	$c .= '<br /><br /><iframe height="400" width="800" src="' . $rr['homepage'] . '" ></iframe>';
+	$c .= '<br /><br /><iframe height="400" width="800" src="' . $rr['homepage'] . '" class="profile-moderate-preview"></iframe>';
 	$c .= '<br />' . $rr['homepage'] . '<br />';
 
 	$o .= '<form action="moderate" method="post" >';

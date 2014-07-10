@@ -1,9 +1,23 @@
-<div class="mirror-wrapper">
+<div class="flagged-wrapper">
+  <h1>Flagged entries</h1>
+  <div class="flagged-entries">$flagged</div>
+</div>
+
+<div class="maintenance-wrapper">
+  <h1>Maintenance</h1>
+  <p>
+    <strong>Current backlog: $backlog</strong><br>
+    <i>$maintenance_size</i>
+  </p>
+</div>
+
+<div class="import-wrapper">
+  <h1>Import tools</h1>
   <h2>Mirror a directory</h2>
   <form method="POST">
     <label>Extract URL's:</label>
-    <input type="text" name="url" value="http://dir.friendica.com">
-    <input type="hidden" name="page" value="0">
+    <input type="text" name="dir_import_url" value="http://dir.friendica.com">
+    <input type="hidden" name="dir_page" value="0">
     <input type="submit" value="Execute">
   </form>
   <br>
@@ -16,5 +30,4 @@
     <input type="text" name="submit_url" placeholder="Profile url" size="35" />
     <input type="submit" value="Submit">
   </form>
-  <h3>Maintenance backlog: $backlog</h3>
 </div>
