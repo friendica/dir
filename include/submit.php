@@ -84,6 +84,7 @@ function run_submit($url) {
 	elseif($parms['explicit-hide'] && $profile_exists) {
 		logger('User opted out of the directory.');
 		nuke_record($url);
+		return true; //This is a good update.
 	}
 	
 	//This is most likely a problem with the site configuration. Ignore.
@@ -95,7 +96,7 @@ function run_submit($url) {
 		if($profile_exists) {
 			nuke_record($url);
 		}
-		return false;
+		return true; //This is a good update.
 	}
 	
 	$photo = $parms['photo'];
@@ -210,13 +211,13 @@ function run_submit($url) {
 	
 	$status = false;
 	
-	$img_str = fetch_url($photo,true);
-	$img = new Photo($img_str);
-	if($img) {
-		$img->scaleImageSquare(80);
-		$r = $img->store($profile_id);
-	}
 	if($profile_id) {
+		$img_str = fetch_url($photo,true);
+		$img = new Photo($img_str);
+		if($img) {
+			$img->scaleImageSquare(80);
+			$r = $img->store($profile_id);
+		}
 		$r = q("UPDATE `profile` SET `photo` = '%s' WHERE `id` = %d LIMIT 1",
 			dbesc($a->get_baseurl() . '/photo/' . $profile_id . '.jpg'),
 			intval($profile_id)
@@ -225,6 +226,7 @@ function run_submit($url) {
 	}
 	else{
 		nuke_record($url);
+		return false;
 	}
 	
 	$submit_end = microtime(true);

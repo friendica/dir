@@ -135,12 +135,12 @@ function moderate_content(&$a) {
 	$c .= '<br />' . $rr['homepage'] . '<br />';
 
 	$o .= '<form action="moderate" method="post" >';
-	$checked = (($reason === 'censor') ? 'checked="checked" ' : ''); 
-	$o .= '<input type="radio" name="action" value="censor"' . $checked . '>Censor Profile<br /><br />';
-	$checked = (($reason === 'dead') ? 'checked="checked" ' : ''); 
-	$o .= '<input type="radio" name="action" value="dead"' . $checked . '" >Dead Account<br /><br />';
+	$checked = (($reason === '1') ? 'checked="checked" ' : ''); 
+	$o .= '<label><input type="radio" name="action" value="censor"' . $checked . '>Censor Profile</label><br /><br />';
+	$checked = (($reason === '2') ? 'checked="checked" ' : ''); 
+	$o .= '<label><input type="radio" name="action" value="dead"' . $checked . '" >Dead Account</label><br /><br />';
  
-	$o .= '<input type="radio" name="action" value="bogus" >Bogus request<br /><br />';
+	$o .= '<label><input type="radio" name="action" value="bogus" >Bogus request</label><br /><br />';
 
 
 	$o .= '<input type="hidden" name="id" value="' . $id . '" ><br /><br />';

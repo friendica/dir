@@ -18,11 +18,11 @@ function admin_content(&$a) {
 		$flagged = '';
 		foreach($r as $rr) {
 			if($rr['reason'] == 1)
-				$str = 'Censor';
+				$str = 'Adult';
 			if($rr['reason'] == 2)
 				$str = 'Dead';
-			$flagged .=  '<a href="' . 'moderate/' . $rr['pid'] . '/' . $str . '">'.
-				"$str profile: [#{$rr['pid']}] {$rr['name']} ({$rr['total']}x) - {$rr['homepage']}</a><br />";
+			$flagged .=  '<a href="' . 'moderate/' . $rr['pid'] . '/' . $rr['reason'] . '">'.
+				"{$rr['total']}x $str - [#{$rr['pid']}] {$rr['name']} ({$rr['homepage']})</a><br />";
 		}
 	} else {
 		$flagged = 'No entries.';
@@ -67,6 +67,7 @@ function admin_post(&$a)
   if($batch){
     
     require_once('include/submit.php');
+    require_once('include/site-health.php');
     
     //First get all data from file.
     $data = file_get_contents($file);
@@ -95,10 +96,21 @@ function admin_post(&$a)
         $_SESSION['import_total']++;
         $_SESSION['import_failed']++;
         try{
+        	
+        	//A site may well turn 'sour' during the import.
+        	//Check the health again for this reason.
+        	$site = parse_site_from_url($url);
+					$r = q("SELECT * FROM `site-health` WHERE `base_url`= '%s' ORDER BY `id` ASC LIMIT 1", $site);
+					if(count($r) && intval($r[0]['health_score']) < $a->config['site-health']['skip_import_threshold']){
+						continue;
+					}
+        	
+        	//Do the submit if health is ok.
           if(run_submit($url)){
             $_SESSION['import_failed']--;
             $_SESSION['import_success']++;
           }
+          
         }catch(\Exception $ex){/* We tried... */}
       }
       else break;
@@ -106,17 +118,18 @@ function admin_post(&$a)
     
     $left = count($list);
     
-    $s = $_SESSION['import_success'];
+    $success = $_SESSION['import_success'];
+    $skipped = $_SESSION['import_skipped'];
     $total = $_SESSION['import_total'];
     $errors = $_SESSION['import_failed'];
     if($left > 0){
-      notice("$left items left in batch.<br>Stats: $s / $total success, $errors errors.");
+      notice("$left items left in batch...<br>$success updated profiles.<br>$errors import errors.");
       file_put_contents($file, implode("\r\n", $list));
       $fid = uniqid('autosubmit_');
       echo '<form method="POST" id="'.$fid.'"><input type="hidden" name="batch_submit" value="1"></form>'.
-        '<script type="text/javascript">setTimeout(function(){ document.getElementById("'.$fid.'").submit(); }, 500);</script>';
+        '<script type="text/javascript">setTimeout(function(){ document.getElementById("'.$fid.'").submit(); }, 300);</script>';
     } else {
-      notice("Completed batch! $s / $total success. $errors errors.");
+      notice("Completed batch! $success updated. $errors errors.");
       unlink($file);
       unset($_SESSION['import_progress']);
     }
@@ -124,7 +137,11 @@ function admin_post(&$a)
     return;
     
   }
+  
+  //Doing a poll from the directory?
   elseif($url){
+    
+    require_once('include/site-health.php');
     
     $result = fetch_url($url."/lsearch?p=$page&n=$perPage&search=.*");
     if($result)
@@ -136,8 +153,33 @@ function admin_post(&$a)
       
       $rows = '';
       foreach($data->results as $profile){
+      	
+      	//Skip known profiles.
+      	$purl = $profile->url;
+      	$nurl = str_replace(array('https:','//www.'), array('http:','//'), $purl);
+      	$r = q("SELECT count(*) as `matched` FROM `profile` WHERE (`homepage` = '%s' OR `nurl` = '%s') LIMIT 1",
+					dbesc($purl),
+					dbesc($nurl)
+				);
+				if(count($r) && $r[0]['matched']){
+					continue;
+				}
+				
+				//Find out site health.
+				else{
+					
+					$site = parse_site_from_url($purl);
+					$r = q("SELECT * FROM `site-health` WHERE `base_url`= '%s' ORDER BY `id` ASC LIMIT 1", $site);
+					if(count($r) && intval($r[0]['health_score']) < $a->config['site-health']['skip_import_threshold']){
+						continue;
+					}
+					
+				}
+      	
         $rows .= $profile->url."\r\n";
+        
       }
+      
       file_put_contents($file, $rows, $page > 0 ? FILE_APPEND : 0);
       
       $progress = min((($page+1) * $perPage), $data->total);
@@ -153,7 +195,7 @@ function admin_post(&$a)
           '<script type="text/javascript">setTimeout(function(){ document.getElementById("'.$fid.'").submit(); }, 500);</script>';
         
       } else {
-        goaway($a->get_baseurl().'/import');
+        goaway($a->get_baseurl().'/admin');
       }
       
     }
