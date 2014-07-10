@@ -1587,3 +1587,17 @@ input#dfrn-url {
 	margin-left: 20px;
 }
 
+.health{font-size:120%; vertical-align:bottom;}
+.health.very-bad{ color:#f99; }
+.health.bad{ color:#f1ba7a; }
+.health.neutral{ color:#e6e782; }
+.health.ok{ color:#bef273; }
+.health.good{ color:#7cf273; }
+.health.perfect{ color:#33ff80; }
+
+.speed-chart{
+	float:left;
+	width:480px;
+	height:320px;
+	text-align:center;
+}

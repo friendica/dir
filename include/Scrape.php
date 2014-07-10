@@ -11,47 +11,79 @@ function attribute_contains($attr,$s) {
 }}
 
 
+if(! function_exists('noscrape_dfrn')) {
+function noscrape_dfrn($url) {
+	$submit_noscrape_start = microtime(true);
+	$data = fetch_url($url);
+	$submit_noscrape_request_end = microtime(true);
+	if(empty($data)) return false;
+	$parms = json_decode($data, true);
+	if(!$parms || !count($parms)) return false;
+	$parms['tags'] = implode(' ', (array)$parms['tags']);
+	$submit_noscrape_end = microtime(true);
+	$parms['_timings'] = array(
+		'fetch' => round(($submit_noscrape_request_end - $submit_noscrape_start) * 1000),
+		'scrape' => round(($submit_noscrape_end - $submit_noscrape_request_end) * 1000)
+	);
+	return $parms;
+}}
+
 if(! function_exists('scrape_dfrn')) {
-function scrape_dfrn($url, $max_nodes=5000) {
+function scrape_dfrn($url, $max_nodes=3500) {
 	
 	$minNodes = 100; //Lets do at least 100 nodes per type.
 	$timeout = 10; //Timeout will affect batch processing.
 	
+	//Try and cheat our way into faster profiles.
+	if(strpos($url, 'tab=profile') === false){
+		$url .= (strpos($url, '?') > 0 ? '&' : '?').'tab=profile';
+	}
+	
+	$scrape_start = microtime(true);
+	
 	$ret = array();
 	$s = fetch_url($url, $timeout);
-
+	
+	$scrape_fetch_end = microtime(true);
+	
 	if(! $s) 
 		return $ret;
-
+	
 	$dom = HTML5_Parser::parse($s);
-
+	
 	if(! $dom)
 		return $ret;
-
-
+	
 	$items = $dom->getElementsByTagName('meta');
-
+	
 	// get DFRN link elements
 	$nodes_left = max(intval($max_nodes), $minNodes);
+	$targets = array('hide', 'comm', 'tags');
+	$targets_left = count($targets);
 	foreach($items as $item) {
 		$x = $item->getAttribute('name');
 		if($x == 'dfrn-global-visibility') {
 			$z = strtolower(trim($item->getAttribute('content')));
 			if($z != 'true')
 				$ret['hide'] = 1;
+			if($z === 'false')
+				$ret['explicit-hide'] = 1;
+			$targets_left = pop_scrape_target($targets, 'hide');
 		}
 		if($x == 'friendika.community' || $x == 'friendica.community') {
 			$z = strtolower(trim($item->getAttribute('content')));
 			if($z == 'true')
 				$ret['comm'] = 1;
+			$targets_left = pop_scrape_target($targets, 'comm');
 		}
 		if($x == 'keywords') {
 			$z = str_replace(',',' ',strtolower(trim($item->getAttribute('content'))));
 			if(strlen($z))
 				$ret['tags'] = $z;
+			$targets_left = pop_scrape_target($targets, 'tags');
 		}
 		$nodes_left--;
-		if($nodes_left <= 0) break;
+		if($nodes_left <= 0 || $targets_left <= 0) break;
 	}
 
 	$items = $dom->getElementsByTagName('link');
@@ -71,37 +103,69 @@ function scrape_dfrn($url, $max_nodes=5000) {
 	
 	$nodes_left = max(intval($max_nodes), $minNodes);
 	$items = $dom->getElementsByTagName('*');
+	$targets = array('fn', 'pdesc', 'photo', 'key', 'locality', 'region', 'postal-code', 'country-name', 'gender', 'marital');
+	$targets_left = count($targets);
 	foreach($items as $item) {
 		if(attribute_contains($item->getAttribute('class'), 'vcard')) {
 			$level2 = $item->getElementsByTagName('*');
 			foreach($level2 as $x) {
-				if(attribute_contains($x->getAttribute('class'),'fn'))
+				if(attribute_contains($x->getAttribute('class'),'fn')){
 					$ret['fn'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'title'))
+					$targets_left = pop_scrape_target($targets, 'fn');
+				}
+				if(attribute_contains($x->getAttribute('class'),'title')){
 					$ret['pdesc'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'photo'))
+					$targets_left = pop_scrape_target($targets, 'pdesc');
+				}
+				if(attribute_contains($x->getAttribute('class'),'photo')){
 					$ret['photo'] = $x->getAttribute('src');
-				if(attribute_contains($x->getAttribute('class'),'key'))
+					$targets_left = pop_scrape_target($targets, 'photo');
+				}
+				if(attribute_contains($x->getAttribute('class'),'key')){
 					$ret['key'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'locality'))
+					$targets_left = pop_scrape_target($targets, 'key');
+				}
+				if(attribute_contains($x->getAttribute('class'),'locality')){
 					$ret['locality'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'region'))
+					$targets_left = pop_scrape_target($targets, 'locality');
+				}
+				if(attribute_contains($x->getAttribute('class'),'region')){
 					$ret['region'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'postal-code'))
+					$targets_left = pop_scrape_target($targets, 'region');
+				}
+				if(attribute_contains($x->getAttribute('class'),'postal-code')){
 					$ret['postal-code'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'country-name'))
+					$targets_left = pop_scrape_target($targets, 'postal-code');
+				}
+				if(attribute_contains($x->getAttribute('class'),'country-name')){
 					$ret['country-name'] = $x->textContent;
-				if(attribute_contains($x->getAttribute('class'),'x-gender'))
+					$targets_left = pop_scrape_target($targets, 'country-name');
+				}
+				if(attribute_contains($x->getAttribute('class'),'x-gender')){
 					$ret['gender'] = $x->textContent;
-
-        		}
+					$targets_left = pop_scrape_target($targets, 'gender');
+				}
+      }
 		}
-		if(attribute_contains($item->getAttribute('class'),'marital-text'))
+		if(attribute_contains($item->getAttribute('class'),'marital-text')){
 			$ret['marital'] = $item->textContent;
+			$targets_left = pop_scrape_target($targets, 'marital');
+		}
 		$nodes_left--;
-		if($nodes_left <= 0) break;
+		if($nodes_left <= 0 || $targets_left <= 0) break;
 	}
+	
+	$scrape_end = microtime(true);
+	$fetch_time = round(($scrape_fetch_end - $scrape_start) * 1000);
+	$scrape_time = round(($scrape_end - $scrape_fetch_end) * 1000);
+	
+	$ret['_timings'] = array(
+		'fetch' => $fetch_time,
+		'scrape' => $scrape_time
+	);
+	
 	return $ret;
+	
 }}
 
 
@@ -119,5 +183,12 @@ function validate_dfrn($a) {
 	if(! x($a,'dfrn-poll'))
 		$errors ++;
 	return $errors;
+}}
+
+if(! function_exists('pop_scrape_target')) {
+function pop_scrape_target(&$array, $name) {
+	$at = array_search($name, $array);
+	unset($array[$at]);
+	return count($array);
 }}
 
