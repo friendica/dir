@@ -13,15 +13,29 @@ function import_init(&$a)
 function import_content(&$a)
 {
   
+  $res = q(
+    "SELECT count(*) as `count` FROM `profile` WHERE `updated` < '%s'",
+    dbesc(date('Y-m-d H:i:s', time()-$a->config['maintenance']['min_scrape_delay']))
+  );
+  $backlog = 'unknown';
+  if(count($res)){
+    $backlog = $res[0]['count'].'/'.$a->config['maintenance']['max_scrapes'].' entries';
+  }
+  
   $tpl = file_get_contents('view/import.tpl');
   return replace_macros($tpl, array(
-    '$present' => is_file('.htimport') ? ' (present)' : ''
+    '$present' => is_file('.htimport') ? ' (present)' : '',
+    '$backlog' => $backlog
   ));
   
 }
 
 function import_post(&$a)
 {
+  
+  if($_POST['submit_url']){
+    goaway($a->get_baseurl().'/submit?url='.bin2hex($_POST['submit_url']));
+  }
   
   //Get our input.
   $url = $_POST['url'];
@@ -66,7 +80,7 @@ function import_post(&$a)
         $_SESSION['import_total']++;
         $_SESSION['import_failed']++;
         try{
-          if(run_submit($a, $url)){
+          if(run_submit($url)){
             $_SESSION['import_failed']--;
             $_SESSION['import_success']++;
           }
@@ -95,7 +109,7 @@ function import_post(&$a)
     return;
     
   }
-  elseif($url && $page){
+  elseif($url){
     
     $result = fetch_url($url."/lsearch?p=$page&n=$perPage&search=.*");
     if($result)

@@ -11,4 +11,10 @@
     <label>Batch submit from file: $present</label>
     <input type="submit" name="batch_submit" value="Run batch">
   </form>
+  <h2>Manual submit</h2>
+  <form method="POST">
+    <input type="text" name="submit_url" placeholder="Profile url" size="35" />
+    <input type="submit" value="Submit">
+  </form>
+  <h3>Maintenance backlog: $backlog</h3>
 </div>
