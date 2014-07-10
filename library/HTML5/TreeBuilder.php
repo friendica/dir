@@ -158,8 +158,9 @@ class HTML5_TreeBuilder {
 
         if ($this->ignore_lf_token) $this->ignore_lf_token--;
         $this->ignored = false;
-
-        $token['name'] = str_replace(':', '-', $token['name']);
+        
+        if(isset($token['name']))
+            $token['name'] = str_replace(':', '-', $token['name']);
         // indenting is a little wonky, this can be changed later on
         switch ($mode) {
 
