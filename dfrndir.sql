@@ -199,3 +199,16 @@ CREATE TABLE IF NOT EXISTS `site-scrape` (
   KEY `dt_performed` (`dt_performed`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
+CREATE TABLE IF NOT EXISTS `sync-targets` (
+  `base_url` varchar(255) NOT NULL,
+  `pull` bit(1) NOT NULL DEFAULT b'0',
+  `push` bit(1) NOT NULL DEFAULT b'1',
+  PRIMARY KEY (`base_url`),
+  KEY `push` (`push`),
+  KEY `pull` (`pull`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-queue` (
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
