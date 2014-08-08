@@ -203,12 +203,25 @@ CREATE TABLE IF NOT EXISTS `sync-targets` (
   `base_url` varchar(255) NOT NULL,
   `pull` bit(1) NOT NULL DEFAULT b'0',
   `push` bit(1) NOT NULL DEFAULT b'1',
+  `dt_last_pull` bigint unsigned NULL DEFAULT NULL,
   PRIMARY KEY (`base_url`),
   KEY `push` (`push`),
   KEY `pull` (`pull`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
-CREATE TABLE IF NOT EXISTS `sync-queue` (
+CREATE TABLE IF NOT EXISTS `sync-push-queue` (
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-pull-queue` (
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-timestamps` (
+  `url` varchar(255) NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`url`),
+  KEY `modified` (`modified`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;

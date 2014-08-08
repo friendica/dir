@@ -28,17 +28,23 @@ function admin_content(&$a) {
 		$flagged = 'No entries.';
 	}
 	
-	//Get the backlog size.
-	$res = q("SELECT count(*) as `count` FROM `profile` WHERE `updated` < '%s'",
+  //Get the maintenance backlog size.
+  $res = q("SELECT count(*) as `count` FROM `profile` WHERE `updated` < '%s'",
     dbesc(date('Y-m-d H:i:s', time()-$a->config['maintenance']['min_scrape_delay'])));
-  $backlog = 'unknown';
-  if(count($res)){ $backlog = $res[0]['count'].' entries'; }
+  $maintenance_backlog = 'unknown';
+  if(count($res)){ $maintenance_backlog = $res[0]['count'].' entries'; }
+  
+	//Get the pulling backlog size.
+	$res = q("SELECT count(*) as `count` FROM `sync-pull-queue`");
+  $pulling_backlog = 'unknown';
+  if(count($res)){ $pulling_backlog = $res[0]['count'].' entries'; }
 	
 	$tpl = file_get_contents('view/admin.tpl');
   return replace_macros($tpl, array(
     '$present' => is_file('.htimport') ? ' (present)' : '',
     '$flagged' => $flagged,
-    '$backlog' => $backlog,
+    '$maintenance_backlog' => $maintenance_backlog,
+    '$pulling_backlog' => $pulling_backlog,
     '$maintenance_size' => $a->config['maintenance']['max_scrapes'].' items per maintenance call.'
   ));
 	
