@@ -287,9 +287,19 @@ function health_details($a, $id)
 			</script>';
 	}
 	
+	//Nice name for registration policy.
+	switch ($site['reg_policy']) {
+		case 'REGISTER_OPEN': $policy = "Open"; break;
+		case 'REGISTER_APPROVE': $policy = "Admin approved"; break;
+		case 'REGISTER_CLOSED': $policy = "Closed"; break;
+		default: $policy = $site['reg_policy']; break;
+	}
+	
 	$tpl .= file_get_contents('view/health_details.tpl');
 	return replace_macros($tpl, array(
 		'$name' => $site['name'],
+		'$policy' => $policy,
+		'$site_info' => $site['info'],
 		'$base_url' => $site['base_url'],
 		'$health_score' => $site['health_score'],
 		'$health_name' => health_score_to_name($site['health_score']),

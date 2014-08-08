@@ -8,9 +8,11 @@
 <div class="meta">
   <h3>General information</h3>
   <div class="users">$users users</div>
+  <div class="policy">$policy registration policy</div>
   <div class="version">Friendica $version</div>
   <div class="first_noticed">First noticed: $dt_first_noticed</div>
   <div class="last_seen">Last update: $dt_last_seen</div>
+  <pre class="site-info">$site_info</pre>
 </div>
 
 <div class="security">
