@@ -7,6 +7,32 @@ Example cronjob.
 */5  * * * * www-data cd /var/www/friendica-directory; php include/cron_sync.php
 ```
 
+## How syncing works
+
+The new syncing features include: pushing and pulling.
+
+### Pushing
+
+Submissions you receive can be submitted to other directories using a push target.
+
+You do this by creating an entry in the sync-targets table with the push bit set to `1`.
+Also, you must enable pushing in your `.htconfig` settings.
+
+The next time `include/cron_sync.php` is run from your cronjob, the queued items will be submitted to your push targets.
+
+### Pulling
+
+For pulling to work, the target server must enable pulling.
+This makes the `/sync/pull/all` and `/sync/pull/since/[when]` methods work on that server.
+
+Next you can add an entry in the sync-targets table with the pull bit set to `1`.
+Also, you must enable pulling in your `.htconfig` settings.
+
+The next time `include/cron_sync.php` is run from your cronjob, the pulling sources will be checked.
+New items will be queued in your pull queue.
+The queue will be gradually cleared based on your `syncing.max_pull_items` settings.
+You can check the backlog of this queue at the `/admin` page.
+
 ## How submissions are processed
 
 1.  The /submit endpoint takes a `?url=` parameter.
