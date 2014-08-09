@@ -4,11 +4,11 @@
 	  <ShortName>Friendica Global Directory</ShortName>
 	  <Description>Search Friendica Global Directory</Description>
 	  <InputEncoding>UTF-8</InputEncoding>
-      <Image width="16" height="16" type="image/x-icon">http://dir.friendica.com/images/friendica-16.ico</Image>
-      <Image width="64" height="64" type="image/png">http://dir.friendica.com/images/friendica-64.png</Image>
-	  <Url type="text/html" method="GET" template="http://dir.friendica.com/directory">
+      <Image width="16" height="16" type="image/x-icon">$base/images/friendica-16.ico</Image>
+      <Image width="64" height="64" type="image/png">$base/images/friendica-64.png</Image>
+	  <Url type="text/html" method="GET" template="$base/directory">
       <Param name="search" value="{searchTerms}"/>
 		</Url>
 
-	  <moz:SearchForm>http://dir.friendica.com</moz:SearchForm>
+	  <moz:SearchForm>$base</moz:SearchForm>
 </OpenSearchDescription>

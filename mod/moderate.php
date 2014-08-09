@@ -68,7 +68,7 @@ function moderate_content(&$a) {
 		$id = intval($a->argv[1]);
 	if($a->argc > 2)
 		$reason = $a->argv[2];
-
+	
 	if($id) {
 		$r = q("SELECT * FROM `profile` WHERE `id` = %d LIMIT 1",
 			intval($id)
@@ -80,6 +80,8 @@ function moderate_content(&$a) {
 			);
 			goaway($a->get_baseurl() . '/admin');
 		}
+	}else{
+		goaway($a->get_baseurl() . '/admin');
 	}
 	
 	$c .= "<h1>Moderate/delete profile</h1>";
@@ -129,16 +131,16 @@ function moderate_content(&$a) {
 
 		$o .= "<div class=\"directory-end\" ></div>\r\n";
 
-	$c .= '<br /><br /><iframe height="400" width="800" src="' . $rr['homepage'] . '" ></iframe>';
+	$c .= '<br /><br /><iframe height="400" width="800" src="' . $rr['homepage'] . '" class="profile-moderate-preview"></iframe>';
 	$c .= '<br />' . $rr['homepage'] . '<br />';
 
 	$o .= '<form action="moderate" method="post" >';
-	$checked = (($reason === 'censor') ? 'checked="checked" ' : ''); 
-	$o .= '<input type="radio" name="action" value="censor"' . $checked . '>Censor Profile<br /><br />';
-	$checked = (($reason === 'dead') ? 'checked="checked" ' : ''); 
-	$o .= '<input type="radio" name="action" value="dead"' . $checked . '" >Dead Account<br /><br />';
+	$checked = (($reason === '1') ? 'checked="checked" ' : ''); 
+	$o .= '<label><input type="radio" name="action" value="censor"' . $checked . '>Censor Profile</label><br /><br />';
+	$checked = (($reason === '2') ? 'checked="checked" ' : ''); 
+	$o .= '<label><input type="radio" name="action" value="dead"' . $checked . '" >Dead Account</label><br /><br />';
  
-	$o .= '<input type="radio" name="action" value="bogus" >Bogus request<br /><br />';
+	$o .= '<label><input type="radio" name="action" value="bogus" >Bogus request</label><br /><br />';
 
 
 	$o .= '<input type="hidden" name="id" value="' . $id . '" ><br /><br />';

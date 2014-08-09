@@ -227,11 +227,12 @@ function t($s) {
 
 
 if(! function_exists('fetch_url')) {
-function fetch_url($url,$binary = false) {
+function fetch_url($url,$binary = false, $timeout=20) {
 	$ch = curl_init($url);
 	if(! $ch) return false;
 
-        curl_setopt($ch, CURLOPT_HEADER, 0);
+  curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_TIMEOUT, max(intval($timeout), 1)); //Minimum of 1 second timeout.
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION,true);
 	curl_setopt($ch, CURLOPT_MAXREDIRS,8);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);

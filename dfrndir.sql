@@ -144,3 +144,84 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` char(255) NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `site-health`
+--
+
+CREATE TABLE IF NOT EXISTS `site-health` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `base_url` varchar(255) NOT NULL,
+  `health_score` int(11) NOT NULL DEFAULT 0,
+  `no_scrape_url` varchar(255) NULL DEFAULT NULL,
+  `dt_first_noticed` datetime NOT NULL,
+  `dt_last_seen` datetime NULL DEFAULT NULL,
+  `dt_last_probed` datetime NULL DEFAULT NULL,
+  `dt_last_heartbeat` datetime NULL DEFAULT NULL,
+  `name` varchar(255) NULL DEFAULT NULL,
+  `version` varchar(255) NULL DEFAULT NULL,
+  `plugins` text NULL DEFAULT NULL,
+  `reg_policy` char(32) NULL DEFAULT NULL,
+  `info` text NULL DEFAULT NULL,
+  `admin_name` varchar(255) NULL DEFAULT NULL,
+  `admin_profile` varchar(255) NULL DEFAULT NULL,
+  `ssl_state` bit(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `base_url` (`base_url`),
+  KEY `health_score` (`health_score`),
+  KEY `dt_last_seen` (`dt_last_seen`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+
+CREATE TABLE IF NOT EXISTS `site-probe` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_health_id` int(10) unsigned NOT NULL,
+  `dt_performed` datetime NOT NULL,
+  `request_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `site_health_id` (`site_health_id`),
+  KEY `dt_performed` (`dt_performed`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+
+CREATE TABLE IF NOT EXISTS `site-scrape` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_health_id` int(10) unsigned NOT NULL,
+  `dt_performed` datetime NOT NULL,
+  `request_time` int(10) unsigned NOT NULL,
+  `scrape_time` int(10) unsigned NOT NULL,
+  `photo_time` int(10) unsigned NOT NULL,
+  `total_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `site_health_id` (`site_health_id`),
+  KEY `dt_performed` (`dt_performed`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-targets` (
+  `base_url` varchar(255) NOT NULL,
+  `pull` bit(1) NOT NULL DEFAULT b'0',
+  `push` bit(1) NOT NULL DEFAULT b'1',
+  `dt_last_pull` bigint unsigned NULL DEFAULT NULL,
+  PRIMARY KEY (`base_url`),
+  KEY `push` (`push`),
+  KEY `pull` (`pull`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-push-queue` (
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-pull-queue` (
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sync-timestamps` (
+  `url` varchar(255) NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`url`),
+  KEY `modified` (`modified`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
