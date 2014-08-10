@@ -262,7 +262,7 @@ function get_remote_pull_batch($a)
   
   //Pull a list of URL's from each target.
   $urls = array();
-  foreach($targets as $target){
+  foreach($targets as $i => $target){
     
     //First pull, or an update?
     if(!$target['dt_last_pull'])
@@ -271,16 +271,16 @@ function get_remote_pull_batch($a)
       $url = $target['base_url'].'/sync/pull/since/'.intval($target['dt_last_pull']);
     
     //Go for it :D
-    $target['pull_data'] = json_decode(fetch_url($url), true);
+    $targets[$i]['pull_data'] = json_decode(fetch_url($url), true);
     
     //If we didn't get any JSON.
-    if($target['pull_data'] === null){
+    if(!$targets[$i]['pull_data']){
       msg(sprintf('Failed to pull from "%s".', $url));
       continue;
     }
     
     //Add all entries as keys, to remove duplicates.
-    foreach($target['pull_data']['results'] as $url)
+    foreach($targets[$i]['pull_data']['results'] as $url)
       $urls[$url]=true;
     
   }
@@ -292,8 +292,10 @@ function get_remote_pull_batch($a)
   
   //Since this all worked out, mark each source with the timestamp of pulling.
   foreach($targets as $target){
-    if($targets['pull_data'] && $targets['pull_data']['now'])
-      q("UPDATE `sync-targets` SET `dt_last_pull`=%u WHERE `base_url`='%s'", $targets['pull_data']['now'], dbesc($targets['base_url']));
+    if($target['pull_data'] && $target['pull_data']['now']){
+      msg('New pull timestamp '.$target['pull_data']['now'].' for '.$target['base_url']);
+      q("UPDATE `sync-targets` SET `dt_last_pull`=%u WHERE `base_url`='%s'", $target['pull_data']['now'], dbesc($target['base_url']));
+    }
   }
   
   //Finally, return a batch of this.
