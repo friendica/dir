@@ -129,6 +129,42 @@ function health_summary(&$a){
 function health_details($a, $id)
 {
 	
+	//Max data age in MySQL date.
+	$maxDate = date('Y-m-d H:i:s', time()-($a->config['stats']['maxDataAge']));
+	
+	//Include graphael line charts.
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/smoothing.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript">
+		window.smoothingFactor = 0.3;
+		window.smoothingBracket = 2;
+		window.availableCharts = [];
+		window.drawRaw = false;
+		window.drawCharts = function(){
+			for (var i = availableCharts.length - 1; i >= 0; i--) {
+				availableCharts[i](jQuery);
+			};
+		};
+		window.onHoverPoint = function(r){ return function(){
+            this.tags = r.set();
+            var i = this.y.length-1;
+            this.tags.push(r.popup(this.x, this.y[i], Math.round(this.values[i])+"ms", "right", 5).insertBefore(this));
+        }};
+        window.onUnHoverPoint = function(r){ return function(){
+            this.tags && this.tags.remove();
+        }};
+		jQuery(function($){
+			drawCharts();
+			$(".js-toggle-raw").click(function(e){
+				e.preventDefault();
+				drawRaw=!drawRaw;
+				drawCharts();
+			});
+		});
+	</script>';
+	
 	//The overall health status.
 	$r = q(
 		"SELECT * FROM `site-health`
@@ -196,62 +232,14 @@ function health_details($a, $id)
 	
 	//Get probe speed data.
 	$r = q(
-		"SELECT `request_time`, `dt_performed` FROM `site-probe`
-		WHERE `site_health_id` = %u",
-		intval($site['id'])
+		"SELECT AVG(`request_time`) as `avg_time`, date(`dt_performed`) as `date` FROM `site-probe`
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'
+		GROUP BY `date`",
+		intval($site['id']),
+		$maxDate
 	);
 	if(count($r)){
-		//Include graphael line charts.
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>';
-		$speeds = array();
-		$times = array();
-		$mintime = time();
-		foreach($r as $row){
-			$speeds[] = $row['request_time'];
-			$time = strtotime($row['dt_performed']);
-			$times[] = $time;
-			if($mintime > $time) $mintime = $time;
-		}
-		for($i=0; $i < count($times); $i++){
-			$times[$i] -= $mintime;
-			$times[$i] = floor($times[$i] / (24*3600));
-		}
-		$a->page['htmlhead'] .=
-			'<script type="text/javascript">
-				jQuery(function($){
-					
-					var r = Raphael("probe-chart")
-						, x = ['.implode(',', $times).']
-						, y = ['.implode(',', $speeds).']
-					;
-					
-					r.linechart(30, 15, 400, 300, x, [y], {symbol:"circle", axis:"0 0 0 1", shade:true, width:1.5}).hoverColumn(function () {
-            this.tags = r.set();
-            for (var i = 0, ii = this.y.length; i < ii; i++) {
-              this.tags.push(r.popup(this.x, this.y[i], this.values[i]+"ms", "right", 5).insertBefore(this).attr([{ fill: "#eee" }, { fill: this.symbols[i].attr("fill") }]));
-            }
-	        }, function () {
-            this.tags && this.tags.remove();
-	        });
-					
-				});
-			</script>';
-	}
-	
-	//Get scrape speed data.
-	$r = q(
-		"SELECT AVG(`total_time`) as `avg_time`, date(`dt_performed`) as `date` FROM `site-scrape`
-		WHERE `site_health_id` = %u GROUP BY `date`",
-		intval($site['id'])
-		// date('Y-m-d H:i:s', time()-(3*24*3600)) //Max 3 days old.
-	);
-	if($r && count($r)){
-		//Include graphael line charts.
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>';
 		$speeds = array();
 		$times = array();
 		$mintime = time();
@@ -267,21 +255,66 @@ function health_details($a, $id)
 		}
 		$a->page['htmlhead'] .=
 			'<script type="text/javascript">
-				jQuery(function($){
+				availableCharts.push(function($){
 					
-					var r = Raphael("scrape-chart")
-						, x = ['.implode(',', $times).']
-						, y = ['.implode(',', $speeds).']
-					;
+					var id = "probe-chart";
+					$("#"+id+" svg").remove();
+					var r = Raphael(id);
+					var x = ['.implode(',', $times).'];
+					var y = ['.implode(',', $speeds).'];
+					var smoothY = Smoothing.exponentialMovingAverage(y, smoothingFactor, smoothingBracket);
+					var values = [smoothY];
+					if(drawRaw){
+						values.push(y);
+					}
 					
-					r.linechart(30, 15, 400, 300, x, [y], {shade:true, axis:"0 0 0 1", width:1}).hoverColumn(function () {
-            this.tags = r.set();
-            for (var i = 0, ii = this.y.length; i < ii; i++) {
-              this.tags.push(r.popup(this.x, this.y[i], Math.round(this.values[i])+"ms", "right", 5).insertBefore(this));
-            }
-	        }, function () {
-            this.tags && this.tags.remove();
-	        });
+					r.linechart(30, 15, 400, 300, x, values, {axis:"0 0 0 1", shade:true, width:0.8})
+						.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+					
+				});
+			</script>';
+	}
+	
+	//Get scrape speed data.
+	$r = q(
+		"SELECT AVG(`total_time`) as `avg_time`, date(`dt_performed`) as `date` FROM `site-scrape`
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'
+		GROUP BY `date`",
+		intval($site['id']),
+		$maxDate
+	);
+	if($r && count($r)){
+		$speeds = array();
+		$times = array();
+		$mintime = time();
+		foreach($r as $row){
+			$speeds[] = $row['avg_time'];
+			$time = strtotime($row['date']);
+			$times[] = $time;
+			if($mintime > $time) $mintime = $time;
+		}
+		for($i=0; $i < count($times); $i++){
+			$times[$i] -= $mintime;
+			$times[$i] = floor($times[$i] / (24*3600));
+		}
+		$a->page['htmlhead'] .=
+			'<script type="text/javascript">
+				availableCharts.push(function($){
+					
+					var id = "scrape-chart";
+					$("#"+id+" svg").remove();
+					var r = Raphael(id);
+					var x = ['.implode(',', $times).'];
+					var y = ['.implode(',', $speeds).'];
+					var smoothY = Smoothing.exponentialMovingAverage(y, smoothingFactor, smoothingBracket);
+					var values = [smoothY];
+					if(drawRaw){
+						values.push(y);
+					}
+					
+					r.linechart(30, 15, 400, 300, x, values, {shade:true, axis:"0 0 0 1", width:0.8})
+						.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
 					
 				});
 			</script>';

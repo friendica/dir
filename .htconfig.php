@@ -13,6 +13,14 @@ $default_timezone = 'Europe/Amsterdam';
 // What is your site name?
 $a->config['sitename'] = "EXPERIMENTAL Friendica public directory";
 
+//Statistic display settings.
+$a->config['stats'] = array(
+  
+  //For site health, the max age for which to display data.
+  'maxDataAge' => 3600*24*30*4 //120 days = ~4 months
+  
+);
+
 //Settings related to the syncing feature.
 $a->config['syncing'] = array(
   
@@ -46,7 +54,7 @@ $a->config['site-health'] = array(
   //Wait for at least ... before probing a site again.
   //The longer this value, the more "stable" site-healths will be over time.
   //Note: If a bad (negative) health site submits something, a probe will be performed regardless.
-  'min_probe_delay' => 3*24*3600, // 3 days
+  'min_probe_delay' => 24*3600, // 1 day
   
   //Probes get a simple /friendica/json file from the server.
   //Feel free to set this timeout to a very tight value.

@@ -28,8 +28,9 @@
     <div class="profile_speed">Profile speed: $avg_profile_timems</div>
     <div class="scrape_speed">Scrape speed: $avg_scrape_timems</div>
     <div class="submit_speed">Submit speed: $avg_submit_timems</div>
-    <span class="health perfect">$no_scrape_support</span>
+    <span class="health perfect">$no_scrape_support</span><br>
+    <a href="javascript:;" class="js-toggle-raw">Toggle raw data</a>
   </div>
-  <div id="probe-chart" class="speed-chart">Probe speed</div>
-  <div id="scrape-chart" class="speed-chart">Submit speed</div>
+  <div id="probe-chart" class="speed-chart">Probe speed in ms<br>(last 120 days)</div>
+  <div id="scrape-chart" class="speed-chart">Submit speed in ms<br>(last 120 days)</div>
 </div>
