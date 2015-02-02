@@ -154,6 +154,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS `site-health` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `base_url` varchar(255) NOT NULL,
+  `effective_base_url` varchar(255) NULL DEFAULT NULL,
   `health_score` int(11) NOT NULL DEFAULT 0,
   `no_scrape_url` varchar(255) NULL DEFAULT NULL,
   `dt_first_noticed` datetime NOT NULL,
