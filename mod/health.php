@@ -45,6 +45,7 @@ function health_search(&$a, $search)
 					'<span class="health '.health_score_to_name($site['health_score']).'">&hearts;</span> '.
 					'<a href="/health/'.$site['id'].'">' . $site['base_url'] . '</a> '.
 					'(' . $site['users'] . ')'.
+					($site['effective_base_url'] ? ' -&gt; <abbr title="Redirects to this domain.">'.$site['effective_base_url'].'</abbr>' : '').
 					"<br />\r\n";
 			}
 			
@@ -70,7 +71,7 @@ function health_summary(&$a){
 	$sites = array();
 	
 	//Find the user count per site.
-	$r = q("SELECT `homepage` FROM `profile` WHERE 1");
+	$r = q("SELECT `homepage` FROM `profile`");
 	if(count($r)) {
 		foreach($r as $rr) {
 			$site = parse_site_from_url($rr['homepage']);
@@ -82,11 +83,11 @@ function health_summary(&$a){
 		}
 	}
 	
-	//See if we have a health for them.
+	//See if we have a health for them AND they provide SSL.
 	$sites_with_health = array();
 	$site_healths = array();
 	
-	$r = q("SELECT * FROM `site-health` WHERE `reg_policy`='REGISTER_OPEN'");
+	$r = q("SELECT * FROM `site-health` WHERE `reg_policy`='REGISTER_OPEN' AND `ssl_state` = 1");
 	if(count($r)) {
 		foreach($r as $rr) {
 			$sites_with_health[$rr['base_url']] = (($sites[$rr['base_url']] / 100) + 10) * intval($rr['health_score']);
@@ -106,7 +107,7 @@ function health_summary(&$a){
 		
 		//Skip small sites.
 		$users = $sites[$k];
-		if($users < 10) continue;
+		if($users < 5) continue;
 		
 		$public_sites .=
 			'<span class="health '.health_score_to_name($site['health_score']).'">&hearts;</span> '.
@@ -178,6 +179,22 @@ function health_details($a, $id)
 	
 	$site = $r[0];
 	
+	//Does it redirect to a known site?
+	$redirectStatement = '';
+	if($site['effective_base_url']){
+		
+		//The effective health status.
+		$r = q(
+			"SELECT * FROM `site-health`
+			WHERE `base_url`= '%s'",
+			dbesc($site['effective_base_url'])
+		);
+		if(count($r)){
+			$redirectStatement = '<a href="/health/'.$r[0]['id'].'">Redirects to '.$site['effective_base_url'].'</a>';
+		}
+		
+	}
+	
 	//Figure out SSL state.
 	$urlMeta = parse_url($site['base_url']);
 	if($urlMeta['scheme'] !== 'https'){
@@ -205,8 +222,10 @@ function health_details($a, $id)
 	//Get avg probe speed.
 	$r = q(
 		"SELECT AVG(`request_time`) as `avg_probe_time` FROM `site-probe`
-		WHERE `site_health_id` = %u",
-		intval($site['id'])
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'",
+		intval($site['id']),
+		$maxDate
 	);
 	if(count($r)){
 		$site['avg_probe_time'] = $r[0]['avg_probe_time'];
@@ -220,8 +239,10 @@ function health_details($a, $id)
 			AVG(`photo_time`) as `avg_photo_time`,
 			AVG(`total_time`) as `avg_submit_time`
 		FROM `site-scrape`
-		WHERE `site_health_id` = %u",
-		intval($site['id'])
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'",
+		intval($site['id']),
+		$maxDate
 	);
 	if(count($r)){
 		$site['avg_profile_time'] = $r[0]['avg_profile_time'];
@@ -255,23 +276,28 @@ function health_details($a, $id)
 		}
 		$a->page['htmlhead'] .=
 			'<script type="text/javascript">
-				availableCharts.push(function($){
+				(function(){
 					
-					var id = "probe-chart";
-					$("#"+id+" svg").remove();
-					var r = Raphael(id);
 					var x = ['.implode(',', $times).'];
 					var y = ['.implode(',', $speeds).'];
 					var smoothY = Smoothing.exponentialMovingAverage(y, smoothingFactor, smoothingBracket);
-					var values = [smoothY];
-					if(drawRaw){
-						values.push(y);
-					}
 					
-					r.linechart(30, 15, 400, 300, x, values, {axis:"0 0 0 1", shade:true, width:0.8})
-						.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+					availableCharts.push(function($){
+						
+						var id = "probe-chart";
+						$("#"+id+" svg").remove();
+						var r = Raphael(id);
+						var values = [smoothY];
+						if(drawRaw){
+							values.push(y);
+						}
+						
+						r.linechart(30, 15, 400, 295, x, values, {axis:"0 0 1 1", shade:true, width:0.8, axisxstep:6})
+							.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+						
+					});
 					
-				});
+				})();
 			</script>';
 	}
 	
@@ -300,23 +326,28 @@ function health_details($a, $id)
 		}
 		$a->page['htmlhead'] .=
 			'<script type="text/javascript">
-				availableCharts.push(function($){
+				(function(){
 					
-					var id = "scrape-chart";
-					$("#"+id+" svg").remove();
-					var r = Raphael(id);
 					var x = ['.implode(',', $times).'];
 					var y = ['.implode(',', $speeds).'];
 					var smoothY = Smoothing.exponentialMovingAverage(y, smoothingFactor, smoothingBracket);
-					var values = [smoothY];
-					if(drawRaw){
-						values.push(y);
-					}
 					
-					r.linechart(30, 15, 400, 300, x, values, {shade:true, axis:"0 0 0 1", width:0.8})
-						.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+					availableCharts.push(function($){
+						
+						var id = "scrape-chart";
+						$("#"+id+" svg").remove();
+						var r = Raphael(id);
+						var values = [smoothY];
+						if(drawRaw){
+							values.push(y);
+						}
+						
+						r.linechart(30, 15, 400, 295, x, values, {shade:true, axis:"0 0 1 1", width:0.8, axisxstep:6})
+							.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+						
+					});
 					
-				});
+				})();
 			</script>';
 	}
 	
@@ -331,6 +362,7 @@ function health_details($a, $id)
 	$tpl .= file_get_contents('view/health_details.tpl');
 	return replace_macros($tpl, array(
 		'$name' => $site['name'],
+		'$redirectStatement' => $redirectStatement,
 		'$policy' => $policy,
 		'$site_info' => $site['info'],
 		'$base_url' => $site['base_url'],
