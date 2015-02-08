@@ -1,7 +1,7 @@
 <?php
 
 //Add the auto loader. This makes sure that we can find the files we need for a class.
-require_once('autoload.php');
+require_once('vendor/autoload.php');
 
 //This says, we want Hello to mean Friendica\Directory\Example\Hello.
 //It's a shortcut.

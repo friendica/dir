@@ -3,3 +3,4 @@
 #*
 favicon.*
 tests/coverage.html
+/vendor

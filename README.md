@@ -1,6 +1,18 @@
-# Friendica Global Directory
+# Decentralized Friendica Directory
 
-Example cronjob.
+## Installing
+
+### 1. Create an autoloader with composer
+
+Make sure you have composer installed globally, or rewrite the command to use a `.phar`.
+
+```sh
+composer dump-autoload
+```
+
+### 2. Set up the cronjobs.
+
+Example cronjob using `www-data` user.
 
 ```
 */30 * * * * www-data cd /var/www/friendica-directory; php include/cron_maintain.php
