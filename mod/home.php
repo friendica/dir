@@ -1,14 +1,17 @@
 <?php
 
-if(! function_exists('home_init')) {
-function home_init(&$a) {
+use Friendica\Directory\Rendering\View;
+use Friendica\Directory\Helper\Profile as ProfileHelper;
 
-	$r = q("SELECT * FROM `user` WHERE 1 LIMIT 1");
-	if(count($r))
-		goaway( $a->get_baseurl() . "/profile/" . $r[0]['nickname'] );
-	else
-		goaway( $a->get_baseurl() . "/register" );
-
+if(! function_exists('home_content')) {
+function home_content(&$a) {
+    
+    $profiles = q("SELECT * FROM profile WHERE comm=1 AND LENGTH(pdesc)>0 ORDER BY RAND() LIMIT 3");
+    
+    $view = new View('homepage', 'minimal');
+    $view->addHelper('photoUrl', ProfileHelper::get('photoUrl'));
+    $view->output(array(
+        'profiles' => $profiles
+    ));
+    
 }}
-
-
