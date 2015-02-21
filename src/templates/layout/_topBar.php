@@ -11,3 +11,4 @@
     <?php echo $this->layout('_navigation'); ?>
     
 </header>
+<div id="top-bar-spacer"></div>

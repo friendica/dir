@@ -23,18 +23,27 @@ html{
     font-size:100%;
 }
 
-a{
-    text-decoration:none;
-    color:inherit;
+a{color:inherit;}
+
+.mobile{
+    display:none !important;
 }
 
 #top-bar{
     background:#f5f5f5;
     padding:8px 14px;
+    position:fixed;
+    z-index:1;
+    top:0;
     height:55px;
+    width:100%;
     text-align:center;
-    position:relative;
     font-weight:300;
+    border-bottom:1px solid #ddd;
+}
+#top-bar-spacer{
+    width:100%;
+    height:55px;
 }
 
 #top-bar .header{
@@ -75,7 +84,6 @@ nav#links a{
     background:#eee;
     line-height:45px;
     height:45px;
-    border-top:1px solid #ddd;
     border-bottom:1px solid #ddd;
 }
 .sub-menu-outer .sub-menu-inner{
@@ -124,6 +132,16 @@ nav#links a{
     margin-top:3em;
 }
 
+nav#links a,
+.profiles a{
+    text-decoration:none;
+}
+
+.search-results .intro{
+    text-align:justify;
+}
+
+.site,
 .profile{
     display:table;
     width:100%;
@@ -131,6 +149,13 @@ nav#links a{
     color:#000;
     padding:2px;
     outline:none;
+    margin:10px 0;
+}
+
+.site{
+    padding:14px 2px;
+    margin:20px 0;
+    border-bottom:1px dashed #ccc;
 }
 
 .profile.selected,
@@ -140,11 +165,17 @@ nav#links a{
     border:1px solid #ccc;
 }
 
+.site .site-info,
+.site .site-supports,
 .profile .profile-photo,
 .profile .profile-info{
     display:table-cell;
     vertical-align:top;
     text-align:left;
+}
+.site .site-supports{
+    text-align:right;
+    padding:8px;
 }
 
 .profile .profile-photo{
@@ -152,17 +183,21 @@ nav#links a{
     border-radius:15px;
     border:1px solid #ddd;
 }
+.site .site-info,
 .profile .profile-info{
     padding:8px;
     width:100%;
 }
+.site .site-info strong,
 .profile .profile-info strong{
     font-weight:600;
 }
+.site .site-info .fa,
 .profile .profile-info .fa{
     line-height:1.1em;
     color:#999;
 }
+.site .site-info .url,
 .profile .profile-info .url{
     font-size:80%;
     margin-bottom:3px;
@@ -218,3 +253,152 @@ nav#links a{
         width:65px;
         border-radius:0 8px 8px 0;
     }
+
+.health{font-size:120%; vertical-align:bottom;}
+.health.very-bad{ color:#f99; }
+.health.bad{ color:#f1ba7a; }
+.health.neutral{ color:#e6e782; }
+.health.ok{ color:#bef273; }
+.health.good{ color:#7cf273; }
+.health.perfect{ color:#33ff80; }
+
+.btn{
+    border:1px solid #ddd;
+    color:#555;
+    background:#eee;
+    border-radius:8px 8px;
+    height:36px;
+    line-height:34px;
+    min-width:80px;
+    padding:0 10px;
+    text-decoration:none;
+    display:inline-block;
+}
+
+/* smaller than tablet in portrait */
+@media screen and (max-width: 880px){
+    
+    body{
+        overflow-x:hidden;
+    }
+    
+    .mobile{
+        display:inherit !important;
+    }
+    
+    #top-bar .header{
+        overflow:hidden;
+        width:0px;
+        padding-left:28px;
+        height:28px;
+        background-size:28px;
+    }
+    
+    #top-bar .search-form{
+        display:block;
+        width:100%;
+        padding:0 35px;
+        margin:0;
+    }
+    
+    .homepage-wrapper,
+    .search-wrapper{
+        width:95%;
+        max-width:500px;
+    }
+    .homepage-wrapper .search-wrapper{
+        width:100%;
+    }
+    
+    .homepage-wrapper{
+        margin:90px auto;
+    }
+    
+    .search-results,
+    .sub-menu-outer .sub-menu-inner{
+        width:95%;
+        max-width:500px;
+    }
+    
+    .hamburger{
+        position:absolute;
+        top:0px;
+        right:0px;
+        padding:14px;
+        font-size:22px;
+        line-height:22px;
+        cursor:pointer;
+    }
+    
+    nav#links{
+        position:absolute;
+        width:100%;
+        top:54px;
+        right:0;
+        padding-bottom:5px;
+    }
+    nav#links .viewport{
+        position:absolute;
+        z-index:1;
+        left:100%;
+        width:100%;
+        transition:left ease 200ms;
+        background:#fff;
+        padding:20px 0;
+        box-shadow:1px 3px 3px rgba(0,0,0,0.2);
+        font-size:150%;
+        text-align:center;
+    }
+    nav#links.open .viewport{
+        left:0%;
+    }
+    #top-bar nav#links .viewport{
+        background:#f5f5f5;
+    }
+    nav#links h3{
+        margin:0;
+        display:block;
+        line-height:2em;
+    }
+    nav#links a{
+        display:block;
+        line-height:2.5em;
+        margin:4px 0;
+    }
+    
+    .profile,
+    .profile .profile-info{
+        overflow-wrap:break-word;
+        word-wrap:break-word;
+        overflow:hidden;
+    }
+    
+}
+
+/* The moment the header starts getting squashed */
+@media screen and (max-width: 520px){
+    .homepage-wrapper{
+        margin:30px auto;
+    }
+    .homepage-wrapper .header{
+        font-size:40px;
+        background-size:36px;
+        display:inline-block;
+        margin-left:18px;
+        width:275px;
+    }
+}
+
+/* close to mobile in portrait */
+@media screen and (max-width: 400px){
+    
+    .profile .profile-photo{
+        width:60px;
+        border-radius:11.25px;
+        margin:8px 4px;
+    }
+    .profile .profile-info .url{
+        display:none;
+    }
+    
+}

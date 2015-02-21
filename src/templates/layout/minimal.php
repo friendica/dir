@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
     <link rel="search" type="application/opensearchdescription+xml" title="Friendica Directory" href="/opensearch" />
     
     <title>Friendica Directory</title>
@@ -12,6 +12,8 @@
     <link href="//fonts.googleapis.com/css?family=Lato:100,300" rel="stylesheet" type="text/css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="/assets/style.css" rel="stylesheet" type="text/css" />
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 </head>
 <body>
 <?php if(isset($topBar)) echo $topBar; ?>
