@@ -133,6 +133,7 @@ nav#links a{
 }
 
 nav#links a,
+.sub-menu-outer a,
 .profiles a{
     text-decoration:none;
 }

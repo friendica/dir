@@ -14,6 +14,7 @@
     <link href="/assets/style.css" rel="stylesheet" type="text/css" />
     
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/assets/js/main.js"></script>
 </head>
 <body>
 <?php if(isset($topBar)) echo $topBar; ?>

@@ -7,10 +7,3 @@
         <a href="/help">Help</a>
     </div>
 </nav>
-
-<script type="text/javascript">
-    jQuery('.hamburger').on('click', function(e){
-        e.preventDefault();
-        jQuery('nav#links').toggleClass('open');
-    })
-</script>
