@@ -16,7 +16,7 @@ function msearch_post(&$a) {
 	if(count($r))
 		$total = $r[0]['total'];
 
-	$r = q("SELECT MATCH `tags` AGAINST ('%s') AS `score`, `name`, `homepage`,`photo`,`tags` FROM `profile` WHERE MATCH `tags` AGAINST ('%s') ORDER BY `score` DESC LIMIT %d , %d ",
+	$r = q("SELECT MATCH `tags` AGAINST ('%s') AS `score`, `id`, `name`, `homepage`,`photo`,`tags` FROM `profile` WHERE MATCH `tags` AGAINST ('%s') ORDER BY `score` DESC LIMIT %d , %d ",
 		dbesc($search),
 		dbesc($search),
 		intval($startrec),
@@ -26,7 +26,7 @@ function msearch_post(&$a) {
 	$results = array();
 	if(count($r)) {
 		foreach($r as $rr)
-			$results[] = array('name' => $rr['name'], 'url' => $rr['homepage'], 'photo' => $rr['photo'], 'tags' => $rr['tags']);
+			$results[] = array('name' => $rr['name'], 'url' => $rr['homepage'], 'photo' => $a->get_baseurl() . '/photo/' . $rr['id'], 'tags' => $rr['tags']);
 	}
 
 	$output = array('total' => $total, 'items_page' => $perpage, 'page' => $page + 1, 'results' => $results);

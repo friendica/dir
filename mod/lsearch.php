@@ -31,7 +31,7 @@ function lsearch_init(&$a) {
 
 	if(count($r)) {
 		foreach($r as $rr)
-	        $results[] = array('name' => $rr['name'], 'url' => $rr['homepage'], 'photo' => $rr['photo'], 'tags' => $rr['tags']);
+	        $results[] = array('name' => $rr['name'], 'url' => $rr['homepage'], 'photo' => $a->get_baseurl() . '/photo/' . $rr['id'], 'tags' => $rr['tags']);
     }
 
     $output = array('total' => $total, 'items_page' => $perpage, 'page' => $page + 1, 'results' => $results);
