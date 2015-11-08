@@ -77,6 +77,7 @@ curl -sS https://getcomposer.org/installer | php
 php composer.phar install
 
 #create cronjob
-echo "*/10 * * * * cd /vagrant; /usr/bin/php include/poller.php" >> friendicacron
+echo "*/30 * * * * www-data cd /vagrant; php include/cron_maintain.php" >> friendicacron
+echo "*/5  * * * * www-data cd /vagrant; php include/cron_sync.php" >> friendicacron
 sudo crontab friendicacron
 sudo rm friendicacron
