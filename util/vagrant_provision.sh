@@ -70,6 +70,7 @@ cp /vagrant/util/htconfig.vagrant.php /vagrant/.htconfig.php
 echo "create database friendica_dir" | mysql -u root -proot
 # import test database
 $MYSQL -uroot -proot friendica_dir < /vagrant/dfrndir.sql
+$MYSQL -uroot -proot friendica_dir < /vagrant/util/vagrant_default_sync_servers.sql
 
 #Install composer
 cd /vagrant
