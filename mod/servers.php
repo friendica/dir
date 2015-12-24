@@ -61,7 +61,6 @@ function servers_content(&$a) {
 		$site['supports'] = array(
 			'HTTPS' => $site['ssl_state'] == 1,
 			'Twitter' => $hasPlugin(array('buffer', 'twitter')),
-			'Facebook' => $hasPlugin(array('buffer', 'facebook', 'fbpost', 'fbsync')),
 			'Google+' => $hasPlugin(array('buffer', 'gpluspost')),
 			'RSS/Atom' => true, //Built-in.
 			'App.net' => $hasPlugin(array('appnet', 'appnetpost')),
@@ -81,7 +80,6 @@ function servers_content(&$a) {
 		$site['popular_supports'] = array(
 			'HTTPS' => $site['supports']['HTTPS'],
 			'Twitter' => $site['supports']['Twitter'],
-			'Facebook' => $site['supports']['Facebook'],
 			'Google+' => $site['supports']['Google+'],
 			'Wordpress' => $site['supports']['Wordpress']
 		);
