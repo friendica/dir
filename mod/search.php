@@ -48,7 +48,7 @@ function search_content(&$a) {
 	//Run our query.
 	if($search)
 		$search = dbesc($search . '*');
-	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `gender`, `marital`, `tags` ) 
+	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags` ) 
 		AGAINST ('$search' IN BOOLEAN MODE) " : "");
 	
 	if(!is_null($community))

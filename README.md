@@ -70,8 +70,6 @@ You can check the backlog of this queue at the `/admin` page.
     * `.vcard .region` as `region`
     * `.vcard .postal-code` as `postal-code`
     * `.vcard .country-name` as `country-name`
-    * `.vcard .x-gender` as `gender`
-    * `.marital-text` as `marital`
 
 3.  If the `dfrn-global-visibility` value is set to false. Any existing records will be deleted.
     And the process exits here.

@@ -61,8 +61,6 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `region` char(255) NOT NULL,
   `postal-code` char(32) NOT NULL,
   `country-name` char(255) NOT NULL,
-  `gender` char(32) NOT NULL,
-  `marital` char(255) NOT NULL,
   `homepage` char(255) NOT NULL,
   `photo` char(255) NOT NULL,
   `tags` mediumtext NOT NULL,
