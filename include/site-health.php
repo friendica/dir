@@ -91,7 +91,7 @@ function parse_site_from_url($url)
 
 //Performs a ping to the given site ID
 //You may need to notice the site first before you know it's ID.
-if(! function_exists('run_site_ping')){
+if(! function_exists('run_site_probe')){
 function run_site_probe($id, &$entry_out)
 {
   
