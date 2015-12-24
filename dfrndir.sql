@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `site-health` (
   `admin_name` varchar(255) NULL DEFAULT NULL,
   `admin_profile` varchar(255) NULL DEFAULT NULL,
   `ssl_state` bit(1) NULL DEFAULT NULL,
-  `ssl_grade` varchar(2) NULL DEFAULT NULL,
+  `ssl_grade` varchar(3) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `base_url` (`base_url`),
   KEY `health_score` (`health_score`),
