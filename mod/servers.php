@@ -41,6 +41,7 @@ function servers_content(&$a) {
 		
 		//Stop at unhealthy sites.
 		$site = $site_healths[$k];
+                
 		if($site['health_score'] <= 20) break;
 		
 		//Skip small sites.
@@ -94,7 +95,7 @@ function servers_content(&$a) {
 				$site['supports_more']++;
 			}
 		}
-		
+	
 		//Push to results.
 		$public_sites[] = $site;
 		
