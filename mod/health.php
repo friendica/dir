@@ -202,9 +202,9 @@ function health_details($a, $id)
 	);
 	if(count($r)){
 		//Include graphael line charts.
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>';
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/g.raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/g.line-min.js"></script>';
 		$speeds = array();
 		$times = array();
 		$mintime = time();
@@ -249,9 +249,9 @@ function health_details($a, $id)
 	);
 	if($r && count($r)){
 		//Include graphael line charts.
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>';
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/g.raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/g.line-min.js"></script>';
 		$speeds = array();
 		$times = array();
 		$mintime = time();

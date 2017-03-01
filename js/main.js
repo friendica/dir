@@ -30,4 +30,3 @@
 			closeMenu("comment-edit-submit-wrapper-" + id);
 		}
 	}
-

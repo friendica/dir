@@ -72,5 +72,3 @@ function init_groups_visitor($contact_id) {
 	}
 	return $groups;
 }}
-
-
