@@ -161,4 +161,3 @@ function closedb() {
 	global $db;
 //	$db->close();
 }}
-

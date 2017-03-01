@@ -53,7 +53,7 @@ class App {
 	public  $argc;
 	public  $module;
 	public  $pager;
-	public  $strings;   
+	public  $strings;
 	public  $path;
 
 	private $scheme;
@@ -80,7 +80,7 @@ class App {
 
 		$this->query_string = $_SERVER['QUERY_STRING'];
 
-		$this->cmd = trim($_GET['q'],'/');
+		$this->cmd = (isset($_GET['q']) ? trim($_GET['q'],'/') : '');
 
 
 		$this->argv = explode('/',$this->cmd);
