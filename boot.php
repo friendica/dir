@@ -21,7 +21,7 @@ define ( 'NOTIFY_WALL',    0x0004 );
 define ( 'NOTIFY_COMMENT', 0x0008 );
 define ( 'NOTIFY_MAIL',    0x0010 );
 
-define ( 'NAMESPACE_DFRN' , 'http://purl.org/macgirvin/dfrn/1.0' ); 
+define ( 'NAMESPACE_DFRN' , 'http://purl.org/macgirvin/dfrn/1.0' );
 
 /**
  * log levels
@@ -53,7 +53,7 @@ class App {
 	public  $argc;
 	public  $module;
 	public  $pager;
-	public  $strings;   
+	public  $strings;
 	public  $path;
 
 	private $scheme;
@@ -67,12 +67,12 @@ class App {
 		$this->page = array();
 		$this->pager= array();
 
-		$this->scheme = ((isset($_SERVER['HTTPS']) 
+		$this->scheme = ((isset($_SERVER['HTTPS'])
 				&& ($_SERVER['HTTPS']))	?  'https' : 'http' );
 		$this->hostname = str_replace('www.','',
 				$_SERVER['SERVER_NAME']);
-		set_include_path("include/$this->hostname" 
-				. PATH_SEPARATOR . 'include' 
+		set_include_path("include/$this->hostname"
+				. PATH_SEPARATOR . 'include'
 				. PATH_SEPARATOR . '.' );
 
                 if(substr($_SERVER['QUERY_STRING'],0,2) == "q=")
@@ -103,7 +103,7 @@ class App {
 			return $this->baseurl;
 
 		$this->baseurl = (($ssl) ? 'https' : $this->scheme) . "://" . $this->hostname
-			. ((isset($this->path) && strlen($this->path)) 
+			. ((isset($this->path) && strlen($this->path))
 			? '/' . $this->path : '' );
 		return $this->baseurl;
 	}
@@ -123,7 +123,7 @@ class App {
 
 	function set_path($p) {
 		$this->path = ltrim(trim($p),'/');
-	} 
+	}
 
 	function get_path() {
 		return $this->path;
@@ -137,7 +137,7 @@ class App {
 		$this->pager['itemspage'] = intval($n);
 		$this->pager['start'] = ($this->pager['page'] * $this->pager['itemspage']) - $this->pager['itemspage'];
 
-	} 
+	}
 
 	function init_pagehead() {
 		if(file_exists("view/head.tpl"))
@@ -160,7 +160,7 @@ function x($s,$k = NULL) {
 		}
 		return false;
 	}
-	else {		
+	else {
 		if(isset($s)) {
 			if($s) {
 				return (int) 1;
@@ -192,7 +192,7 @@ function logger($msg,$level = 0) {
 }}
 
 
-if(! function_exists('replace_macros')) {  
+if(! function_exists('replace_macros')) {
 function replace_macros($s,$r) {
 
 	$search = array();
@@ -359,7 +359,7 @@ function paginate(&$a) {
       			$numstart = (($pagenum > 7) ? ($pagenum - 7) : 1);
       			$numstop = (($pagenum > ($numpages - 7)) ? $numpages : ($numstart + 14));
     		}
-   
+
 		for($i = $numstart; $i <= $numstop; $i++){
       			if($i == $a->pager['page'])
 				$o .= '<span class="pager_current">'.(($i < 10) ? '&nbsp;'.$i : $i);
