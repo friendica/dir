@@ -2,7 +2,12 @@
 
 ## Installing
 
-### 1. Create an autoloader with composer
+### 1. Initialize the database
+
+Create a database with a username and a password.
+Then import ````dfrndir.sql```` to it.
+
+### 2. Create an autoloader with composer
 
 Make sure you have composer installed globally, or rewrite the command to use a `.phar`.
 
@@ -10,7 +15,7 @@ Make sure you have composer installed globally, or rewrite the command to use a 
 composer dump-autoload
 ```
 
-### 2. Set up the cronjobs.
+### 3. Set up the cronjobs.
 
 Example cronjob using `www-data` user.
 
