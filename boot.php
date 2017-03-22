@@ -80,8 +80,8 @@ class App {
 
 		$this->query_string = $_SERVER['QUERY_STRING'];
 
-		$this->cmd = trim($_GET['q'],'/');
-
+		$q = isset($_GET['q']) ? $_GET['q'] : '';
+		$this->cmd = trim($q, '/');
 
 		$this->argv = explode('/',$this->cmd);
 		$this->argc = count($this->argv);
