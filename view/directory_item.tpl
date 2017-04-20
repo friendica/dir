@@ -13,6 +13,5 @@ $star
 $pgroup
 <div class="directory-name-end"></div>
 <div class="directory-details">$details</div>
-$marital
 <div class="directory-item-end"></div>
 </div>

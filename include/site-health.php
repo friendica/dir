@@ -91,7 +91,13 @@ function parse_site_from_url($url)
 
 //Performs a ping to the given site ID
 //You may need to notice the site first before you know it's ID.
-if(! function_exists('run_site_ping')){
+//TODO: Probe server location using IP address or using the info the friendica server provides (preferred). 
+//      If IP needs to be used only provide country information.
+//TODO: Check SSLLabs Grade
+//      Check needs to be asynchronous, meaning that the check at SSLLabs will be initiated in one run while 
+//      the results must be fetched later. It might be good to mark sites, where a check has been inititated
+//      f.e. using the ssl_grade field. In the next run, results of these sites could be fetched.
+if(! function_exists('run_site_probe')){
 function run_site_probe($id, &$entry_out)
 {
   

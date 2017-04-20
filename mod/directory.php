@@ -47,7 +47,7 @@ function directory_content(&$a) {
 
 	if($search)
 		$search = dbesc($search . '*');
-	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `gender`, `marital`, `tags` ) 
+	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags` ) 
 		AGAINST ('$search' IN BOOLEAN MODE) " : "");
 
 	if($forums)
@@ -92,8 +92,6 @@ function directory_content(&$a) {
 				$details .= $rr['country-name'];
 			}
 
-			if(strlen($rr['gender']))
-				$details .= '<br />' . t('Gender: ') . $rr['gender'] ;
 
 			$o .= replace_macros($tpl,array(
 				'$id' => $rr['id'],
@@ -107,8 +105,7 @@ function directory_content(&$a) {
 				'$name' => $rr['name'],
 				'$pclass' => (($rr['comm']) ? ' group' : ''),
 				'$pgroup' => (($rr['comm']) ? '<div class="directory-group">' . t('[Public Group]') . '</div>' : ''),
-				'$details' => $pdesc . $details,
-				'$marital' => ((strlen($rr['marital'])) ? '<div class="marital"><span class="marital-label"><span class="heart">&hearts;</span> ' . t('Status:') . ' </span><span class="marital-text">' . $rr['marital'] . '</span></div>' : '')
+				'$details' => $pdesc . $details
   
 
 

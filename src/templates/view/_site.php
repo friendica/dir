@@ -20,7 +20,10 @@
     <div class="site-supports">
         <em>Features</em>
         <?php foreach ($site['popular_supports'] as $key => $value): if(!$value) continue; ?>
-            <div class="supports <?php echo strtolower($key); ?>"><?php echo $key; ?>&nbsp;&nbsp;&radic;</div>
+            
+            <div class="supports <?php echo strtolower($key); ?>">
+                <?php echo $key; ?><?php if($key == 'HTTPS' && $site['ssl_grade'] != null): ?>,&nbsp;Grade:&nbsp;<?php echo $site['ssl_grade']; ?><?php endif ?>&nbsp;&nbsp;&radic;
+            </div>
         <?php endforeach ?>
         <?php if ($site['supports_more'] > 0): ?>
             

@@ -4,3 +4,4 @@
 favicon.*
 tests/coverage.html
 /vendor
+/nbproject/private/

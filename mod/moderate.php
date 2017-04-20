@@ -107,9 +107,6 @@ function moderate_content(&$a) {
 				$details .= $rr['country-name'];
 			}
 
-			if(strlen($rr['gender']))
-				$details .= '<br />' . t('Gender: ') . t($rr['gender']) ;
-
 			$o .= replace_macros($tpl,array(
 				'$id' => $rr['id'],
 				'$mod' => '',
@@ -120,8 +117,7 @@ function moderate_content(&$a) {
 				'$star' => '',
 				'$pclass' => (($rr['comm']) ? ' group' : ''),
 				'$pgroup' => (($rr['comm']) ? '<div class="directory-group">' . t('[Public Group]') . '</div>' : ''),
-				'$details' => $pdesc . $details,
-				'$marital' => ((strlen($rr['marital'])) ? '<div class="marital"><span class="marital-label"><span class="heart">&hearts;</span> Status: </span><span class="marital-text">' . $rr['marital'] . '</span></div>' : '')
+				'$details' => $pdesc . $details
   
 
 

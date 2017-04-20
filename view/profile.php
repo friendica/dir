@@ -42,18 +42,10 @@
 
 	<?php } ?>
 
-	<?php if(strlen($profile['gender'])) { ?>
-		<div class="mf">Gender: <span class="x-gender"><?php echo $profile['gender']; ?></span></div>
-
-	<?php } ?>
-
 	<?php if(strlen($profile['pubkey'])) { ?>
 		<div class="key" style="display: none"><?php echo $profile['pubkey']; ?></div>
 	<?php } ?>
 </div>
-<?php } ?>
-<?php if(strlen($profile['marital'])) { ?>
-<div class="marital"><span class="marital-label"><span class="heart">&hearts;</span> Status: </span><span class="marital-text"><?php echo $profile['marital']; ?></span></div>
 <?php } ?>
 <?php if(strlen($profile['url'])) { ?>
 <div class="homepage"><span class="homepage-label">Homepage: </span><span class="homepage-url"><?php echo $profile['homepage']; ?></span></div>

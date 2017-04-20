@@ -7,7 +7,7 @@
             We recommend these based on their <abbr title="Decent speed, proper security, recent version, etc.">health</abbr>.
         </p>
         <p class="intro">
-            Keep in mind that different servers may support different networks besides Friendica.
+            Keep in mind that different servers may support different features like communicating with additional networks besides Friendica.
             It's best to pick the one that best suits your needs.
         </p>
         

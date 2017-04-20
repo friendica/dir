@@ -11,9 +11,8 @@
     <p class="about">
         Friendica is a decentralized social network.
         And this is a directory to find people on this network.
-        Vivamus condimentum tempor pellentesque. Phasellus turpis nulla, lacinia vitae quam in,
-        cursus semper est. Ut lobortis ex quis sodales porta. Nam rhoncus tortor lobortis auctor
-        efficitur. Ut ac ullamcorper lorem.
+        If you want to create your own account on a public server, have a look 
+        on our <a href="servers">Public servers listing</a>.
     </p>
     
     <div class="profiles">

@@ -19,16 +19,6 @@ $o .= <<< EOT
 EOT;
 }
 
-if($a->profile['gender']) {
-$o .= <<< EOT
-<div id="advanced-profile-gender-wrapper" >
-<div id="advanced-profile-gender-text">Gender:</div>
-<div id="advanced-profile-gender">{$a->profile['gender']}</div>
-</div>
-<div id="advanced-profile-gender-end"></div>
-EOT;
-}
-
 if($a->profile['dob']) {
 $o .= <<< EOT
 <div id="advanced-profile-dob-wrapper" >
@@ -54,16 +44,6 @@ $o .= <<< EOT
 <div id="advanced-profile-age">$age</div>
 </div>
 <div id="advanced-profile-age-end"></div>
-EOT;
-}
-
-if($a->profile['marital']) {
-$o .= <<< EOT
-<div id="advanced-profile-marital-wrapper" >
-<div id="advanced-profile-marital-text"><span class="heart">&hearts;</span> Status:</div>
-<div id="advanced-profile-marital">{$a->profile['marital']}</div>
-</div>
-<div id="advanced-profile-marital-end"></div>
 EOT;
 }
 
