@@ -183,4 +183,3 @@ function pop_scrape_target(&$array, $name) {
 	unset($array[$at]);
 	return count($array);
 }}
-

@@ -25,4 +25,3 @@
 	fetch_url($dir . '?url=' . bin2hex($argv[1]));
 
 	exit;
-

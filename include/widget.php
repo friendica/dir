@@ -4,7 +4,7 @@
 function tags_widget() {
 	$o = '';
 
-	$r = q("select distinct(term), count(term) as total from tag group by term order by count(term) desc limit 10");
+	$r = q("select distinct(term), count(term) as total from tag group by term order by count(term) desc limit 20");
 	if(count($r)) {
 		$o .= '<div class="widget">';
 		$o .= '<h3>' . t('Trending Interests') . '</h3>';
@@ -20,7 +20,7 @@ function tags_widget() {
 function country_widget() {
 	$o = '';
 
-	$r = q("select distinct(`country-name`), count(`country-name`) as total from profile where `country-name` != '' group by `country-name` order by count(`country-name`) desc limit 10");
+	$r = q("select distinct(`country-name`), count(`country-name`) as total from profile where `country-name` != '' group by `country-name` order by count(`country-name`) desc limit 20");
 	if(count($r)) {
 		$o .= '<div class="widget">';
 		$o .= '<h3>' . t('Locations') . '</h3>';

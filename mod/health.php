@@ -261,6 +261,10 @@ function health_details($a, $id)
 		$maxDate
 	);
 	if(count($r)){
+		//Include graphael line charts.
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_line.js?v=0.51"></script>';
 		$speeds = array();
 		$times = array();
 		$mintime = time();
@@ -311,6 +315,10 @@ function health_details($a, $id)
 		$maxDate
 	);
 	if($r && count($r)){
+		//Include graphael line charts.
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_line.js?v=0.51"></script>';
 		$speeds = array();
 		$times = array();
 		$mintime = time();
@@ -385,5 +393,3 @@ function health_details($a, $id)
 		'$avg_photo_time' => round($site['avg_photo_time']),
 		'$avg_submit_time' => round($site['avg_submit_time'])
 	));
-	
-}
