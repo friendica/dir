@@ -109,3 +109,15 @@ You can check the backlog of this queue at the `/admin` page.
 
 11. Should there somehow have been an error at this point such as that there is no profile ID known.
     Everything will get deleted based on the original `?url=` parameter.
+
+## Note about search
+
+The Directory uses MySQL fulltext capabilities to index profiles and offer a search feature.
+However, the default minimum word size MySQL will index is 4, which ignores words like `PHP` and `USA`.
+
+To index words smaller than 4 characters, you will have to edit your my.cnf/my.ini file to include this:
+
+````
+[mysqld]
+ft_min_word_len = 3
+````

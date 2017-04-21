@@ -48,10 +48,9 @@ function directory_content(App $a)
 	));
 
 	if ($search) {
-		$search = dbesc($search . '*');
+		$search = dbesc($search);
 	}
-	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags`)
-			AGAINST ('$search' IN BOOLEAN MODE) " : "");
+	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags`) AGAINST ('$search') " : "");
 
 	if ($forums) {
 		$sql_extra .= " AND `comm` = 1 ";
