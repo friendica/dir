@@ -101,35 +101,35 @@ class dba
 }
 
 if (! function_exists('printable')) {
-    function printable($s)
-    {
-        $s = preg_replace("~([\x01-\x08\x0E-\x0F\x10-\x1F\x7F-\xFF])~", ".", $s);
-        $s = str_replace("\x00", '.', $s);
-        if (x($_SERVER, 'SERVER_NAME')) {
-            $s = escape_tags($s);
-        }
-        return $s;
-    }
+	function printable($s)
+	{
+		$s = preg_replace("~([\x01-\x08\x0E-\x0F\x10-\x1F\x7F-\xFF])~", ".", $s);
+		$s = str_replace("\x00", '.', $s);
+		if (x($_SERVER, 'SERVER_NAME')) {
+			$s = escape_tags($s);
+		}
+		return $s;
+	}
 }
 
 
 // Procedural functions
 if (! function_exists('dbg')) {
-    function dbg($state)
-    {
-        global $db;
-        $db->dbg($state);
-    }
+	function dbg($state)
+	{
+		global $db;
+		$db->dbg($state);
+	}
 }
 
 if (! function_exists('dbesc')) {
-    function dbesc($str)
-    {
-        global $db;
-        if ($db) {
-            return($db->escape($str));
-        }
-    }
+	function dbesc($str)
+	{
+		global $db;
+		if ($db) {
+			return($db->escape($str));
+		}
+	}
 }
 
 
@@ -139,21 +139,21 @@ if (! function_exists('dbesc')) {
 //                   'user', 1);
 
 if (! function_exists('q')) {
-    function q($sql)
-    {
-        global $db;
-        $args = func_get_args();
-        unset($args[0]);
-        if ($db) {
-            $ret = $db->q(vsprintf($sql, $args));
-        }
-        if ($db->db->errno) {
-            logger('dba: ' . $db->db->error);
-        }
+	function q($sql)
+	{
+		global $db;
+		$args = func_get_args();
+		unset($args[0]);
+		if ($db) {
+			$ret = $db->q(vsprintf($sql, $args));
+		}
+		if ($db->db->errno) {
+			logger('dba: ' . $db->db->error);
+		}
 
 
-        return $ret;
-    }
+		return $ret;
+	}
 }
 
 
@@ -164,29 +164,29 @@ if (! function_exists('q')) {
 
 
 if (! function_exists('dbesc_array_cb')) {
-    function dbesc_array_cb(&$item, $key)
-    {
-        if (is_string($item)) {
-            $item = dbesc($item);
-        }
-    }
+	function dbesc_array_cb(&$item, $key)
+	{
+		if (is_string($item)) {
+			$item = dbesc($item);
+		}
+	}
 }
 
 
 if (! function_exists('dbesc_array')) {
-    function dbesc_array(&$arr)
-    {
-        if (is_array($arr) && count($arr)) {
-            array_walk($arr, 'dbesc_array_cb');
-        }
-    }
+	function dbesc_array(&$arr)
+	{
+		if (is_array($arr) && count($arr)) {
+			array_walk($arr, 'dbesc_array_cb');
+		}
+	}
 }
 
 
 if (! function_exists('closedb')) {
-    function closedb()
-    {
-        global $db;
+	function closedb()
+	{
+		global $db;
 //	$db->close();
-    }
+	}
 }

@@ -21,14 +21,14 @@ $db = new dba($db_host, $db_user, $db_pass, $db_data);
 	unset($db_host, $db_user, $db_pass, $db_data);
 
 $a->init_pagehead();
-$a->page['aside'] .= '<div id="logo"><img src="images/friendica-32.png" alt="friendica logo" /> <a href="http://friendica.com">Friendica</a></div><div id="slogan">Your friends. Your web.</div>';
+$a->page['aside'] = '<div id="logo"><img src="images/friendica-32.png" alt="friendica logo" /> <a href="http://friendica.com">Friendica</a></div><div id="slogan">Your friends. Your web.</div>';
 
 require_once 'session.php';
 
 session_start();
 
 if ((x($_SESSION, 'authenticated')) || (x($_POST, 'auth-params')) || ($a->module === 'login')) {
-    require 'auth.php';
+	require 'auth.php';
 }
 
 $dreamhost_error_hack = 1;
@@ -73,17 +73,19 @@ if ($a->module_loaded) {
 
 	if ((! $a->error) && (function_exists($a->module . '_content'))) {
 		$func = $a->module . '_content';
-		$a->page['content'] .= $func($a);
+		$a->page['content'] = $func($a);
 	}
-}
-
-if (stristr($_SESSION['sysmsg'], t('Permission denied'))) {
-	header($_SERVER['SERVER_PROTOCOL'] . ' 403 ' . t('Permission denied.'));
 }
 
 // report anything important happening
 
 if (x($_SESSION, 'sysmsg')) {
+	if (stristr($_SESSION['sysmsg'], t('Permission denied'))) {
+		header($_SERVER['SERVER_PROTOCOL'] . ' 403 ' . t('Permission denied.'));
+	}
+	if (!isset($a->page['content'])) {
+		$a->page['content'] = '';
+	}
 	$a->page['content'] = '<div id="sysmsg" class="error-message">' . $_SESSION['sysmsg'] . '</div>' . PHP_EOL
 		. $a->page['content'];
 	unset($_SESSION['sysmsg']);
