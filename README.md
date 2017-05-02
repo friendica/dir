@@ -121,3 +121,11 @@ To index words smaller than 4 characters, you will have to edit your my.cnf/my.i
 [mysqld]
 ft_min_word_len = 3
 ````
+
+Then restart your MySQL server.
+
+If you already had data in your profile table, you will need to rebuild the index by executing the following query:
+
+````
+REPAIR TABLE `profile` QUICK;
+````
