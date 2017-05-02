@@ -2,7 +2,7 @@
 
 use Friendica\Directory\Rendering\View;
 
-require_once('include/site-health.php');
+require_once 'include/site-health.php';
 
 function servers_content(&$a) {
 
