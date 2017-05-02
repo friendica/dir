@@ -1,5 +1,7 @@
 <?php
 
+use Friendica\Directory\App;
+
 require_once 'datetime.php';
 
 function photo_init(App $a)

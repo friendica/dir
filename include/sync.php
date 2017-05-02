@@ -1,5 +1,7 @@
 <?php
 
+use Friendica\Directory\App;
+
 /**
  * Pull this URL to our pulling queue.
  * @param  string $url
@@ -92,7 +94,7 @@ function get_push_targets()
  * @param object $a The App instance.
  * @return array Batch of URL's.
  */
-function get_push_batch($a)
+function get_push_batch(App $a)
 {
 	return q("SELECT * FROM `sync-push-queue` LIMIT %u", intval($a->config['syncing']['max_push_items']));
 }
@@ -102,7 +104,7 @@ function get_push_batch($a)
  * @param object $a The App instance.
  * @return list($targets, $batch) A list of both the targets array and batch array.
  */
-function get_pushing_job($a)
+function get_pushing_job(App $a)
 {
 	//When pushing is requested...
 	if (!!$a->config['syncing']['enable_pushing']) {
@@ -221,7 +223,7 @@ function run_pushing_job($targets, $batch, $db_host, $db_user, $db_pass, $db_dat
  * @param object $a The App instance.
  * @return array Batch of URL's.
  */
-function get_queued_pull_batch($a)
+function get_queued_pull_batch(App $a)
 {
 	//Randomize this, to prevent scraping the same servers too much or dead URL's.
 	$batch = q("SELECT * FROM `sync-pull-queue` ORDER BY RAND() LIMIT %u", intval($a->config['syncing']['max_pull_items']));
@@ -243,7 +245,7 @@ function get_pull_targets()
  * @param object $a The App instance.
  * @return array Batch of URL's.
  */
-function get_remote_pull_batch($a)
+function get_remote_pull_batch(App $a)
 {
 	//Find our targets.
 	$targets = get_pull_targets();
@@ -305,7 +307,7 @@ function get_remote_pull_batch($a)
  * @param  object $a The App instance.
  * @return array URL's to scrape.
  */
-function get_pulling_job($a)
+function get_pulling_job(App $a)
 {
 	//No pulling today...
 	if (!$a->config['syncing']['enable_pulling']) {
@@ -375,7 +377,7 @@ function pull_worker($i, $threadc, $pull_batch, $db_host, $db_user, $db_pass, $d
  * @param  mixed  $install    Maybe a boolean.
  * @return void
  */
-function run_pulling_job($a, $pull_batch, $db_host, $db_user, $db_pass, $db_data, $install)
+function run_pulling_job(App $a, $pull_batch, $db_host, $db_user, $db_pass, $db_data, $install)
 {
 	//We need the scraper.
 	require_once 'include/submit.php';

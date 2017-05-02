@@ -1,6 +1,9 @@
 <?php
 
+//Startup.
 require_once 'boot.php';
+
+use Friendica\Directory\App;
 
 $a = new App;
 
@@ -57,7 +60,7 @@ foreach ($contacts as $contact) {
 		}
 		if (!$update) {
 			continue;
-	}
+		}
 	}
 
 	$r = q("SELECT * FROM `contact` WHERE `self` = 1 LIMIT 1");

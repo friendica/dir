@@ -1,6 +1,9 @@
 <?php
 
+//Startup.
 require_once 'boot.php';
+
+use Friendica\Directory\App;
 
 $a = new App;
 

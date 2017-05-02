@@ -2,6 +2,8 @@
 
 namespace Friendica\Directory\Helper;
 
+use Friendica\Directory\App;
+
 use \OutOfBoundsException;
 use \ReflectionMethod;
 
@@ -12,7 +14,7 @@ abstract class BaseHelper
 {
 	/**
 	 * A reference to the global App.
-	 * @var \App
+	 * @var Friendica\Directory\App
 	 */
 	protected $app;
 

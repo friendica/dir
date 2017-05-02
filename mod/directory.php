@@ -1,5 +1,7 @@
 <?php
 
+use Friendica\Directory\App;
+
 require_once 'include/widget.php';
 
 function directory_init(App $a)

@@ -1,5 +1,6 @@
 <?php
 
+use Friendica\Directory\App;
 use Friendica\Directory\Rendering\View;
 use Friendica\Directory\Helper\Search as SearchHelper;
 use Friendica\Directory\Helper\Profile as ProfileHelper;

@@ -1,5 +1,10 @@
 <?php
 
+//Startup.
+require_once 'boot.php';
+
+use Friendica\Directory\App;
+
 // Debug stuff.
 // ini_set('display_errors', 1);
 // ini_set('log_errors','0');
@@ -8,9 +13,6 @@ error_reporting(E_ALL ^ E_NOTICE);
 $start_maintain = time();
 
 $verbose = $argv[1] === 'verbose';
-
-//Startup.
-require_once 'boot.php';
 
 $a = new App;
 
