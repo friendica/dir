@@ -7,26 +7,23 @@
 </div>
 
 <div class="search-results">
+	<h3>Results for "<?php echo $query; ?>" (<?php echo $total; ?>)</h3>
     <div class="profiles">
-        
         <?php if (count($results)): ?>
-            
-            <h3>Results for "<?php echo $query; ?>" (<?php echo $total; ?>)</h3>
+
             <?php
-            
-                foreach ($results as $profile)
-                    echo $this->view('_profile', array('profile'=>$profile));
-                
-                echo $this->paginate();
-            
+
+                foreach ($results as $profile) {
+                    echo $this->view('_profile', array('profile' => $profile));
+				}
             ?>
-            
-            
+
+
         <?php else: ?>
-            
+
             <h3>There were no results</h3>
-            
+
         <?php endif ?>
-        
     </div>
+	<?php echo $this->paginate();?>
 </div>

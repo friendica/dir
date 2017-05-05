@@ -267,15 +267,15 @@ nav#links a,
 
 /* smaller than tablet in portrait */
 @media screen and (max-width: 880px){
-    
+
     body{
         overflow-x:hidden;
     }
-    
+
     .mobile{
         display:inherit !important;
     }
-    
+
     #top-bar .header{
         overflow:hidden;
         width:0px;
@@ -283,14 +283,14 @@ nav#links a,
         height:28px;
         background-size:28px;
     }
-    
+
     #top-bar .search-form{
         display:block;
         width:100%;
         padding:0 35px;
         margin:0;
     }
-    
+
     .homepage-wrapper,
     .search-wrapper{
         width:95%;
@@ -299,17 +299,17 @@ nav#links a,
     .homepage-wrapper .search-wrapper{
         width:100%;
     }
-    
+
     .homepage-wrapper{
         margin:90px auto;
     }
-    
+
     .search-results,
     .sub-menu-outer .sub-menu-inner{
         width:95%;
         max-width:500px;
     }
-    
+
     .hamburger{
         position:absolute;
         top:0px;
@@ -319,7 +319,7 @@ nav#links a,
         line-height:22px;
         cursor:pointer;
     }
-    
+
     nav#links{
         position:absolute;
         width:100%;
@@ -355,14 +355,14 @@ nav#links a,
         line-height:2.5em;
         margin:4px 0;
     }
-    
+
     .profile,
     .profile .profile-info{
         overflow-wrap:break-word;
         word-wrap:break-word;
         overflow:hidden;
     }
-    
+
 }
 
 /* The moment the header starts getting squashed */
@@ -381,7 +381,7 @@ nav#links a,
 
 /* close to mobile in portrait */
 @media screen and (max-width: 400px){
-    
+
     .profile .profile-photo{
         width:60px;
         border-radius:11.25px;
@@ -390,5 +390,5 @@ nav#links a,
     .profile .profile-info .url{
         display:none;
     }
-    
+
 }

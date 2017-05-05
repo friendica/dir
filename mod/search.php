@@ -51,10 +51,10 @@ function search_content(App $a)
 	}
 
 	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags` )
-		AGAINST ('$search' IN BOOLEAN MODE) " : "");
+		AGAINST ('$search' IN BOOLEAN MODE) " : '');
 
 	if (!is_null($community)) {
-		$sql_extra .= " and comm=" . intval($community) . " ";
+		$sql_extra .= ' AND `comm` = ' . intval($community) . ' ';
 	}
 
 	$sql_extra = str_replace('%', '%%', $sql_extra);
@@ -63,13 +63,13 @@ function search_content(App $a)
 	$r = q("SELECT COUNT(*) AS `total` FROM `profile` WHERE `censored` = 0 $sql_extra ");
 	if (count($r)) {
 		$total = $r[0]['total'];
-		$a->set_pager_total($r[0]['total']);
+		$a->set_pager_total($total);
 	}
 
 	if ($alpha) {
-		$order = " order by name asc ";
+		$order = ' ORDER BY `name` ASC ';
 	} else {
-		$order = " order by updated desc, id desc ";
+		$order = ' ORDER BY `updated` DESC, `id` DESC ';
 	}
 
 	$r = q("SELECT * FROM `profile` WHERE `censored` = 0 $sql_extra $order LIMIT %d , %d ",
