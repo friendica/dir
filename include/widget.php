@@ -1,41 +1,47 @@
 <?php
 
-
-function tags_widget() {
+function tags_widget()
+{
 	$o = '';
 
-	$r = q("select distinct(term), count(term) as total from tag group by term order by count(term) desc limit 20");
-	if(count($r)) {
+	$r = q("SELECT `term`, COUNT(`term`) AS `total` FROM `tag` GROUP BY `term` ORDER BY COUNT(`term`) DESC LIMIT 20");
+	if (count($r)) {
 		$o .= '<div class="widget">';
 		$o .= '<h3>' . t('Trending Interests') . '</h3>';
 		$o .= '<ul>';
-		foreach($r as $rr) {
-			$o .= '<li><a href="directory?search=' . $rr['term'] . '" >' . $rr['term'] . '</a></li>';
+		foreach ($r as $rr) {
+			$o .= '<li><a href="search?query=' . $rr['term'] . '" >' . $rr['term'] . '</a> (' . $rr['total'] . ')</li>';
 		}
 		$o .= '</ul></div>';
 	}
 	return $o;
 }
 
-function country_widget() {
+function country_widget()
+{
 	$o = '';
 
-	$r = q("select distinct(`country-name`), count(`country-name`) as total from profile where `country-name` != '' group by `country-name` order by count(`country-name`) desc limit 20");
-	if(count($r)) {
+	$r = q("SELECT `country-name`, COUNT(`country-name`) AS `total`"
+		. " FROM `profile`"
+		. " WHERE `country-name` != ''"
+		. " GROUP BY `country-name`"
+		. " ORDER BY COUNT(`country-name`) DESC"
+		. " LIMIT 20");
+	if (count($r)) {
 		$o .= '<div class="widget">';
 		$o .= '<h3>' . t('Locations') . '</h3>';
 		$o .= '<ul>';
-		foreach($r as $rr) {
-			$o .= '<li><a href="directory?search=' . $rr['country-name'] . '" >' . $rr['country-name'] . '</a></li>';
+		foreach ($r as $rr) {
+			$o .= '<li><a href="search?query=' . $rr['country-name'] . '" >' . $rr['country-name'] . '</a> (' . $rr['total'] . ')</li>';
 		}
 		$o .= '</ul></div>';
 	}
 	return $o;
 }
 
-
-function get_taglist($limit = 50) {
-	$r = q("select distinct(term), count(term) as total from tag group by term order by count(term) desc limit %d",
+function get_taglist($limit = 50)
+{
+	$r = q("SELECT DISTINCT(`term`), COUNT(`term`) AS `total` FROM `tag` GROUP BY `term` ORDER BY COUNT(`term`) DESC LIMIT %d",
 		intval($limit)
 	);
 

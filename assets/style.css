@@ -15,6 +15,10 @@ html{
 
 a{color:inherit;}
 
+p{
+    margin:0 0 1em 0;
+}
+
 .mobile{
     display:none !important;
 }
@@ -88,15 +92,31 @@ nav#links a{
     border-bottom:2px solid #f00;
 }
 
-.search-results,
 .homepage-wrapper{
     width:500px;
     margin:auto;
     text-align:center;
 }
 
-.search-results{
+.search-results,
+.directory-results{
     margin-bottom:25px;
+}
+
+.directory-results{
+    display:flex;
+    flex-flow:row;
+}
+
+.directory-results > aside{
+    flex:1 6 20%;
+    order:1;
+    padding:0 1em;
+}
+
+.directory-results > section{
+    flex:3 1 80%;
+    order:2;
 }
 
 .homepage-wrapper{
@@ -121,9 +141,18 @@ nav#links a{
     margin-top:3em;
 }
 
+.profiles{
+    padding:0 10px;
+    column-width:400px;
+}
+
+.profiles > figure{
+    display:inline-block;
+    cursor:pointer;
+}
+
 nav#links a,
-.sub-menu-outer a,
-.profiles a{
+.sub-menu-outer a{
     text-decoration:none;
 }
 
@@ -133,13 +162,15 @@ nav#links a,
 
 .site,
 .profile{
-    display:table;
     width:100%;
     text-decoration:none;
     color:#000;
     padding:2px;
     outline:none;
-    margin:10px 0;
+    margin:5px 0;
+    display:inline;
+    background-color:rgba(0, 0, 0, .01);
+    border-radius:23px .5em 23px .5em;
 }
 
 .site{
@@ -169,6 +200,7 @@ nav#links a,
 }
 
 .profile .profile-photo{
+    float:left;
     margin:8px;
     border-radius:15px;
     border:1px solid #ddd;
@@ -192,6 +224,21 @@ nav#links a,
     font-size:80%;
     margin-bottom:3px;
     color:#555;
+
+    /** @see https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ */
+    overflow-wrap:break-word;
+    word-wrap:break-word;
+    -ms-word-break:break-all;
+    word-break:break-all;
+    word-break:break-word;
+    -ms-hyphens:auto;
+    -moz-hyphens:auto;
+    -webkit-hyphens:auto;
+    hyphens:auto;
+}
+
+.profile .profile-info .description{
+    margin-bottom:.5em;
 }
 
 .search-wrapper{
@@ -204,45 +251,47 @@ nav#links a,
     height:38px;
     line-height:22px;
 }
-    .search-wrapper .search-field{
-        line-height:22px;
-        display:block;
-        border:none;
-        outline:none;
-        background:none;
-        padding:8px 12px;
-        padding-right:117px;
-        width:100%;
-    }
-    .search-wrapper .reset{
-        position:absolute;
-        top:0;
-        right:65px;
-        height:25px;
-        width:25px;
-        margin:6px;
-        padding:0;
-        line-height:1;
-        font-size:12px;
-        color:#555;
-        background:#eee;
-        border:1px solid #ddd;
-        border-radius:20px;
-        font-family:'FontAwesome';
-        font-weight:100;
-    }
-    .search-wrapper .search{
-        border:none;
-        border-left:1px solid #ddd;
-        color:#555;
-        background:#eee;
-        position:absolute;
-        top:0;
-        right:0;
-        height:36px;
-        width:65px;
-        border-radius:0 8px 8px 0;
-    }
+.search-wrapper .search-field{
+    line-height:22px;
+    display:block;
+    border:none;
+    outline:none;
+    background:none;
+    padding:8px 12px;
+    padding-right:117px;
+    width:100%;
+}
+.search-wrapper .reset{
+    position:absolute;
+    top:0;
+    right:65px;
+    height:25px;
+    width:25px;
+    margin:6px;
+    padding:0;
+    line-height:1;
+    font-size:12px;
+    color:#555;
+    background:#eee;
+    border:1px solid #ddd;
+    border-radius:20px;
+    font-family:'FontAwesome';
+    font-weight:100;
+    line-height:25px;
+    text-decoration:none;
+}
+.search-wrapper .search{
+    border:none;
+    border-left:1px solid #ddd;
+    color:#555;
+    background:#eee;
+    position:absolute;
+    top:0;
+    right:0;
+    height:36px;
+    width:65px;
+    border-radius:0 8px 8px 0;
+}
 
 .health{font-size:120%; vertical-align:bottom;}
 .health.very-bad{ color:#f99; }
