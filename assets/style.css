@@ -31,9 +31,10 @@ p {
     top: 0;
     height: 55px;
     width: 100%;
-    text-align: center;
     font-weight: 300;
     border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
 }
 #top-bar-spacer {
     width: 100%;
@@ -41,21 +42,18 @@ p {
 }
 
 #top-bar .header {
-    position: absolute;
-    top: 14px;
-    left: 14px;
     display: inline-block;
     font-size: 16px;
     font-weight: 300;
-    line-height: 0.9em;
+    line-height: 19px;
     background: url('/images/friendica.svg') top left no-repeat;
     background-size: 14px;
     padding-left: 18px;
     margin: 0;
+    white-space: nowrap;
 }
 
 #top-bar .search-form {
-    margin: 0 20px;
     display: inline-block;
 }
 #top-bar .search-wrapper {
@@ -63,10 +61,8 @@ p {
 }
 
 nav#links {
-    position: absolute;
-    top: 0;
-    right: 14px;
-    line-height: 55px;
+    line-height: 39px;
+    white-space: nowrap;
 }
 nav#links a {
     display: inline-block;
@@ -342,7 +338,7 @@ nav#links a,
 
     .homepage-wrapper,
     .search-wrapper {
-        width: 95%;
+        width: 100%;
         max-width: 500px;
     }
     .homepage-wrapper .search-wrapper {
@@ -360,10 +356,7 @@ nav#links a,
     }
 
     .hamburger {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        padding: 14px;
+        padding: 8px;
         font-size: 22px;
         line-height: 22px;
         cursor: pointer;
@@ -410,6 +403,18 @@ nav#links a,
         overflow-wrap: break-word;
         word-wrap: break-word;
         overflow: hidden;
+    }
+
+    .directory-results {
+        flex-flow: column;
+    }
+
+    .directory-results > aside {
+        order: 2;
+    }
+
+    .directory-results > section {
+        order: 1;
     }
 
 }
