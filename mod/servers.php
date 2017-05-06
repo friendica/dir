@@ -64,9 +64,9 @@ function servers_content(&$a) {
 		$site['supports'] = array(
 			'HTTPS' => $site['ssl_state'] == 1,
 			'Twitter' => $hasPlugin(array('buffer', 'twitter')),
+			'Facebook' => $hasPlugin(array('buffer')),
 			'Google+' => $hasPlugin(array('buffer', 'gpluspost')),
 			'RSS/Atom' => true, //Built-in.
-			'App.net' => $hasPlugin(array('appnet', 'appnetpost')),
 			'Diaspora*' => $hasPlugin(array('diaspora')),
 			'pump.io' => $hasPlugin(array('pumpio')),
 			'StatusNet' => $hasPlugin(array('statusnet')),
