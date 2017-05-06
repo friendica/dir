@@ -1,6 +1,23 @@
-# Friendica Global Directory
+# Decentralized Friendica Directory
 
-Example cronjob.
+## Installing
+
+### 1. Initialize the database
+
+Create a database with a username and a password.
+Then import ````dfrndir.sql```` to it.
+
+### 2. Create an autoloader with composer
+
+Make sure you have composer installed globally, or rewrite the command to use a `.phar`.
+
+```sh
+composer dump-autoload
+```
+
+### 3. Set up the cronjobs.
+
+Example cronjob using `www-data` user.
 
 ```
 */30 * * * * www-data cd /var/www/friendica-directory; php include/cron_maintain.php
@@ -58,8 +75,6 @@ You can check the backlog of this queue at the `/admin` page.
     * `.vcard .region` as `region`
     * `.vcard .postal-code` as `postal-code`
     * `.vcard .country-name` as `country-name`
-    * `.vcard .x-gender` as `gender`
-    * `.marital-text` as `marital`
 
 3.  If the `dfrn-global-visibility` value is set to false. Any existing records will be deleted.
     And the process exits here.
@@ -94,3 +109,23 @@ You can check the backlog of this queue at the `/admin` page.
 
 11. Should there somehow have been an error at this point such as that there is no profile ID known.
     Everything will get deleted based on the original `?url=` parameter.
+
+## Note about search
+
+The Directory uses MySQL fulltext capabilities to index profiles and offer a search feature.
+However, the default minimum word size MySQL will index is 4, which ignores words like `PHP` and `USA`.
+
+To index words smaller than 4 characters, you will have to edit your my.cnf/my.ini file to include this:
+
+````
+[mysqld]
+ft_min_word_len = 3
+````
+
+Then restart your MySQL server.
+
+If you already had data in your profile table, you will need to rebuild the index by executing the following query:
+
+````
+REPAIR TABLE `profile` QUICK;
+````

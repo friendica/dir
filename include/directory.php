@@ -1,28 +1,34 @@
 <?php
 
-	require_once("boot.php");
+//Startup.
+require_once 'boot.php';
 
-	$a = new App;
+use Friendica\Directory\App;
 
-	@include(".htconfig.php");
-	require_once("dba.php");
-	$db = new dba($db_host, $db_user, $db_pass, $db_data);
-		unset($db_host, $db_user, $db_pass, $db_data);
+$a = new App;
 
+@include '.htconfig.php';
 
-	if($argc != 2)
-		exit;
+require_once 'dba.php';
 
-	load_config('system');
+$db = new dba($db_host, $db_user, $db_pass, $db_data);
 
-	$a->set_baseurl(get_config('system','url'));
+unset($db_host, $db_user, $db_pass, $db_data);
 
-	$dir = get_config('system','directory_submit_url');
-
-	if(! strlen($dir))
-		exit;
-
-	fetch_url($dir . '?url=' . bin2hex($argv[1]));
-
+if ($argc != 2) {
 	exit;
+}
 
+load_config('system');
+
+$a->set_baseurl(get_config('system', 'url'));
+
+$dir = get_config('system', 'directory_submit_url');
+
+if (!strlen($dir)) {
+	exit;
+}
+
+fetch_url($dir . '?url=' . bin2hex($argv[1]));
+
+exit;

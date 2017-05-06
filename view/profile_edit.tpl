@@ -29,12 +29,6 @@ $default
 </div>
 <div id="profile-edit-name-end"></div>
 
-<div id="profile-edit-gender-wrapper" >
-<label id="profile-edit-gender-label" for="gender-select" >Your Gender: </label>
-$gender
-</div>
-<div id="profile-edit-gender-end"></div>
-
 <div id="profile-edit-dob-wrapper" >
 <label id="profile-edit-dob-label" for="dob-select" >Birthday (y/m/d): </label>
 <div id="profile-edit-dob" >
@@ -93,12 +87,6 @@ $hide_friends
 <input type="submit" name="submit" class="profile-edit-submit-button" value="Submit" />
 </div>
 <div class="profile-edit-submit-end"></div>
-
-<div id="profile-edit-marital-wrapper" >
-<label id="profile-edit-marital-label" for="profile-edit-marital" >Marital Status: </label>
-$marital
-</div>
-<div id="profile-edit-marital-end"></div>
 
 <div id="profile-edit-sexual-wrapper" >
 <label id="profile-edit-sexual-label" for="sexual-select" >Sexual Preference: </label>

@@ -178,10 +178,6 @@ msgstr ""
 msgid "Search for: "
 msgstr ""
 
-#: ../../mod/directory.php:96 ../../mod/moderate.php:109
-msgid "Gender: "
-msgstr ""
-
 #: ../../mod/directory.php:100
 msgid "Flag this entry"
 msgstr ""

@@ -45,6 +45,7 @@ function health_search(&$a, $search)
 					'<span class="health '.health_score_to_name($site['health_score']).'">&hearts;</span> '.
 					'<a href="/health/'.$site['id'].'">' . $site['base_url'] . '</a> '.
 					'(' . $site['users'] . ')'.
+					($site['effective_base_url'] ? ' -&gt; <abbr title="Redirects to this domain.">'.$site['effective_base_url'].'</abbr>' : '').
 					"<br />\r\n";
 			}
 			
@@ -70,7 +71,7 @@ function health_summary(&$a){
 	$sites = array();
 	
 	//Find the user count per site.
-	$r = q("SELECT `homepage` FROM `profile` WHERE 1");
+	$r = q("SELECT `homepage` FROM `profile`");
 	if(count($r)) {
 		foreach($r as $rr) {
 			$site = parse_site_from_url($rr['homepage']);
@@ -82,11 +83,11 @@ function health_summary(&$a){
 		}
 	}
 	
-	//See if we have a health for them.
+	//See if we have a health for them AND they provide SSL.
 	$sites_with_health = array();
 	$site_healths = array();
 	
-	$r = q("SELECT * FROM `site-health` WHERE `reg_policy`='REGISTER_OPEN'");
+	$r = q("SELECT * FROM `site-health` WHERE `reg_policy`='REGISTER_OPEN' AND `ssl_state` = 1");
 	if(count($r)) {
 		foreach($r as $rr) {
 			$sites_with_health[$rr['base_url']] = (($sites[$rr['base_url']] / 100) + 10) * intval($rr['health_score']);
@@ -106,7 +107,7 @@ function health_summary(&$a){
 		
 		//Skip small sites.
 		$users = $sites[$k];
-		if($users < 10) continue;
+		if($users < 5) continue;
 		
 		$public_sites .=
 			'<span class="health '.health_score_to_name($site['health_score']).'">&hearts;</span> '.
@@ -129,6 +130,42 @@ function health_summary(&$a){
 function health_details($a, $id)
 {
 	
+	//Max data age in MySQL date.
+	$maxDate = date('Y-m-d H:i:s', time()-($a->config['stats']['maxDataAge']));
+	
+	//Include graphael line charts.
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/smoothing.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript">
+		window.smoothingFactor = 0.3;
+		window.smoothingBracket = 2;
+		window.availableCharts = [];
+		window.drawRaw = false;
+		window.drawCharts = function(){
+			for (var i = availableCharts.length - 1; i >= 0; i--) {
+				availableCharts[i](jQuery);
+			};
+		};
+		window.onHoverPoint = function(r){ return function(){
+            this.tags = r.set();
+            var i = this.y.length-1;
+            this.tags.push(r.popup(this.x, this.y[i], Math.round(this.values[i])+"ms", "right", 5).insertBefore(this));
+        }};
+        window.onUnHoverPoint = function(r){ return function(){
+            this.tags && this.tags.remove();
+        }};
+		jQuery(function($){
+			drawCharts();
+			$(".js-toggle-raw").click(function(e){
+				e.preventDefault();
+				drawRaw=!drawRaw;
+				drawCharts();
+			});
+		});
+	</script>';
+	
 	//The overall health status.
 	$r = q(
 		"SELECT * FROM `site-health`
@@ -141,6 +178,22 @@ function health_details($a, $id)
 	}
 	
 	$site = $r[0];
+	
+	//Does it redirect to a known site?
+	$redirectStatement = '';
+	if($site['effective_base_url']){
+		
+		//The effective health status.
+		$r = q(
+			"SELECT * FROM `site-health`
+			WHERE `base_url`= '%s'",
+			dbesc($site['effective_base_url'])
+		);
+		if(count($r)){
+			$redirectStatement = '<a href="/health/'.$r[0]['id'].'">Redirects to '.$site['effective_base_url'].'</a>';
+		}
+		
+	}
 	
 	//Figure out SSL state.
 	$urlMeta = parse_url($site['base_url']);
@@ -169,8 +222,10 @@ function health_details($a, $id)
 	//Get avg probe speed.
 	$r = q(
 		"SELECT AVG(`request_time`) as `avg_probe_time` FROM `site-probe`
-		WHERE `site_health_id` = %u",
-		intval($site['id'])
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'",
+		intval($site['id']),
+		$maxDate
 	);
 	if(count($r)){
 		$site['avg_probe_time'] = $r[0]['avg_probe_time'];
@@ -184,8 +239,10 @@ function health_details($a, $id)
 			AVG(`photo_time`) as `avg_photo_time`,
 			AVG(`total_time`) as `avg_submit_time`
 		FROM `site-scrape`
-		WHERE `site_health_id` = %u",
-		intval($site['id'])
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'",
+		intval($site['id']),
+		$maxDate
 	);
 	if(count($r)){
 		$site['avg_profile_time'] = $r[0]['avg_profile_time'];
@@ -196,62 +253,18 @@ function health_details($a, $id)
 	
 	//Get probe speed data.
 	$r = q(
-		"SELECT `request_time`, `dt_performed` FROM `site-probe`
-		WHERE `site_health_id` = %u",
-		intval($site['id'])
+		"SELECT AVG(`request_time`) as `avg_time`, date(`dt_performed`) as `date` FROM `site-probe`
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'
+		GROUP BY `date`",
+		intval($site['id']),
+		$maxDate
 	);
 	if(count($r)){
 		//Include graphael line charts.
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>';
-		$speeds = array();
-		$times = array();
-		$mintime = time();
-		foreach($r as $row){
-			$speeds[] = $row['request_time'];
-			$time = strtotime($row['dt_performed']);
-			$times[] = $time;
-			if($mintime > $time) $mintime = $time;
-		}
-		for($i=0; $i < count($times); $i++){
-			$times[$i] -= $mintime;
-			$times[$i] = floor($times[$i] / (24*3600));
-		}
-		$a->page['htmlhead'] .=
-			'<script type="text/javascript">
-				jQuery(function($){
-					
-					var r = Raphael("probe-chart")
-						, x = ['.implode(',', $times).']
-						, y = ['.implode(',', $speeds).']
-					;
-					
-					r.linechart(30, 15, 400, 300, x, [y], {symbol:"circle", axis:"0 0 0 1", shade:true, width:1.5}).hoverColumn(function () {
-            this.tags = r.set();
-            for (var i = 0, ii = this.y.length; i < ii; i++) {
-              this.tags.push(r.popup(this.x, this.y[i], this.values[i]+"ms", "right", 5).insertBefore(this).attr([{ fill: "#eee" }, { fill: this.symbols[i].attr("fill") }]));
-            }
-	        }, function () {
-            this.tags && this.tags.remove();
-	        });
-					
-				});
-			</script>';
-	}
-	
-	//Get scrape speed data.
-	$r = q(
-		"SELECT AVG(`total_time`) as `avg_time`, date(`dt_performed`) as `date` FROM `site-scrape`
-		WHERE `site_health_id` = %u GROUP BY `date`",
-		intval($site['id'])
-		// date('Y-m-d H:i:s', time()-(3*24*3600)) //Max 3 days old.
-	);
-	if($r && count($r)){
-		//Include graphael line charts.
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>';
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_line.js?v=0.51"></script>';
 		$speeds = array();
 		$times = array();
 		$mintime = time();
@@ -267,23 +280,82 @@ function health_details($a, $id)
 		}
 		$a->page['htmlhead'] .=
 			'<script type="text/javascript">
-				jQuery(function($){
+				(function(){
 					
-					var r = Raphael("scrape-chart")
-						, x = ['.implode(',', $times).']
-						, y = ['.implode(',', $speeds).']
-					;
+					var x = ['.implode(',', $times).'];
+					var y = ['.implode(',', $speeds).'];
+					var smoothY = Smoothing.exponentialMovingAverage(y, smoothingFactor, smoothingBracket);
 					
-					r.linechart(30, 15, 400, 300, x, [y], {shade:true, axis:"0 0 0 1", width:1}).hoverColumn(function () {
-            this.tags = r.set();
-            for (var i = 0, ii = this.y.length; i < ii; i++) {
-              this.tags.push(r.popup(this.x, this.y[i], Math.round(this.values[i])+"ms", "right", 5).insertBefore(this));
-            }
-	        }, function () {
-            this.tags && this.tags.remove();
-	        });
+					availableCharts.push(function($){
+						
+						var id = "probe-chart";
+						$("#"+id+" svg").remove();
+						var r = Raphael(id);
+						var values = [smoothY];
+						if(drawRaw){
+							values.push(y);
+						}
+						
+						r.linechart(30, 15, 400, 295, x, values, {axis:"0 0 1 1", shade:true, width:0.8, axisxstep:6})
+							.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+						
+					});
 					
-				});
+				})();
+			</script>';
+	}
+	
+	//Get scrape speed data.
+	$r = q(
+		"SELECT AVG(`total_time`) as `avg_time`, date(`dt_performed`) as `date` FROM `site-scrape`
+		WHERE `site_health_id` = %u
+		AND `dt_performed` > '%s'
+		GROUP BY `date`",
+		intval($site['id']),
+		$maxDate
+	);
+	if($r && count($r)){
+		//Include graphael line charts.
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_raphael.js"></script>'.PHP_EOL;
+		$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/js/raphael/g_line.js?v=0.51"></script>';
+		$speeds = array();
+		$times = array();
+		$mintime = time();
+		foreach($r as $row){
+			$speeds[] = $row['avg_time'];
+			$time = strtotime($row['date']);
+			$times[] = $time;
+			if($mintime > $time) $mintime = $time;
+		}
+		for($i=0; $i < count($times); $i++){
+			$times[$i] -= $mintime;
+			$times[$i] = floor($times[$i] / (24*3600));
+		}
+		$a->page['htmlhead'] .=
+			'<script type="text/javascript">
+				(function(){
+					
+					var x = ['.implode(',', $times).'];
+					var y = ['.implode(',', $speeds).'];
+					var smoothY = Smoothing.exponentialMovingAverage(y, smoothingFactor, smoothingBracket);
+					
+					availableCharts.push(function($){
+						
+						var id = "scrape-chart";
+						$("#"+id+" svg").remove();
+						var r = Raphael(id);
+						var values = [smoothY];
+						if(drawRaw){
+							values.push(y);
+						}
+						
+						r.linechart(30, 15, 400, 295, x, values, {shade:true, axis:"0 0 1 1", width:0.8, axisxstep:6})
+							.hoverColumn(onHoverPoint(r), onUnHoverPoint(r));
+						
+					});
+					
+				})();
 			</script>';
 	}
 	
@@ -298,6 +370,7 @@ function health_details($a, $id)
 	$tpl .= file_get_contents('view/health_details.tpl');
 	return replace_macros($tpl, array(
 		'$name' => $site['name'],
+		'$redirectStatement' => $redirectStatement,
 		'$policy' => $policy,
 		'$site_info' => $site['info'],
 		'$base_url' => $site['base_url'],
@@ -320,5 +393,3 @@ function health_details($a, $id)
 		'$avg_photo_time' => round($site['avg_photo_time']),
 		'$avg_submit_time' => round($site['avg_submit_time'])
 	));
-	
-}

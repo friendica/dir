@@ -103,7 +103,7 @@ function scrape_dfrn($url, $max_nodes=3500) {
 	
 	$nodes_left = max(intval($max_nodes), $minNodes);
 	$items = $dom->getElementsByTagName('*');
-	$targets = array('fn', 'pdesc', 'photo', 'key', 'locality', 'region', 'postal-code', 'country-name', 'gender', 'marital');
+	$targets = array('fn', 'pdesc', 'photo', 'key', 'locality', 'region', 'postal-code', 'country-name');
 	$targets_left = count($targets);
 	foreach($items as $item) {
 		if(attribute_contains($item->getAttribute('class'), 'vcard')) {
@@ -141,15 +141,7 @@ function scrape_dfrn($url, $max_nodes=3500) {
 					$ret['country-name'] = $x->textContent;
 					$targets_left = pop_scrape_target($targets, 'country-name');
 				}
-				if(attribute_contains($x->getAttribute('class'),'x-gender')){
-					$ret['gender'] = $x->textContent;
-					$targets_left = pop_scrape_target($targets, 'gender');
-				}
       }
-		}
-		if(attribute_contains($item->getAttribute('class'),'marital-text')){
-			$ret['marital'] = $item->textContent;
-			$targets_left = pop_scrape_target($targets, 'marital');
 		}
 		$nodes_left--;
 		if($nodes_left <= 0 || $targets_left <= 0) break;
@@ -191,4 +183,3 @@ function pop_scrape_target(&$array, $name) {
 	unset($array[$at]);
 	return count($array);
 }}
-

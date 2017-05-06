@@ -29,7 +29,7 @@ function notice_site($url, $check_health=false)
     $entry = $result[0];
     
     //If we are allowed to do health checks...
-    if(!!$check_health){
+    if($check_health){
       
       //And the site is in bad health currently, do a check now.
       //This is because you have a high certainty the site may perform better now.
@@ -57,7 +57,7 @@ function notice_site($url, $check_health=false)
     );
     
     //And in case we should probe now, do so.
-    if(!!$check_health){
+    if($check_health){
       
       $result = q(
         "SELECT * FROM `site-health` WHERE `base_url`= '%s' ORDER BY `id` ASC LIMIT 1",
@@ -91,7 +91,13 @@ function parse_site_from_url($url)
 
 //Performs a ping to the given site ID
 //You may need to notice the site first before you know it's ID.
-if(! function_exists('run_site_ping')){
+//TODO: Probe server location using IP address or using the info the friendica server provides (preferred). 
+//      If IP needs to be used only provide country information.
+//TODO: Check SSLLabs Grade
+//      Check needs to be asynchronous, meaning that the check at SSLLabs will be initiated in one run while 
+//      the results must be fetched later. It might be good to mark sites, where a check has been inititated
+//      f.e. using the ssl_grade field. In the next run, results of these sites could be fetched.
+if(! function_exists('run_site_probe')){
 function run_site_probe($id, &$entry_out)
 {
   
@@ -134,7 +140,7 @@ function run_site_probe($id, &$entry_out)
     CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
     
     //Basic request
-    CURLOPT_USERAGENT => 'friendica-directory-probe-0.1',
+    CURLOPT_USERAGENT => 'friendica-directory-probe-1.0',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_URL => $probe_location
     
@@ -159,7 +165,7 @@ function run_site_probe($id, &$entry_out)
     //Probe again, without strict SSL.
     $options[CURLOPT_SSL_VERIFYPEER] = false;
     
-    //Replace the handler.
+    //Replace the handle.
     curl_close($handle);
     $handle = curl_init();
     curl_setopt_array($handle, $options);
@@ -178,13 +184,14 @@ function run_site_probe($id, &$entry_out)
   $time = round(($probe_end - $probe_start) * 1000);
   $status = curl_getinfo($handle, CURLINFO_HTTP_CODE);
   $type = curl_getinfo($handle, CURLINFO_CONTENT_TYPE);
-  $effective_url = curl_getinfo($handle, CURLINFO_EFFECTIVE_URL);
+  $info = curl_getinfo($handle);
   
   //Done with CURL now.
   curl_close($handle);
   
   #TODO: if the site redirects elsewhere, notice this site and record an issue.
-  $wrong_base_url = parse_site_from_url($effective_url) !== $entry['base_url'];
+  $effective_base_url = parse_site_from_url($info['url']);
+  $wrong_base_url = $effective_base_url !== $entry['base_url'];
   
   try{
     $data = json_decode($probe_data);
@@ -195,6 +202,18 @@ function run_site_probe($id, &$entry_out)
   $parse_failed = !$data;
   
   $parsedDataQuery = '';
+  
+  logger('Effective Base URL: ' . $effective_base_url);
+  
+  if($wrong_base_url){
+    $parsedDataQuery .= sprintf(
+      "`effective_base_url` = '%s',",
+      dbesc($effective_base_url)
+    );
+  }else{
+    $parsedDataQuery .= "`effective_base_url` = NULL,";
+  }
+  
   if(!$parse_failed){
     
     $given_base_url_match = $data->url == $base_url;
@@ -208,7 +227,7 @@ function run_site_probe($id, &$entry_out)
     );
     
     //Update any health calculations or otherwise processed data.
-    $parsedDataQuery = sprintf(
+    $parsedDataQuery .= sprintf(
       "`dt_last_seen` = NOW(),
        `name` = '%s',
        `version` = '%s',
@@ -307,8 +326,8 @@ function health_score_after_probe($current, $probe_success, $time=null, $version
       $current = min($current, 30);
     }
     
-    //Older than 3.2.x?
-    elseif(intval($versionParts[1] < 2)){
+    //Older than 3.3.x?
+    elseif(intval($versionParts[1] < 3)){
       $current -= 5; //Somewhat outdated.
     }
     

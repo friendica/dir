@@ -2,5 +2,6 @@
 .htconfig.php
 #*
 favicon.*
-
-
+tests/coverage.html
+/vendor
+/nbproject/private/

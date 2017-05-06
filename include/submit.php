@@ -114,8 +114,6 @@ function run_submit($url) {
 			`region` = '%s', 
 			`postal-code` = '%s', 
 			`country-name` = '%s', 
-			`gender` = '%s', 
-			`marital` = '%s', 
 			`homepage` = '%s',
 			`nurl` = '%s',
 			`comm` = %d,
@@ -129,8 +127,6 @@ function run_submit($url) {
 			$parms['region'],
 			$parms['postal-code'],
 			$parms['country-name'],
-			$parms['gender'],
-			$parms['marital'],
 			dbesc($url),
 			dbesc($nurl),
 			intval($parms['comm']),
@@ -142,7 +138,7 @@ function run_submit($url) {
 
 	}
 	else {
-		$r = q("INSERT INTO `profile` ( `name`, `pdesc`, `locality`, `region`, `postal-code`, `country-name`, `gender`, `marital`, `homepage`, `nurl`, `comm`, `tags`, `created`, `updated` )
+		$r = q("INSERT INTO `profile` ( `name`, `pdesc`, `locality`, `region`, `postal-code`, `country-name`, `homepage`, `nurl`, `comm`, `tags`, `created`, `updated` )
 			VALUES ( '%s', '%s', '%s', '%s' , '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s' )",
 			$parms['fn'],
 			$parms['pdesc'],
@@ -150,8 +146,6 @@ function run_submit($url) {
 			$parms['region'],
 			$parms['postal-code'],
 			$parms['country-name'],
-			$parms['gender'],
-			$parms['marital'],
 			dbesc($url),
 			dbesc($nurl),
 			intval($parms['comm']),

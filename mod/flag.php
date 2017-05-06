@@ -28,7 +28,7 @@ function flag_post(&$a) {
 		);
 
 		$msg = "An entry ($id) has just been flagged for $reason.";
-		
+
 		mail('info@friendika.com',"Directory Flag action",$msg);
 
 	}
@@ -39,7 +39,7 @@ function flag_post(&$a) {
 		);
 	}
 
-	notice("Entry has been flagged.");	
+	notice("Entry has been flagged.");
 
 	goaway($a->get_baseurl());
 
@@ -50,7 +50,7 @@ function flag_content(&$a) {
 
 	if($a->argc > 1)
 		$id = intval($a->argv[1]);
-	if(! id) {
+	if(! $id) {
 		goaway($a->get_baseurl());
 	}
 
@@ -62,7 +62,7 @@ $o .= <<< EOT
 You may flag profile listings for one of two reasons: inappropriate (adult) content, or if the link destination and therefore the profile entry is no longer valid. If you selected this form by mistake, please use your browser "Back" button to return to the Friendika directory.
 </p>
 <p>
-Your request will be verified and if it is deemed to be valid, the entry will be flagged/removed. Please allow 24-36 hours for this action to take place. 
+Your request will be verified and if it is deemed to be valid, the entry will be flagged/removed. Please allow 24-36 hours for this action to take place.
 </p>
 
 <form action="flag" method="post" ><br /><br />
