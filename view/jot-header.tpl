@@ -45,7 +45,7 @@ tinyMCE.init({
 });
 
 </script>
-<script type="text/javascript" src="include/ajaxupload.js" ></script>
+<script type="text/javascript" src="/assets/js/ajaxupload.js" ></script>
 <script>
 	$(document).ready(function() {
 		var uploader = new window.AjaxUpload(
