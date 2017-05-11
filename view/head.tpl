@@ -11,6 +11,6 @@
 
 <link rel="shortcut icon" href="images/friendica-32.png" />
 
-<script type="text/javascript" src="js/jquery.js?v=1.4.2" ></script>
-<script type="text/javascript" src="js/main.js" ></script>
+<script type="text/javascript" src="/assets/js/jquery/jquery.js?v=1.11.2" ></script>
+<script type="text/javascript" src="/assets/js/main.js" ></script>
 <link rel="search" type="application/opensearchdescription+xml" title="Friendica Global Directory" href="$baseurl/opensearch" />

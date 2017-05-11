@@ -134,10 +134,10 @@ function health_details($a, $id)
 	$maxDate = date('Y-m-d H:i:s', time()-($a->config['stats']['maxDataAge']));
 	
 	//Include graphael line charts.
-	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/smoothing.js"></script>'.PHP_EOL;
-	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/raphael.js"></script>'.PHP_EOL;
-	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.raphael.js"></script>'.PHP_EOL;
-	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/include/g.line-min.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/assets/js/raphael/smoothing.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/assets/js/raphael/raphael.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/assets/js/raphael/g_raphael.js"></script>'.PHP_EOL;
+	$a->page['htmlhead'] .= '<script type="text/javascript" src="'.$a->get_baseurl().'/assets/js/raphael/g_line-min.js"></script>'.PHP_EOL;
 	$a->page['htmlhead'] .= '<script type="text/javascript">
 		window.smoothingFactor = 0.3;
 		window.smoothingBracket = 2;
