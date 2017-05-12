@@ -9,7 +9,6 @@ use \Closure;
  */
 class View
 {
-        exit;
 	#TODO: Replace this with better code.
 
 	protected $layout;

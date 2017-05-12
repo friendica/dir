@@ -137,12 +137,16 @@ function q($sql)
 	$args = func_get_args();
 	unset($args[0]);
 
+	$ret = null;
+
 	if ($db) {
 		$ret = $db->q(vsprintf($sql, $args));
 
 		if ($db->db->errno) {
 			logger('dba: ' . $db->db->error);
 		}
+	} else {
+		error_log(__FILE__ . ':' . __LINE__ . ' $db has gone');
 	}
 
 	return $ret;
