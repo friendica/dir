@@ -115,6 +115,5 @@ require_once $template;
 
 session_write_close();
 
-closedb();
 
 exit;
