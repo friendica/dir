@@ -4,7 +4,7 @@
         <a href="/home" class="mobile">Home</a>
         <a href="/directory">Directory</a>
         <a href="/servers">Public Servers</a>
-        <a href="/stats">Stats</a>
-        <a href="/help">Help</a>
+        <!--<a href="/stats">Stats</a>-->
+        <!--<a href="/help">Help</a>-->
     </div>
 </nav>
