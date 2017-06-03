@@ -1,4 +1,4 @@
-<figure class="profile" data-href="<?php echo $profile['homepage']; ?>" id="profile-<?php echo $profile['id']; ?>">
+<figure class="profile" data-href="<?php echo zrl($profile['homepage']); ?>" id="profile-<?php echo $profile['id']; ?>">
     <img class="profile-photo" src="<?php echo $this->photoUrl($profile['id']); ?>" />
     <div class="profile-info">
         <strong class="name"><?php echo $profile['name']; ?></strong>
