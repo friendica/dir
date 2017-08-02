@@ -1,5 +1,7 @@
 <?php
 
+require_once 'include/session.php';
+
 require_once 'vendor/autoload.php';
 
 set_time_limit(0);
