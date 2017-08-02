@@ -73,8 +73,6 @@ if ($a->module_loaded) {
 	if ((!$a->error) && (function_exists($a->module . '_content'))) {
 		$func = $a->module . '_content';
 		$a->page['content'] = $func($a);
-
-		killme();
 	}
 }
 
