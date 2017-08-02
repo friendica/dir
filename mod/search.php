@@ -94,4 +94,6 @@ function search_content(App $a)
 		'filter'  => $filter,
 		'query'   => x($_GET, 'query') ? $_GET['query'] : ''
 	));
+
+	killme();
 }

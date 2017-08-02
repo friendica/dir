@@ -10,11 +10,11 @@
             Keep in mind that different servers may support different features like communicating with additional networks besides Friendica.
             It's best to pick the one that best suits your needs.
         </p>
-        
+
         <div class="feeling-lucky">
             <a class="btn surprise" href="/servers/surprise">Surprise me &raquo;</a>
         </div>
-        
+
         <h3>Recommending <?php echo $total; ?> public servers</h3>
         <?php
             foreach ($sites as $site)
