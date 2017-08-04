@@ -4,8 +4,7 @@ use Friendica\Directory\Rendering\View;
 
 require_once 'include/site-health.php';
 
-function servers_content(&$a)
-{
+function servers_content(&$a) {
 	$sites = array();
 
 	//Find the user count per site.
@@ -14,8 +13,9 @@ function servers_content(&$a)
 		foreach ($r as $rr) {
 			$site = parse_site_from_url($rr['homepage']);
 			if ($site) {
-				if (!isset($sites[$site]))
+				if (!isset($sites[$site])) {
 					$sites[$site] = 0;
+				}
 				$sites[$site] ++;
 			}
 		}
