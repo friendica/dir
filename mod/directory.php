@@ -79,4 +79,6 @@ function directory_content(App $a)
 		'results' => $r,
 		'filter'  => $forums ? 'forums' : '',
 	));
+
+	killme();
 }
