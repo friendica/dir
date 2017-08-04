@@ -14,7 +14,6 @@ $db = new dba($db_host, $db_user, $db_pass, $db_data, $install);
 
 unset($db_host, $db_user, $db_pass, $db_data);
 
-require_once 'session.php';
 require_once 'datetime.php';
 
 $a->set_baseurl(get_config('system', 'url'));

@@ -15,7 +15,6 @@ $db = new dba($db_host, $db_user, $db_pass, $db_data);
 
 unset($db_host, $db_user, $db_pass, $db_data);
 
-require_once 'session.php';
 require_once 'datetime.php';
 require_once 'simplepie/simplepie.inc';
 require_once 'include/items.php';

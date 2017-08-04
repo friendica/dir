@@ -30,8 +30,12 @@ function ref_session_write($id, $data)
 {
 	global $session_exists, $session_expire;
 
-	if (!$id || !$data) {
+	if (!$id) {
 		return false;
+	}
+
+	if (!$data) {
+		return true;
 	}
 
 	$expire = time() + $session_expire;
@@ -65,7 +69,7 @@ function ref_session_gc($expire)
 {
 	q("DELETE FROM `session` WHERE `expire` < %d", dbesc(time()));
 	q("OPTIMIZE TABLE `sess_data`");
-	
+
 	return true;
 }
 
