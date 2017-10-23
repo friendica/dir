@@ -75,7 +75,7 @@ function run_submit($url) {
 	}
 
 	//Empty result is due to an offline site.
-	if(!count($parms)){
+	if(!count($parms) > 1){
 
 		//For large sites this could lower the health too quickly, so don't track health.
 		//But for sites that are already in bad status. Do a cleanup now.
