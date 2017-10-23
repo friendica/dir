@@ -31,6 +31,7 @@ function run_submit($url) {
 		$profile_id = $r[0]['id'];
 
 		$r = q("UPDATE `profile` SET
+			`available` = 0,
 			`updated` = '%s'
 			WHERE `id` = %d LIMIT 1",
 
@@ -56,6 +57,7 @@ function run_submit($url) {
 
 	//Skip the scrape? :D
 	$noscrape = $site_health && $site_health['no_scrape_url'];
+
 	if($noscrape){
 
 		//Find out who to look up.
@@ -128,6 +130,7 @@ function run_submit($url) {
 			`nurl` = '%s',
 			`comm` = %d,
 			`tags` = '%s',
+			`available` = 1,
 			`updated` = '%s'
 			WHERE `id` = %d LIMIT 1",
 
