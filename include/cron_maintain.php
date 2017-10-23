@@ -21,12 +21,23 @@ require_once '.htconfig.php';
 require_once 'dba.php';
 $db = new dba($db_host, $db_user, $db_pass, $db_data, $install);
 
-//Get our set of items. Youngest items first, after the threshold.
-//This may be counter-intuitive, but is to prevent items that fail to update from blocking the rest.
+
+//Get the maintenance backlog size.
+$res = q("SELECT count(*) as `count`
+FROM `profile`
+WHERE `updated` < '%s'",
+	dbesc(date('Y-m-d H:i:s', time() - $a->config['maintenance']['min_scrape_delay']))
+);
+$maintenance_backlog = 'unknown';
+if (count($res)) {
+	$maintenance_backlog = $res[0]['count'] . ' entries left';
+}
+
+//Get our set of items. Oldest items first, after the threshold.
 $res = q("SELECT `id`, `homepage`, `censored`
 FROM `profile`
 WHERE `updated` < '%s'
-ORDER BY `updated` DESC
+ORDER BY `updated` ASC
 LIMIT %u",
 	dbesc(date('Y-m-d H:i:s', time() - $a->config['maintenance']['min_scrape_delay'])),
 	intval($a->config['maintenance']['max_scrapes'])
@@ -56,9 +67,9 @@ $threads = array();
 
 //Debug...
 if ($verbose) {
-	echo "Creating $threadc maintainer threads for $items profiles." . PHP_EOL;
+	echo "Creating $threadc maintainer threads for $items profiles, $maintenance_backlog"  . PHP_EOL;
 }
-logger("Creating $threadc maintainer threads for $items profiles.");
+logger("Creating $threadc maintainer threads for $items profiles. $maintenance_backlog");
 
 for ($i = 0; $i < $threadc; $i++) {
 

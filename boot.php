@@ -79,7 +79,7 @@ if (!function_exists('logger')) {
 		}
 		require_once('include/datetime.php');
 
-		@file_put_contents($logfile, datetime_convert() . ':' . ' ' . $msg . "\n", FILE_APPEND);
+		@file_put_contents($logfile, datetime_convert() . ' [#' . getmypid() . '] ' . $msg . "\n", FILE_APPEND);
 		return;
 	}
 }

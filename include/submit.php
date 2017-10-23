@@ -29,6 +29,14 @@ function run_submit($url) {
 	if(count($r)) { 
 		$profile_exists = true;
 		$profile_id = $r[0]['id'];
+
+		$r = q("UPDATE `profile` SET
+			`updated` = '%s'
+			WHERE `id` = %d LIMIT 1",
+
+			dbesc(datetime_convert()),
+			intval($profile_id)
+		);
 	}
 	
 	//Remove duplicates.
@@ -86,19 +94,21 @@ function run_submit($url) {
 		nuke_record($url);
 		return true; //This is a good update.
 	}
-	
-	//This is most likely a problem with the site configuration. Ignore.
-	elseif(validate_dfrn($parms)) {
-		return false;
-	}
-	
+
 	if((x($parms,'hide')) || (! (x($parms,'fn')) && (x($parms,'photo')))) {
 		if($profile_exists) {
+			logger('Profile inferred to be opted out of the directory.');
 			nuke_record($url);
 		}
 		return true; //This is a good update.
 	}
-	
+
+	//This is most likely a problem with the site configuration. Ignore.
+	if(validate_dfrn($parms)) {
+		logger('Site is unavailable');
+		return false;
+	}
+
 	$photo = $parms['photo'];
 
 	dbesc_array($parms);
