@@ -6,17 +6,17 @@ require_once('site-health.php');
 function run_submit($url) {
 
 	global $a;
-		
+
 	if(! strlen($url))
 		return false;
 
 	logger('Updating: ' . $url);
-	
+
 	//First run a notice script for the site it is hosted on.
 	$site_health = notice_site($url, true);
-	
+
 	$submit_start = microtime(true);
-	
+
 	$nurl = str_replace(array('https:','//www.'), array('http:','//'), $url);
 
 	$profile_exists = false;
@@ -26,7 +26,7 @@ function run_submit($url) {
 		dbesc($nurl)
 	);
 
-	if(count($r)) { 
+	if(count($r)) {
 		$profile_exists = true;
 		$profile_id = $r[0]['id'];
 
@@ -38,7 +38,7 @@ function run_submit($url) {
 			intval($profile_id)
 		);
 	}
-	
+
 	//Remove duplicates.
 	if(count($r) > 1){
 		for($i=1; $i<count($r); $i++){
@@ -51,43 +51,43 @@ function run_submit($url) {
 			);
 		}
 	}
-	
+
 	require_once('Scrape.php');
-	
+
 	//Skip the scrape? :D
 	$noscrape = $site_health && $site_health['no_scrape_url'];
 	if($noscrape){
-		
+
 		//Find out who to look up.
 		$which = str_replace($site_health['base_url'], '', $url);
 		$noscrape = preg_match('~/profile/([^/]+)~', $which, $matches) === 1;
-		
+
 		//If that did not fail...
 		if($noscrape){
 			$parms = noscrape_dfrn($site_health['no_scrape_url'].'/'.$matches[1]);
 			$noscrape = !!$parms; //If the result was false, do a scrape after all.
 		}
-		
+
 	}
-	
+
 	if(!$noscrape){
 		$parms = scrape_dfrn($url);
 	}
-	
+
 	//Empty result is due to an offline site.
 	if(!count($parms)){
-		
+
 		//For large sites this could lower the health too quickly, so don't track health.
 		//But for sites that are already in bad status. Do a cleanup now.
 		if($profile_exists && $site_health['health_score'] < $a->config['maintenance']['remove_profile_health_threshold']){
 			logger('Nuked bad health record.');
 			nuke_record($url);
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	//We don't care about valid dfrn if the user indicates to be hidden.
 	elseif($parms['explicit-hide'] && $profile_exists) {
 		logger('User opted out of the directory.');
@@ -117,18 +117,18 @@ function run_submit($url) {
 		$parms['comm'] = intval($parms['comm']);
 
 	if($profile_exists) {
-		$r = q("UPDATE `profile` SET 
-			`name` = '%s', 
+		$r = q("UPDATE `profile` SET
+			`name` = '%s',
 			`pdesc` = '%s',
-			`locality` = '%s', 
-			`region` = '%s', 
-			`postal-code` = '%s', 
-			`country-name` = '%s', 
+			`locality` = '%s',
+			`region` = '%s',
+			`postal-code` = '%s',
+			`country-name` = '%s',
 			`homepage` = '%s',
 			`nurl` = '%s',
 			`comm` = %d,
 			`tags` = '%s',
-			`updated` = '%s' 
+			`updated` = '%s'
 			WHERE `id` = %d LIMIT 1",
 
 			$parms['fn'],
@@ -140,7 +140,7 @@ function run_submit($url) {
 			dbesc($url),
 			dbesc($nurl),
 			intval($parms['comm']),
-			$parms['tags'],			
+			$parms['tags'],
 			dbesc(datetime_convert()),
 			intval($profile_id)
 		);
@@ -206,15 +206,15 @@ function run_submit($url) {
 			}
 		}
 	}
-	
+
 	$submit_photo_start = microtime(true);
-	
+
 	require_once("Photo.php");
 
 	$photo_failure = false;
-	
+
 	$status = false;
-	
+
 	if($profile_id) {
 		$img_str = fetch_url($photo,true);
 		$img = new Photo($img_str);
@@ -232,11 +232,11 @@ function run_submit($url) {
 		nuke_record($url);
 		return false;
 	}
-	
+
 	$submit_end = microtime(true);
 	$photo_time = round(($submit_end - $submit_photo_start) * 1000);
 	$time = round(($submit_end - $submit_start) * 1000);
-	
+
 	//Record the scrape speed in a scrapes table.
 	if($site_health && $status) q(
     "INSERT INTO `site-scrape` (`site_health_id`, `dt_performed`, `request_time`, `scrape_time`, `photo_time`, `total_time`)".
@@ -247,7 +247,7 @@ function run_submit($url) {
     $photo_time,
     $time
   );
-	
+
 	return $status;
 
 }
