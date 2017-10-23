@@ -60,7 +60,7 @@ function search_content(App $a)
 	$sql_extra = str_replace('%', '%%', $sql_extra);
 
 	$total = 0;
-	$r = q("SELECT COUNT(*) AS `total` FROM `profile` WHERE `censored` = 0 $sql_extra ");
+	$r = q("SELECT COUNT(*) AS `total` FROM `profile` WHERE `censored` = 0 AND `available` = 1 $sql_extra ");
 	if (count($r)) {
 		$total = $r[0]['total'];
 		$a->set_pager_total($total);
@@ -72,7 +72,7 @@ function search_content(App $a)
 		$order = ' ORDER BY `updated` DESC, `id` DESC ';
 	}
 
-	$r = q("SELECT * FROM `profile` WHERE `censored` = 0 $sql_extra $order LIMIT %d , %d ",
+	$r = q("SELECT * FROM `profile` WHERE `censored` = 0 AND `available` = 1 $sql_extra $order LIMIT %d , %d ",
 		intval($a->pager['start']),
 		intval($a->pager['itemspage'])
 	);
