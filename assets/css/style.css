@@ -147,6 +147,11 @@ nav#links a {
     cursor: pointer;
 }
 
+.sites {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 nav#links a,
 .sub-menu-outer a {
     text-decoration: none;
