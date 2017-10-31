@@ -17,9 +17,14 @@ function directory_init(App $a)
 
 function directory_content(App $a)
 {
-	$forums = false;
-	if ($a->argc == 2 && $a->argv[1] === 'forum') {
-		$forums = true;
+	$filter = false;
+	if ($a->argc == 2) {
+		if ($a->argv[1] === 'forums') {
+			$filter = 'forums';
+		}
+		if ($a->argv[1] === 'people') {
+			$filter = 'people';
+		}
 	}
 
 	$alpha = false;
@@ -33,15 +38,17 @@ function directory_content(App $a)
 		'$header'  => t('Global Directory'),
 		'$submit'  => t('Find'),
 		'$forum'   => $a->get_baseurl() . (($forums) ? '' : '/directory/forum'),
-		'$toggle'  => (($forums) ? t('Show People') : t('Show Community Forums')),
+		'$toggle'  => (($filter == 'forums') ? t('Show People') : t('Show Community Forums')),
 		'$alpha'   => (($alpha) ? t('Updated order') : t('Alphabetic order')),
 		'$alink'   => (($alpha) ? str_replace('&alpha=1', '', $a->query_string) : $a->query_string . "&alpha=1"),
-		'$args'    => (($forums) ? '/forum' : ''),
+		'$args'    => (($filter == 'forums') ? '/forum' : ''),
 	));
 
 	$sql_extra = '';
-	if ($forums) {
+	if ($filter == 'forums') {
 		$sql_extra .= ' AND `comm` = 1 ';
+	}else if ($filter == 'people') {
+		$sql_extra .= ' AND `comm` = 0 ';
 	}
 
 	$sql_extra = str_replace('%', '%%', $sql_extra);
@@ -77,7 +84,7 @@ function directory_content(App $a)
 	$view->output(array(
 		'total'   => number_format($total),
 		'results' => $r,
-		'filter'  => $forums ? 'forums' : '',
+		'filter'  => $filter,
 	));
 
 	killme();

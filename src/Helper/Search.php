@@ -7,20 +7,35 @@ use \BadMethodCallException;
  */
 class Search extends BaseHelper
 {
-    
-    public function filterAllUrl($query)
+
+    public function filterAllUrl($query = '')
     {
-        return $this->app->get_baseurl() . '/search?query=' . urlencode($query);
+		if (empty($query)) {
+			$url = $this->app->get_baseurl() . '/directory';
+		} else {
+			$url = $this->app->get_baseurl() . '/search?query=' . urlencode($query);
+		}
+		return $url;
     }
-    
-    public function filterPeopleUrl($query)
+
+    public function filterPeopleUrl($query = '')
     {
-        return $this->app->get_baseurl() . '/search/people?query=' . urlencode($query);
+        if (empty($query)) {
+			$url = $this->app->get_baseurl() . '/directory/people';
+		} else {
+			$url = $this->app->get_baseurl() . '/search/people?query=' . urlencode($query);
+		}
+		return $url;
     }
-    
-    public function filterForumsUrl($query)
+
+    public function filterForumsUrl($query = '')
     {
-        return $this->app->get_baseurl() . '/search/forums?query=' . urlencode($query);
+		if (empty($query)) {
+			$url = $this->app->get_baseurl() . '/directory/forums';
+		} else {
+			$url = $this->app->get_baseurl() . '/search/forums?query=' . urlencode($query);
+		}
+		return $url;
     }
-    
+
 }
