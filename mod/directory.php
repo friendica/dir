@@ -37,7 +37,7 @@ function directory_content(App $a)
 	$o = replace_macros($tpl, array(
 		'$header'  => t('Global Directory'),
 		'$submit'  => t('Find'),
-		'$forum'   => $a->get_baseurl() . (($forums) ? '' : '/directory/forum'),
+		'$forum'   => $a->get_baseurl() . (($filter == 'forums') ? '' : '/directory/forums'),
 		'$toggle'  => (($filter == 'forums') ? t('Show People') : t('Show Community Forums')),
 		'$alpha'   => (($alpha) ? t('Updated order') : t('Alphabetic order')),
 		'$alink'   => (($alpha) ? str_replace('&alpha=1', '', $a->query_string) : $a->query_string . "&alpha=1"),
