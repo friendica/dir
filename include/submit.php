@@ -143,7 +143,7 @@ function run_submit($url)
 		logger('Update returns: ' . $r);
 	} else {
 		$r = q("INSERT INTO `profile` ( `name`, `pdesc`, `locality`, `region`, `postal-code`, `country-name`, `homepage`, `nurl`, `comm`, `tags`, `created`, `updated` )
-			VALUES ( '%s', '%s', '%s', '%s' , '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s' )",
+			VALUES ( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s' )",
 			$params['fn'],
 			x($params, 'pdesc') ? $params['pdesc'] : '',
 			x($params, 'locality') ? $params['locality'] : '',
