@@ -1,14 +1,16 @@
 <?php
+require_once 'datetime.php';
+require_once 'site-health.php';
+require_once 'Scrape.php';
+require_once 'Photo.php';
 
-require_once('datetime.php');
-require_once('site-health.php');
-
-function run_submit($url) {
-
+function run_submit($url)
+{
 	global $a;
 
-	if(! strlen($url))
+	if (!strlen($url)) {
 		return false;
+	}
 
 	logger('Updating: ' . $url);
 
@@ -17,7 +19,7 @@ function run_submit($url) {
 
 	$submit_start = microtime(true);
 
-	$nurl = str_replace(array('https:','//www.'), array('http:','//'), $url);
+	$nurl = str_replace(array('https:', '//www.'), array('http:', '//'), $url);
 
 	$profile_exists = false;
 
@@ -26,24 +28,23 @@ function run_submit($url) {
 		dbesc($nurl)
 	);
 
-	if(count($r)) {
+	$profile_id = null;
+
+	if (count($r)) {
 		$profile_exists = true;
 		$profile_id = $r[0]['id'];
 
 		$r = q("UPDATE `profile` SET
 			`available` = 0,
 			`updated` = '%s'
-			WHERE `id` = %d LIMIT 1",
-
-			dbesc(datetime_convert()),
-			intval($profile_id)
+			WHERE `id` = %d LIMIT 1", dbesc(datetime_convert()), intval($profile_id)
 		);
 	}
 
 	//Remove duplicates.
-	if(count($r) > 1){
-		for($i=1; $i<count($r); $i++){
-			logger('Removed duplicate profile '.intval($r[$i]['id']));
+	if (count($r) > 1) {
+		for ($i = 1; $i < count($r); $i++) {
+			logger('Removed duplicate profile ' . intval($r[$i]['id']));
 			q("DELETE FROM `photo` WHERE `profile-id` = %d LIMIT 1",
 				intval($r[$i]['id'])
 			);
@@ -53,72 +54,65 @@ function run_submit($url) {
 		}
 	}
 
-	require_once('Scrape.php');
-
 	//Skip the scrape? :D
 	$noscrape = $site_health && $site_health['no_scrape_url'];
 
-	if($noscrape){
-
+	if ($noscrape) {
 		//Find out who to look up.
 		$which = str_replace($site_health['base_url'], '', $url);
 		$noscrape = preg_match('~/profile/([^/]+)~', $which, $matches) === 1;
 
 		//If that did not fail...
-		if($noscrape){
-			$parms = noscrape_dfrn($site_health['no_scrape_url'].'/'.$matches[1]);
-			$noscrape = !!$parms; //If the result was false, do a scrape after all.
+		if ($noscrape) {
+			$params = noscrape_dfrn($site_health['no_scrape_url'] . '/' . $matches[1]);
+			$noscrape = !!$params; //If the result was false, do a scrape after all.
 		}
-
 	}
 
-	if(!$noscrape){
-		$parms = scrape_dfrn($url);
+	if (!$noscrape) {
+		$params = scrape_dfrn($url);
 	}
 
-	//Empty result is due to an offline site.
-	if(!count($parms) > 1){
-
+	// Empty result is due to an offline site.
+	if (!count($params) > 1) {
 		//For large sites this could lower the health too quickly, so don't track health.
 		//But for sites that are already in bad status. Do a cleanup now.
-		if($profile_exists && $site_health['health_score'] < $a->config['maintenance']['remove_profile_health_threshold']){
+		if ($profile_exists && $site_health['health_score'] < $a->config['maintenance']['remove_profile_health_threshold']) {
 			logger('Nuked bad health record.');
 			nuke_record($url);
 		}
 
 		return false;
-
-	}
-
-	//We don't care about valid dfrn if the user indicates to be hidden.
-	elseif($parms['explicit-hide'] && $profile_exists) {
+	} elseif (x($params, 'explicit-hide') && $profile_exists) {
+		// We don't care about valid dfrn if the user indicates to be hidden.
 		logger('User opted out of the directory.');
 		nuke_record($url);
 		return true; //This is a good update.
 	}
 
-	if((x($parms,'hide')) || (! (x($parms,'fn')) && (x($parms,'photo')))) {
-		if($profile_exists) {
+	if ((x($params, 'hide')) || (!(x($params, 'fn')) && (x($params, 'photo')))) {
+		if ($profile_exists) {
 			logger('Profile inferred to be opted out of the directory.');
 			nuke_record($url);
 		}
 		return true; //This is a good update.
 	}
 
-	//This is most likely a problem with the site configuration. Ignore.
-	if(validate_dfrn($parms)) {
+	// This is most likely a problem with the site configuration. Ignore.
+	if (validate_dfrn($params)) {
 		logger('Site is unavailable');
 		return false;
 	}
 
-	$photo = $parms['photo'];
+	$photo = $params['photo'];
 
-	dbesc_array($parms);
+	dbesc_array($params);
 
-	if(x($parms,'comm'))
-		$parms['comm'] = intval($parms['comm']);
+	if (x($params, 'comm')) {
+		$params['comm'] = intval($params['comm']);
+	}
 
-	if($profile_exists) {
+	if ($profile_exists) {
 		$r = q("UPDATE `profile` SET
 			`name` = '%s',
 			`pdesc` = '%s',
@@ -133,50 +127,48 @@ function run_submit($url) {
 			`available` = 1,
 			`updated` = '%s'
 			WHERE `id` = %d LIMIT 1",
-
-			$parms['fn'],
-			$parms['pdesc'],
-			$parms['locality'],
-			$parms['region'],
-			$parms['postal-code'],
-			$parms['country-name'],
+			$params['fn'],
+			$params['pdesc'],
+			$params['locality'],
+			$params['region'],
+			$params['postal-code'],
+			$params['country-name'],
 			dbesc($url),
 			dbesc($nurl),
-			intval($parms['comm']),
-			$parms['tags'],
+			intval($params['comm']),
+			$params['tags'],
 			dbesc(datetime_convert()),
 			intval($profile_id)
 		);
 		logger('Update returns: ' . $r);
-
-	}
-	else {
+	} else {
 		$r = q("INSERT INTO `profile` ( `name`, `pdesc`, `locality`, `region`, `postal-code`, `country-name`, `homepage`, `nurl`, `comm`, `tags`, `created`, `updated` )
 			VALUES ( '%s', '%s', '%s', '%s' , '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s' )",
-			$parms['fn'],
-			$parms['pdesc'],
-			$parms['locality'],
-			$parms['region'],
-			$parms['postal-code'],
-			$parms['country-name'],
+			$params['fn'],
+			x($params, 'pdesc') ? $params['pdesc'] : '',
+			x($params, 'locality') ? $params['locality'] : '',
+			x($params, 'region') ? $params['region'] : '',
+			x($params, 'postal-code') ? $params['postal-code'] : '',
+			x($params, 'country-name') ? $params['country-name'] : '',
 			dbesc($url),
 			dbesc($nurl),
-			intval($parms['comm']),
-			$parms['tags'],
+			intval($params['comm']),
+			x($params, 'tags') ? $params['tags'] : '',
 			dbesc(datetime_convert()),
 			dbesc(datetime_convert())
 		);
 		logger('Insert returns: ' . $r);
 
-		$r = q("SELECT `id` FROM `profile` WHERE ( `homepage` = '%s' or `nurl` = '%s' ) order by id asc",
+		$r = q("SELECT `id` FROM `profile` WHERE ( `homepage` = '%s' or `nurl` = '%s' ) ORDER BY `id` ASC",
 			dbesc($url),
 			dbesc($nurl)
 		);
 
-		if(count($r))
+		if (count($r)) {
 			$profile_id = $r[count($r) - 1]['id'];
+		}
 
-		if(count($r) > 1) {
+		if (count($r) > 1) {
 			q("DELETE FROM `photo` WHERE `profile-id` = %d LIMIT 1",
 				intval($r[0]['id'])
 			);
@@ -184,27 +176,24 @@ function run_submit($url) {
 				intval($r[0]['id'])
 			);
 		}
-
 	}
 
-	if($parms['tags']) {
-		$arr = explode(' ', $parms['tags']);
-		if(count($arr)) {
-			foreach($arr as $t) {
-				$t = strip_tags(trim($t));
-				$t = substr($t,0,254);
+	if ($params['tags']) {
+		$arr = explode(' ', $params['tags']);
+		foreach ($arr as $t) {
+			$t = strip_tags(trim($t));
+			$t = substr($t, 0, 254);
 
-				if(strlen($t)) {
-					$r = q("SELECT `id` FROM `tag` WHERE `term` = '%s' and `nurl` = '%s' LIMIT 1",
+			if (strlen($t)) {
+				$r = q("SELECT `id` FROM `tag` WHERE `term` = '%s' and `nurl` = '%s' LIMIT 1",
+					dbesc($t),
+					dbesc($nurl)
+				);
+				if (!count($r)) {
+					$r = q("INSERT INTO `tag` (`term`, `nurl`) VALUES ('%s', '%s') ",
 						dbesc($t),
 						dbesc($nurl)
 					);
-					if(! count($r)) {
-						$r = q("INSERT INTO `tag` (`term`, `nurl`) VALUES ('%s', '%s') ",
-							dbesc($t),
-							dbesc($nurl)
-						);
-					}
 				}
 			}
 		}
@@ -212,26 +201,22 @@ function run_submit($url) {
 
 	$submit_photo_start = microtime(true);
 
-	require_once("Photo.php");
-
 	$photo_failure = false;
 
 	$status = false;
 
-	if($profile_id) {
-		$img_str = fetch_url($photo,true);
+	if ($profile_id) {
+		$img_str = fetch_url($photo, true);
 		$img = new Photo($img_str);
-		if($img) {
+		if ($img) {
 			$img->scaleImageSquare(80);
 			$r = $img->store($profile_id);
 		}
-		$r = q("UPDATE `profile` SET `photo` = '%s' WHERE `id` = %d LIMIT 1",
-			dbesc($a->get_baseurl() . '/photo/' . $profile_id . '.jpg'),
+		$r = q("UPDATE `profile` SET `photo` = '%s' WHERE `id` = %d LIMIT 1", dbesc($a->get_baseurl() . '/photo/' . $profile_id . '.jpg'),
 			intval($profile_id)
 		);
 		$status = true;
-	}
-	else{
+	} else {
 		nuke_record($url);
 		return false;
 	}
@@ -241,32 +226,32 @@ function run_submit($url) {
 	$time = round(($submit_end - $submit_start) * 1000);
 
 	//Record the scrape speed in a scrapes table.
-	if($site_health && $status) q(
-    "INSERT INTO `site-scrape` (`site_health_id`, `dt_performed`, `request_time`, `scrape_time`, `photo_time`, `total_time`)".
-    "VALUES (%u, NOW(), %u, %u, %u, %u)",
-    $site_health['id'],
-    $parms['_timings']['fetch'],
-    $parms['_timings']['scrape'],
-    $photo_time,
-    $time
-  );
+	if ($site_health && $status) {
+		q(
+			"INSERT INTO `site-scrape` (`site_health_id`, `dt_performed`, `request_time`, `scrape_time`, `photo_time`, `total_time`)" .
+			"VALUES (%u, NOW(), %u, %u, %u, %u)",
+			$site_health['id'],
+			$params['_timings']['fetch'],
+			$params['_timings']['scrape'],
+			$photo_time,
+			$time
+		);
+	}
 
 	return $status;
-
 }
 
-
-function nuke_record($url) {
-
-	$nurl = str_replace(array('https:','//www.'), array('http:','//'), $url);
+function nuke_record($url)
+{
+	$nurl = str_replace(array('https:', '//www.'), array('http:', '//'), $url);
 
 	$r = q("SELECT `id` FROM `profile` WHERE ( `homepage` = '%s' OR `nurl` = '%s' ) ",
 		dbesc($url),
 		dbesc($nurl)
 	);
 
-	if(count($r)) {
-		foreach($r as $rr) {
+	if (count($r)) {
+		foreach ($r as $rr) {
 			q("DELETE FROM `photo` WHERE `profile-id` = %d LIMIT 1",
 				intval($rr['id'])
 			);
