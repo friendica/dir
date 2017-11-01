@@ -140,10 +140,12 @@ function q($sql)
 	$ret = null;
 
 	if ($db) {
-		$ret = $db->q(vsprintf($sql, $args));
+		$final_sql = vsprintf($sql, $args);
+
+		$ret = $db->q($final_sql);
 
 		if ($db->db->errno) {
-			logger('dba: ' . $db->db->error);
+			logger('dba: ' . $db->db->error . ' sql: ' . $final_sql);
 		}
 	} else {
 		error_log(__FILE__ . ':' . __LINE__ . ' $db has gone');
