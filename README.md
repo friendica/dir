@@ -2,20 +2,26 @@
 
 ## Installing
 
-### 1. Initialize the database
+### 1. Copy configuration
+
+Copy the `htconfig.php` to `.htconfig.php` and enter the database credentials.
+
+### 2. Initialize the database
 
 Create a database with a username and a password.
 Then import ````dfrndir.sql```` to it.
 
-### 2. Create an autoloader with composer
+	mysql -u YOURDBUSER -p YOURDBNAME < dfrnlr.sql
 
-Make sure you have composer installed globally, or rewrite the command to use a `.phar`.
+### 3. Create an autoloader with composer
+
+Make sure you have [composer](https://getcomposer.org/download/) installed globally, or rewrite the command to use a `.phar`.
 
 ```sh
 composer dump-autoload
 ```
 
-### 3. Set up the cronjobs.
+### 4. Set up the cronjobs.
 
 Example cronjob using `www-data` user.
 
