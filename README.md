@@ -56,6 +56,9 @@ New items will be queued in your pull queue.
 The queue will be gradually cleared based on your `syncing.max_pull_items` settings.
 You can check the backlog of this queue at the `/admin` page.
 
+**Note**: If you set the bit for pulling or pushing in the MySQL console, it won't be visible in a `SELECT` query.
+MySQL will however inform you about changed rows after `UPDATE` queries.
+
 ## How submissions are processed
 
 1.  The /submit endpoint takes a `?url=` parameter.
