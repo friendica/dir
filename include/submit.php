@@ -39,6 +39,9 @@ function run_submit($url)
 			`updated` = '%s'
 			WHERE `id` = %d LIMIT 1", dbesc(datetime_convert()), intval($profile_id)
 		);
+		$r = q("DELETE FROM `tag` WHERE `nurl` = '%s'",
+			dbesc($r[0]['nurl'])
+		);
 	}
 
 	//Remove duplicates.
@@ -185,16 +188,10 @@ function run_submit($url)
 			$t = substr($t, 0, 254);
 
 			if (strlen($t)) {
-				$r = q("SELECT `id` FROM `tag` WHERE `term` = '%s' and `nurl` = '%s' LIMIT 1",
+				$r = q("INSERT INTO `tag` (`term`, `nurl`) VALUES ('%s', '%s') ",
 					dbesc($t),
 					dbesc($nurl)
 				);
-				if (!count($r)) {
-					$r = q("INSERT INTO `tag` (`term`, `nurl`) VALUES ('%s', '%s') ",
-						dbesc($t),
-						dbesc($nurl)
-					);
-				}
 			}
 		}
 	}
