@@ -11,8 +11,8 @@ function directory_init(App $a)
 {
 	$a->set_pager_itemspage(30);
 
-	$a->page['aside'] .= tags_widget();
-	$a->page['aside'] .= country_widget();
+	$a->page['aside'] .= tags_widget($a);
+	$a->page['aside'] .= country_widget($a);
 }
 
 function directory_content(App $a)
@@ -82,6 +82,7 @@ function directory_content(App $a)
 	$view->addHelper('filterForumsUrl', SearchHelper::get('filterForumsUrl'));
 
 	$view->output(array(
+		'aside'   => $a->page['aside'],
 		'total'   => number_format($total),
 		'results' => $r,
 		'filter'  => $filter,

@@ -5,6 +5,16 @@ use Friendica\Directory\Rendering\View;
 use Friendica\Directory\Helper\Search as SearchHelper;
 use Friendica\Directory\Helper\Profile as ProfileHelper;
 
+require_once 'include/widget.php';
+
+function search_init(App $a)
+{
+	$a->set_pager_itemspage(30);
+
+	$a->page['aside'] .= tags_widget($a);
+	$a->page['aside'] .= country_widget($a);
+}
+
 function search_content(App $a)
 {
 	//Filters
@@ -89,6 +99,7 @@ function search_content(App $a)
 	$view->addHelper('filterForumsUrl', SearchHelper::get('filterForumsUrl'));
 
 	$view->output(array(
+		'aside'   => $a->page['aside'],
 		'total'   => number_format($total),
 		'results' => $r,
 		'filter'  => $filter,
