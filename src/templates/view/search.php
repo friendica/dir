@@ -6,24 +6,27 @@
     </div>
 </div>
 
-<div class="search-results">
-	<h3>Results for "<?php echo $query; ?>" (<?php echo $total; ?>)</h3>
-    <div class="profiles">
-        <?php if (count($results)): ?>
+<div class="directory-results">
+    <aside>
+        <?php echo $aside ?>
+    </aside>
+    <section>
+        <h3>Results for "<?php echo $query; ?>" (<?php echo $total; ?>)</h3>
+        <div class="profiles">
+            <?php if (count($results)): ?>
 
-            <?php
-
+                <?php
                 foreach ($results as $profile) {
-                    echo $this->view('_profile', array('profile' => $profile));
-				}
-            ?>
+                    echo $this->view('_profile', ['profile' => $profile]);
+                }
+                ?>
 
+            <?php else: ?>
 
-        <?php else: ?>
+                <h3>There were no results</h3>
 
-            <h3>There were no results</h3>
-
-        <?php endif ?>
-    </div>
-	<?php echo $this->paginate();?>
+            <?php endif ?>
+        </div>
+        <?php echo $this->paginate(); ?>
+    </section>
 </div>
