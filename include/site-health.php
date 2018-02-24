@@ -228,7 +228,7 @@ if (!function_exists('run_site_probe')) {
       ",
 				dbesc($data->site_name),
 				dbesc($data->version),
-				dbesc(implode("\r\n", $data->addons)),
+				dbesc(implode("\r\n", $addons)),
 				dbesc($data->register_policy),
 				dbesc($data->info),
 				dbesc($data->admin->name),
