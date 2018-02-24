@@ -382,7 +382,7 @@ function health_details(App $a, $id)
 		'$dt_first_noticed' => $site['dt_first_noticed'],
 		'$dt_last_seen' => $site['dt_last_seen'],
 		'$version' => $site['version'],
-		'$plugins' => $site['plugins'],
+		'$addons' => $site['addons'],
 		'$reg_policy' => $site['reg_policy'],
 		'$info' => $site['info'],
 		'$admin_name' => $site['admin_name'],
