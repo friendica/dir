@@ -208,6 +208,13 @@ if (!function_exists('run_site_probe')) {
 				$time
 			);
 
+			if (isset($data->addons)) {
+				$addons = $data->addons;
+			} else {
+				// Backward compatibility
+				$addons = $data->plugins;
+			}
+
 			//Update any health calculations or otherwise processed data.
 			$parsedDataQuery .= sprintf(
 				"`dt_last_seen` = NOW(),
