@@ -58,28 +58,28 @@ function servers_content(&$a) {
 		$site['users'] = $users;
 
 		//Figure out what this server supports.
-		$plugins = explode("\r\n", $site['plugins']);
-		$site['plugins'] = $plugins;
-		$hasPlugin = function (array $input) use ($plugins) {
-			return !!count(array_intersect($input, $plugins));
+		$addons = explode("\r\n", $site['addons']);
+		$site['addons'] = $addons;
+		$hasAddon = function (array $input) use ($addons) {
+			return !!count(array_intersect($input, $addons));
 		};
 
 		$site['supports'] = array(
 			'HTTPS'         => $site['ssl_state'] == 1,
-			'Twitter'       => $hasPlugin(array('buffer', 'twitter')),
-			'Facebook'      => $hasPlugin(array('buffer')),
-			'Google+'       => $hasPlugin(array('buffer', 'gpluspost')),
+			'Twitter'       => $hasAddon(array('buffer', 'twitter')),
+			'Facebook'      => $hasAddon(array('buffer')),
+			'Google+'       => $hasAddon(array('buffer', 'gpluspost')),
 			'RSS/Atom'      => true, //Built-in.
-			'Diaspora*'     => $hasPlugin(array('diaspora')),
-			'pump.io'       => $hasPlugin(array('pumpio')),
-			'StatusNet'     => $hasPlugin(array('statusnet')),
-			'Tumblr'        => $hasPlugin(array('tumblr')),
-			'Blogger'       => $hasPlugin(array('blogger')),
-			'Dreamwidth'    => $hasPlugin(array('dwpost')),
-			'Wordpress'     => $hasPlugin(array('wppost')),
-			'LiveJournal'   => $hasPlugin(array('ljpost')),
-			'Insanejournal' => $hasPlugin(array('ijpost')),
-			'Libertree'     => $hasPlugin(array('libertree'))
+			'Diaspora*'     => $hasAddon(array('diaspora')),
+			'pump.io'       => $hasAddon(array('pumpio')),
+			'StatusNet'     => $hasAddon(array('statusnet')),
+			'Tumblr'        => $hasAddon(array('tumblr')),
+			'Blogger'       => $hasAddon(array('blogger')),
+			'Dreamwidth'    => $hasAddon(array('dwpost')),
+			'Wordpress'     => $hasAddon(array('wppost')),
+			'LiveJournal'   => $hasAddon(array('ljpost')),
+			'Insanejournal' => $hasAddon(array('ijpost')),
+			'Libertree'     => $hasAddon(array('libertree'))
 		);
 
 		//Subset of the full support list, to show popular items.

@@ -16,7 +16,7 @@ function updatesites_content(&$a) {
 			else
 				continue;
 			if($j) {
-				$plugs = (array) $j->plugins;
+				$plugs = (array) $j->addons;
 				if(in_array('testdrive',$plugs)) {
 					$j->site_name = '!!! Test/Demo ONLY. !!! ' . $j->site_name;
 					$j->info = 'Accounts are temporary, expiration is enabled. ' . $j->info;
@@ -25,9 +25,9 @@ function updatesites_content(&$a) {
 
 				q("UPDATE site set
 					name = '%s',
-					url = '%s', 
+					url = '%s',
 					version = '%s',
-					plugins = '%s',
+					addons = '%s',
 					reg_policy = '%s',
 					info = '%s',
 					admin_name = '%s',

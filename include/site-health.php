@@ -208,12 +208,19 @@ if (!function_exists('run_site_probe')) {
 				$time
 			);
 
+			if (isset($data->addons)) {
+				$addons = $data->addons;
+			} else {
+				// Backward compatibility
+				$addons = $data->plugins;
+			}
+
 			//Update any health calculations or otherwise processed data.
 			$parsedDataQuery .= sprintf(
 				"`dt_last_seen` = NOW(),
        `name` = '%s',
        `version` = '%s',
-       `plugins` = '%s',
+       `addons` = '%s',
        `reg_policy` = '%s',
        `info` = '%s',
        `admin_name` = '%s',
@@ -221,7 +228,7 @@ if (!function_exists('run_site_probe')) {
       ",
 				dbesc($data->site_name),
 				dbesc($data->version),
-				dbesc(implode("\r\n", $data->plugins)),
+				dbesc(implode("\r\n", $data->addons)),
 				dbesc($data->register_policy),
 				dbesc($data->info),
 				dbesc($data->admin->name),

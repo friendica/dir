@@ -5,7 +5,7 @@
 site_name
 version
 url
-plugins (arr)
+addons (arr)
 register_policy
 admin:
 	name
@@ -26,7 +26,7 @@ function siteinfo_content(&$a) {
 	$o .= '<p>Friendica is experiencing very rapid growth and we need more public portals - as some of our primary servers are reaching capacity. Friendica is a decentralised and distributed network. Help us share the load. If you can provide a Friendica server for public use, please send the URL to info at friendica dot com. We will include you in our list.</p>';
 
 
-	$r = q("select * from site where url != '' and version != '' and not plugins like '%%testdrive%%' order by rand()");
+	$r = q("select * from site where url != '' and version != '' and not addons like '%%testdrive%%' order by rand()");
 
 	$policy = array ( 'REGISTER_CLOSED' => 'closed', 'REGISTER_OPEN' => 'open', 'REGISTER_APPROVE' => 'requires approval');
 
@@ -40,7 +40,7 @@ function siteinfo_content(&$a) {
 			$o .= '<td>' . t('Registration') . '</td>';
 			$o .= '<td>' . t('Additional Info') . '</td>';
 			$o .= '<td>' . t('Version') . '</td>';
-			$o .= '<td>' . t('Plugins Installed') . '</td>';
+			$o .= '<td>' . t('Addons Installed') . '</td>';
 			$o .= '<td>' . t('Site Administrator') . '</td>';
 			$o .= '<td>' . t('Record Updated (UTC)') . '</td>';
 			$o .= '</tr>';
@@ -53,14 +53,14 @@ function siteinfo_content(&$a) {
 			$o .= '<td>' . $policy[$rr['reg_policy']] . '</td>';
 			$o .= '<td>' . $rr['info'] . '</td>';
 			$o .= '<td>' . $rr['version'] . '</td>';
-			$o .= '<td>' . str_replace(',',', ',$rr['plugins']) . '</td>';
+			$o .= '<td>' . str_replace(',',', ',$rr['addons']) . '</td>';
 			$o .= '<td>' . '<a href="' . $rr['admin_profile'] . '">' . $rr['admin_name'] . '</a>' . '</td>';
 			$o .= '<td>' . $rr['updated'] . '</td>';
 			$o .= '</tr>';
 		}
 	}
 
-	$r = q("select * from site where url != '' and version != '' and plugins like '%%testdrive%%' order by rand()");
+	$r = q("select * from site where url != '' and version != '' and addons like '%%testdrive%%' order by rand()");
 
 	if(count($r)) {
 		$o .= '<tr><td colspan="7" height="100px" ><strong>-- Demo and test sites -- Limited account duration with expiration --</stron></td></tr>';
@@ -72,7 +72,7 @@ function siteinfo_content(&$a) {
 			$o .= '<td>' . $policy[$rr['reg_policy']] . '</td>';
 			$o .= '<td>' . $rr['info'] . '</td>';
 			$o .= '<td>' . $rr['version'] . '</td>';
-			$o .= '<td>' . str_replace(',',', ',$rr['plugins']) . '</td>';
+			$o .= '<td>' . str_replace(',',', ',$rr['addons']) . '</td>';
 			$o .= '<td>' . '<a href="' . $rr['admin_profile'] . '">' . $rr['admin_name'] . '</a>' . '</td>';
 			$o .= '<td>' . $rr['updated'] . '</td>';
 			$o .= '</tr>';
@@ -94,5 +94,4 @@ function siteinfo_content(&$a) {
 
 
 	return $o;
-} 
-	
+}
