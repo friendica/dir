@@ -30,6 +30,8 @@ Example cronjob using `www-data` user.
 */5  * * * * www-data cd /var/www/friendica-directory; php include/cron_sync.php
 ```
 
+### 5. Copy .htaccess-dist to .htaccess and make local modifications
+
 ## How syncing works
 
 The new syncing features include: pushing and pulling.
