@@ -40,8 +40,8 @@ class dba
 		if ($this->debug) {
 			$mesg = '';
 
-			if ($this->db->mysqli->errno) {
-				$debug_text .= $this->db->mysqli->error . EOL;
+			if ($this->db->errno) {
+				$debug_text .= $this->db->error . EOL;
 			}
 
 			if ($result === false) {
