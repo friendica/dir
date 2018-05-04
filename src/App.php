@@ -34,17 +34,20 @@ class App
 		$this->pager = array();
 
 		$this->scheme = ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'])) ? 'https' : 'http');
-		$this->hostname = str_replace('www.', '', $_SERVER['SERVER_NAME']);
+		if (!empty($_SERVER['SERVER_NAME'])) {
+			$this->hostname = str_replace('www.', '', $_SERVER['SERVER_NAME']);
+		}
 		set_include_path(get_include_path()
-				. PATH_SEPARATOR . "include/$this->hostname"
 				. PATH_SEPARATOR . 'include'
 				. PATH_SEPARATOR . '.');
 
-		if (substr($_SERVER['QUERY_STRING'], 0, 2) == "q=") {
-			$_SERVER['QUERY_STRING'] = substr($_SERVER['QUERY_STRING'], 2);
-		}
+		if (!empty($_SERVER['QUERY_STRING'])) {
+			if (substr($_SERVER['QUERY_STRING'], 0, 2) == "q=") {
+				$_SERVER['QUERY_STRING'] = substr($_SERVER['QUERY_STRING'], 2);
+			}
 
-		$this->query_string = $_SERVER['QUERY_STRING'];
+			$this->query_string = $_SERVER['QUERY_STRING'];
+		}
 
 		$q = isset($_GET['q']) ? $_GET['q'] : '';
 		$this->cmd = trim($q, '/');
