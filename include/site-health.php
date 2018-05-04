@@ -110,6 +110,16 @@ if (!function_exists('run_site_probe')) {
 		$base_url = $entry['base_url'];
 		$probe_location = $base_url . '/friendica/json';
 
+		$net_ping = Net_Ping::factory();
+		$net_ping->setArgs(['count' => 5]);
+		$result = $net_ping->ping(parse_url($base_url, PHP_URL_HOST));
+
+		if (is_a($result, 'Net_Ping_Result')) {
+			$avg_ping = $result->getAvg();
+		} else {
+			$avg_ping = null;
+		}
+
 		//Prepare the CURL call.
 		$handle = curl_init();
 		$options = array(
@@ -172,6 +182,12 @@ if (!function_exists('run_site_probe')) {
 		//Done with CURL now.
 		curl_close($handle);
 
+		if ($time && $avg_ping) {
+			$speed_score = max(1, $avg_ping > 10 ? $time / $avg_ping : $time / 50);
+		} else {
+			$speed_score = null;
+		}
+
 		#TODO: if the site redirects elsewhere, notice this site and record an issue.
 		$effective_base_url = parse_site_from_url($info['url']);
 		$wrong_base_url = $effective_base_url !== $entry['base_url'];
@@ -202,10 +218,12 @@ if (!function_exists('run_site_probe')) {
 
 			//Record the probe speed in a probes table.
 			q(
-				"INSERT INTO `site-probe` (`site_health_id`, `dt_performed`, `request_time`)" .
-				"VALUES (%u, NOW(), %u)",
+				"INSERT INTO `site-probe` (`site_health_id`, `dt_performed`, `request_time`, `avg_ping`, `speed_score`)" .
+				"VALUES (%u, NOW(), %u, %u, %u)",
 				$entry['id'],
-				$time
+				$time,
+				$avg_ping,
+				$speed_score
 			);
 
 			if (isset($data->addons)) {
@@ -322,7 +340,7 @@ if (!function_exists('health_score_after_probe')) {
 			}
 
 			//Older than 3.3.x?
-			elseif (intval($versionParts[1] < 3)) {
+			elseif (!empty($versionParts[1]) && intval($versionParts[1] < 3)) {
 				$current -= 5; //Somewhat outdated.
 			}
 
