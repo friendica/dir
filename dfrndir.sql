@@ -146,6 +146,8 @@ CREATE TABLE IF NOT EXISTS `site-probe` (
   `site_health_id` int(10) UNSIGNED NOT NULL,
   `dt_performed` datetime NOT NULL,
   `request_time` int(10) UNSIGNED NOT NULL,
+  `avg_ping` int(11) DEFAULT NULL,
+  `speed_score` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `site_health_id` (`site_health_id`),
   KEY `dt_performed` (`dt_performed`)
