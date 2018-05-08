@@ -190,8 +190,10 @@ CREATE TABLE IF NOT EXISTS `sync-pull-queue` (
 --
 
 CREATE TABLE IF NOT EXISTS `sync-push-queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`url`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url` (`url`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
