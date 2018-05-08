@@ -18,12 +18,9 @@ function photo_init(App $a)
 	$profile_id = str_replace('.jpg', '', $photo);
 
 	$r = q('SELECT * FROM `photo` WHERE `profile-id` = %d LIMIT 1', intval($profile_id));
-
 	if (count($r)) {
 		$data = $r[0]['data'];
-	}
-
-	if (x($data) === false || (!strlen($data))) {
+	} else {
 		$data = file_get_contents('images/default-profile-sm.jpg');
 	}
 

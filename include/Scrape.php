@@ -11,51 +11,67 @@ function attribute_contains($attr,$s) {
 }}
 
 
-if(! function_exists('noscrape_dfrn')) {
-function noscrape_dfrn($url) {
+if (!function_exists('noscrape_dfrn')) {
+
+function noscrape_dfrn($url)
+{
 	$submit_noscrape_start = microtime(true);
 	$data = fetch_url($url);
 	$submit_noscrape_request_end = microtime(true);
-	if(empty($data)) return false;
+	if (empty($data)) {
+		return false;
+	}
+
 	$parms = json_decode($data, true);
-	if(!$parms || !count($parms)) return false;
-	$parms['tags'] = implode(' ', (array)$parms['tags']);
+	if (!$parms || !count($parms)) {
+		return false;
+	}
+
+	if (isset($parms['tags'])) {
+		$parms['tags'] = implode(' ', (array) $parms['tags']);
+	} else {
+		$parms['tags'] = '';
+	}
+
 	$submit_noscrape_end = microtime(true);
 	$parms['_timings'] = array(
 		'fetch' => round(($submit_noscrape_request_end - $submit_noscrape_start) * 1000),
 		'scrape' => round(($submit_noscrape_end - $submit_noscrape_request_end) * 1000)
 	);
+
 	return $parms;
-}}
+}
+
+}
 
 if(! function_exists('scrape_dfrn')) {
 function scrape_dfrn($url, $max_nodes=3500) {
-	
+
 	$minNodes = 100; //Lets do at least 100 nodes per type.
 	$timeout = 10; //Timeout will affect batch processing.
-	
+
 	//Try and cheat our way into faster profiles.
 	if(strpos($url, 'tab=profile') === false){
 		$url .= (strpos($url, '?') > 0 ? '&' : '?').'tab=profile';
 	}
-	
+
 	$scrape_start = microtime(true);
-	
+
 	$ret = array();
 	$s = fetch_url($url, $timeout);
-	
+
 	$scrape_fetch_end = microtime(true);
-	
-	if(! $s) 
+
+	if(! $s)
 		return $ret;
-	
+
 	$dom = HTML5_Parser::parse($s);
-	
+
 	if(! $dom)
 		return $ret;
-	
+
 	$items = $dom->getElementsByTagName('meta');
-	
+
 	// get DFRN link elements
 	$nodes_left = max(intval($max_nodes), $minNodes);
 	$targets = array('hide', 'comm', 'tags');
@@ -89,7 +105,7 @@ function scrape_dfrn($url, $max_nodes=3500) {
 	$items = $dom->getElementsByTagName('link');
 
 	// get DFRN link elements
-	
+
 	$nodes_left = max(intval($max_nodes), $minNodes);
 	foreach($items as $item) {
 		$x = $item->getAttribute('rel');
@@ -100,7 +116,7 @@ function scrape_dfrn($url, $max_nodes=3500) {
 	}
 
 	// Pull out hCard profile elements
-	
+
 	$nodes_left = max(intval($max_nodes), $minNodes);
 	$items = $dom->getElementsByTagName('*');
 	$targets = array('fn', 'pdesc', 'photo', 'key', 'locality', 'region', 'postal-code', 'country-name');
@@ -146,18 +162,18 @@ function scrape_dfrn($url, $max_nodes=3500) {
 		$nodes_left--;
 		if($nodes_left <= 0 || $targets_left <= 0) break;
 	}
-	
+
 	$scrape_end = microtime(true);
 	$fetch_time = round(($scrape_fetch_end - $scrape_start) * 1000);
 	$scrape_time = round(($scrape_end - $scrape_fetch_end) * 1000);
-	
+
 	$ret['_timings'] = array(
 		'fetch' => $fetch_time,
 		'scrape' => $scrape_time
 	);
-	
+
 	return $ret;
-	
+
 }}
 
 
