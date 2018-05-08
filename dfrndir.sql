@@ -230,13 +230,10 @@ CREATE TABLE IF NOT EXISTS `sync-timestamps` (
 --
 
 CREATE TABLE IF NOT EXISTS `tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `term` char(255) NOT NULL,
-  `nurl` char(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `term` (`term`(250)),
-  KEY `nurl` (`nurl`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=101679 DEFAULT CHARSET=utf8mb4;
+  `term` varchar(50) NOT NULL,
+  `profile_id` int(11) NOT NULL,
+  PRIMARY KEY (`term`,`profile_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
