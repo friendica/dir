@@ -1,6 +1,6 @@
-<h1>Search your site</h1>
+<h1>Search for a Friendica node</h1>
 <form method="GET">
-  <label>Your site URL:</label>
+  <label>URL of node:</label>
   <input type="text" name="s" placeholder="example.com" value="$searched" />
   <input type="submit" value="Search" />
 </form>
