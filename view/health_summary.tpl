@@ -1,7 +1,7 @@
 <h1>Search for a Friendica node</h1>
 <form method="GET">
   <label>URL of node:</label>
-  <input type="text" name="s" placeholder="friendica.example.social" />
+  <input type="text" name="s" placeholder="example.com" />
   <input type="submit" value="Search" />
 </form>
 <br>
