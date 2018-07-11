@@ -13,7 +13,7 @@ function sync_pull($url)
 
 	//If we support it that is.
 	if ($a->config['syncing']['enable_pulling']) {
-		q("INSERT INTO `sync-pull-queue` (`url`) VALUES ('%s')", dbesc($url));
+		q("REPLACE INTO `sync-pull-queue` (`url`) VALUES ('%s')", dbesc($url));
 	}
 }
 
@@ -28,7 +28,7 @@ function sync_push($url)
 
 	//If we support it that is.
 	if ($a->config['syncing']['enable_pushing']) {
-		q("INSERT INTO `sync-push-queue` (`url`) VALUES ('%s')", dbesc($url));
+		q("REPLACE INTO `sync-push-queue` (`url`) VALUES ('%s')", dbesc($url));
 	}
 
 	sync_mark($url);
@@ -96,7 +96,7 @@ function get_push_targets()
  */
 function get_push_batch(App $a)
 {
-	return q("SELECT * FROM `sync-push-queue` LIMIT %u", intval($a->config['syncing']['max_push_items']));
+	return q("SELECT * FROM `sync-push-queue` ORDER BY `id` LIMIT %u", intval($a->config['syncing']['max_push_items']));
 }
 
 /**

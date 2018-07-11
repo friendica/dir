@@ -1,11 +1,21 @@
 {
-	"name": "friendica/dir",
-	"description": "The internet is our social network",
-	"license": "AGPL3",
-	"autoload": {
-		"psr-4": {"Friendica\\Directory\\": "src"}
-	},
-	"require": {
-		"php": ">=5.3"
-	}
+    "name": "friendica/dir",
+    "description": "The internet is our social network",
+    "license": "AGPL3",
+    "autoload": {
+        "psr-4": {
+            "Friendica\\Directory\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=5.3",
+        "pear/Net_Ping": "dev-master",
+        "asika/simple-console": "^1.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/pear/Net_Ping"
+        }
+    ]
 }

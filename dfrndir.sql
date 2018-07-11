@@ -146,6 +146,8 @@ CREATE TABLE IF NOT EXISTS `site-probe` (
   `site_health_id` int(10) UNSIGNED NOT NULL,
   `dt_performed` datetime NOT NULL,
   `request_time` int(10) UNSIGNED NOT NULL,
+  `avg_ping` int(11) DEFAULT NULL,
+  `speed_score` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `site_health_id` (`site_health_id`),
   KEY `dt_performed` (`dt_performed`)
@@ -188,8 +190,10 @@ CREATE TABLE IF NOT EXISTS `sync-pull-queue` (
 --
 
 CREATE TABLE IF NOT EXISTS `sync-push-queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`url`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url` (`url`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -228,13 +232,10 @@ CREATE TABLE IF NOT EXISTS `sync-timestamps` (
 --
 
 CREATE TABLE IF NOT EXISTS `tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `term` char(255) NOT NULL,
-  `nurl` char(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `term` (`term`(250)),
-  KEY `nurl` (`nurl`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=101679 DEFAULT CHARSET=utf8mb4;
+  `term` varchar(50) NOT NULL,
+  `profile_id` int(11) NOT NULL,
+  PRIMARY KEY (`term`,`profile_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 

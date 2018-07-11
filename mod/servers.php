@@ -68,7 +68,7 @@ function servers_content(&$a) {
 			'HTTPS'         => $site['ssl_state'] == 1,
 			'Twitter'       => $hasAddon(array('buffer', 'twitter')),
 			'Facebook'      => $hasAddon(array('buffer')),
-			'Google+'       => $hasAddon(array('buffer', 'gpluspost')),
+			'Google+'       => $hasAddon(array('buffer', 'fromgplus')),
 			'RSS/Atom'      => true, //Built-in.
 			'Diaspora*'     => $hasAddon(array('diaspora')),
 			'pump.io'       => $hasAddon(array('pumpio')),
