@@ -29,7 +29,7 @@ WHERE `updated` < '%s'",
 	dbesc(date('Y-m-d H:i:s', time() - $a->config['maintenance']['min_scrape_delay']))
 );
 $maintenance_backlog = 'unknown';
-if (count($res)) {
+if (is_array($res) && count($res)) {
 	$maintenance_backlog = $res[0]['count'] . ' entries left';
 }
 

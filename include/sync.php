@@ -51,10 +51,10 @@ function sync_mark($url)
 
 	$exists = count(q("SELECT * FROM `sync-timestamps` WHERE `url`='%s'", dbesc($url)));
 
-	if (!$exists) {
-		q("INSERT INTO `sync-timestamps` (`url`, `modified`) VALUES ('%s', NOW())", dbesc($url));
-	} else {
+	if (is_array($exists) && count($exists)) {
 		q("UPDATE `sync-timestamps` SET `modified`=NOW() WHERE `url`='%s'", dbesc($url));
+	} else {
+		q("INSERT INTO `sync-timestamps` (`url`, `modified`) VALUES ('%s', NOW())", dbesc($url));
 	}
 }
 
@@ -86,7 +86,9 @@ function push_worker($target, $batch)
  */
 function get_push_targets()
 {
-	return q("SELECT * FROM `sync-targets` WHERE `push`=b'1'");
+	$res = q("SELECT * FROM `sync-targets` WHERE `push`=b'1'");
+
+	return is_array($res) ? $res : [];
 }
 
 /**
@@ -96,7 +98,9 @@ function get_push_targets()
  */
 function get_push_batch(App $a)
 {
-	return q("SELECT * FROM `sync-push-queue` ORDER BY `id` LIMIT %u", intval($a->config['syncing']['max_push_items']));
+	$res = q("SELECT * FROM `sync-push-queue` ORDER BY `id` LIMIT %u", intval($a->config['syncing']['max_push_items']));
+
+	return is_array($res) ? $res : [];
 }
 
 /**
@@ -116,13 +120,12 @@ function get_pushing_job(App $a)
 		if (!count($targets)) {
 			msg('Pushing enabled, but no push targets.');
 			$batch = array();
-		}
-
-		//If we have targets, get our batch.
-		else {
+		} else {
+			//If we have targets, get our batch.
 			$batch = get_push_batch($a);
-			if (!count($batch))
+			if (!count($batch)) {
 				msg('Empty pushing queue.'); //No batch, means no work.
+			}
 		}
 	} else {
 		//No pushing if it's disabled.
@@ -226,8 +229,11 @@ function run_pushing_job($targets, $batch, $db_host, $db_user, $db_pass, $db_dat
 function get_queued_pull_batch(App $a)
 {
 	//Randomize this, to prevent scraping the same servers too much or dead URL's.
-	$batch = q("SELECT * FROM `sync-pull-queue` ORDER BY RAND() LIMIT %u", intval($a->config['syncing']['max_pull_items']));
+	$res = q("SELECT * FROM `sync-pull-queue` ORDER BY RAND() LIMIT %u", intval($a->config['syncing']['max_pull_items']));
+	$batch = is_array($res) ? $res : [];
+
 	msg(sprintf('Pulling %u items from queue.', count($batch)));
+
 	return $batch;
 }
 
@@ -237,7 +243,9 @@ function get_queued_pull_batch(App $a)
  */
 function get_pull_targets()
 {
-	return q("SELECT * FROM `sync-targets` WHERE `pull`=b'1'");
+	$res = q("SELECT * FROM `sync-targets` WHERE `pull`=b'1'");
+
+	return is_array($res) ? $res : [];
 }
 
 /**
@@ -325,6 +333,8 @@ function get_pulling_job(App $a)
 	if (count($batch)) {
 		return $batch;
 	}
+
+	return [];
 }
 
 /**
@@ -377,7 +387,7 @@ function pull_worker($i, $threadc, $pull_batch, $db_host, $db_user, $db_pass, $d
  * @param  mixed  $install    Maybe a boolean.
  * @return void
  */
-function run_pulling_job(App $a, $pull_batch, $db_host, $db_user, $db_pass, $db_data, $install)
+function run_pulling_job(App $a, array $pull_batch, $db_host, $db_user, $db_pass, $db_data, $install)
 {
 	//We need the scraper.
 	require_once 'include/submit.php';
