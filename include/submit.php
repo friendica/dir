@@ -45,7 +45,7 @@ function run_submit($url)
 	}
 
 	//Remove duplicates.
-	if (count($r) > 1) {
+	if (is_array($r) && count($r) > 1) {
 		for ($i = 1; $i < count($r); $i++) {
 			logger('Removed duplicate profile ' . intval($r[$i]['id']));
 			q("DELETE FROM `photo` WHERE `profile-id` = %d LIMIT 1",
