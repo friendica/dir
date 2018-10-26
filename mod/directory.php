@@ -62,7 +62,7 @@ function directory_content(App $a)
 	if ($alpha) {
 		$order = ' ORDER BY `name` ASC ';
 	} else {
-		$order = ' ORDER BY `updated` DESC, `id` DESC ';
+		$order = ' ORDER BY `filled_fields` DESC, `last_activity` DESC, `updated` DESC';
 	}
 
 	$r = q("SELECT * FROM `profile` WHERE `censored` = 0 AND `available` = 1 $sql_extra $order LIMIT %d , %d ",
