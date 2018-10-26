@@ -1,4 +1,4 @@
--- Generation Time: Apr 21, 2017 at 03:58 AM
+-- Generation Time: Oct 26, 2018 at 05:31 AM
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `flag` (
   `reason` int(11) NOT NULL,
   `total` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `data` mediumblob NOT NULL,
   `score` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2516 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -53,20 +53,16 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `homepage` char(255) NOT NULL,
   `photo` char(255) NOT NULL,
   `tags` longtext NOT NULL,
+  `filled_fields` tinyint(4) NOT NULL DEFAULT '0',
+  `last_activity` varchar(7) DEFAULT NULL,
   `available` tinyint(1) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `censored` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `name` (`name`(250)),
   KEY `nurl` (`nurl`(250)),
-  KEY `comm` (`comm`),
-  KEY `pdesc` (`pdesc`(250)),
-  KEY `locality` (`locality`(250)),
-  KEY `region` (`region`(250)),
-  KEY `country-name` (`country-name`(250)),
-  KEY `homepage` (`homepage`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=2518 DEFAULT CHARSET=utf8mb4;
+  KEY `profile_sorting` (`filled_fields`,`last_activity`,`updated`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -82,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `session` (
   PRIMARY KEY (`id`),
   KEY `sid` (`sid`(250)),
   KEY `expire` (`expire`)
-) ENGINE=MyISAM AUTO_INCREMENT=22917 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -130,10 +126,10 @@ CREATE TABLE IF NOT EXISTS `site-health` (
   `ssl_state` bit(1) DEFAULT NULL,
   `ssl_grade` varchar(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `base_url` (`base_url`(250)),
+  UNIQUE KEY `base_url` (`base_url`(250)) USING BTREE,
   KEY `health_score` (`health_score`),
   KEY `dt_last_seen` (`dt_last_seen`)
-) ENGINE=MyISAM AUTO_INCREMENT=10035 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -151,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `site-probe` (
   PRIMARY KEY (`id`),
   KEY `site_health_id` (`site_health_id`),
   KEY `dt_performed` (`dt_performed`)
-) ENGINE=MyISAM AUTO_INCREMENT=28987 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -170,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `site-scrape` (
   PRIMARY KEY (`id`),
   KEY `site_health_id` (`site_health_id`),
   KEY `dt_performed` (`dt_performed`)
-) ENGINE=MyISAM AUTO_INCREMENT=177675 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -257,5 +253,4 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 -- Indexes for table `profile`
 --
-ALTER TABLE `profile` ADD FULLTEXT KEY `tags` (`tags`);
 ALTER TABLE `profile` ADD FULLTEXT KEY `profile-ft` (`name`,`pdesc`,`homepage`,`locality`,`region`,`country-name`,`tags`);
