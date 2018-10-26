@@ -51,38 +51,40 @@ function search_content(App $a)
 		goaway('/home');
 	}
 
-	if ($search) {
-		$alpha = true;
+	if (strpos($search, ' ') === false) {
+		$search .= '*';
 	}
 
 	//Run our query.
-	if ($search) {
-		$search = dbesc($search . '*');
-	}
+	$search = dbesc($search);
+	$search = str_replace('%', '%%', $search);
 
-	$sql_extra = ((strlen($search)) ? " AND MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags` )
-		AGAINST ('$search' IN BOOLEAN MODE) " : '');
+	$sql_where = "WHERE MATCH (`name`, `pdesc`, `homepage`, `locality`, `region`, `country-name`, `tags` )
+AGAINST ('$search' IN BOOLEAN MODE)
+AND NOT `censored`
+AND `available`";
 
 	if (!is_null($community)) {
-		$sql_extra .= ' AND `comm` = ' . intval($community) . ' ';
+		$sql_where .= '
+AND `comm` = ' . intval($community);
 	}
 
-	$sql_extra = str_replace('%', '%%', $sql_extra);
-
 	$total = 0;
-	$r = q("SELECT COUNT(*) AS `total` FROM `profile` WHERE `censored` = 0 AND `available` = 1 $sql_extra ");
+	$r = q("SELECT COUNT(*) AS `total`
+FROM `profile`
+$sql_where");
 	if (count($r)) {
 		$total = $r[0]['total'];
 		$a->set_pager_total($total);
 	}
 
-	if ($alpha) {
-		$order = ' ORDER BY `name` ASC ';
-	} else {
-		$order = ' ORDER BY `updated` DESC, `id` DESC ';
-	}
+	$query = "SELECT *
+FROM `profile`
+$sql_where
+ORDER BY `filled_fields` DESC, `last_activity` DESC, `updated` DESC
+LIMIT %d, %d";
 
-	$r = q("SELECT * FROM `profile` WHERE `censored` = 0 AND `available` = 1 $sql_extra $order LIMIT %d , %d ",
+	$r = q($query,
 		intval($a->pager['start']),
 		intval($a->pager['itemspage'])
 	);
