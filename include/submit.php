@@ -115,6 +115,11 @@ function run_submit($url)
 		$params['comm'] = intval($params['comm']);
 	}
 
+	$filled_fields =
+		intval(!empty($params['pdesc'])) * 4
+		+ intval(!empty($params['tags'])) * 2
+		+ intval(!empty($params['locality']) || !empty($params['region']) || !empty($params['postal-code']) || !empty($params['country-name']));
+
 	if ($profile_exists) {
 		$r = q("UPDATE `profile` SET
 			`name` = '%s',
@@ -127,6 +132,8 @@ function run_submit($url)
 			`nurl` = '%s',
 			`comm` = %d,
 			`tags` = '%s',
+			`filled_fields` = %d,
+			`last_activity` = '%s',
 			`available` = 1,
 			`updated` = '%s'
 			WHERE `id` = %d LIMIT 1",
@@ -140,13 +147,29 @@ function run_submit($url)
 			dbesc($nurl),
 			intval($params['comm']),
 			$params['tags'],
+			$filled_fields,
+			x($params, 'last-activity') ? $params['last-activity'] : NULL,
 			dbesc(datetime_convert()),
 			intval($profile_id)
 		);
 		logger('Update returns: ' . $r);
 	} else {
-		$r = q("INSERT INTO `profile` ( `name`, `pdesc`, `locality`, `region`, `postal-code`, `country-name`, `homepage`, `nurl`, `comm`, `tags`, `created`, `updated` )
-			VALUES ( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s' )",
+		$r = q("INSERT INTO `profile` SET
+			`name` = '%s',
+			`pdesc` = '%s',
+			`locality` = '%s',
+			`region` = '%s',
+			`postal-code` = '%s',
+			`country-name` = '%s',
+			`homepage` = '%s',
+			`nurl` = '%s',
+			`comm` = %d,
+			`tags` = '%s',
+			`filled_fields` = %d,
+			`last_activity` = '%s',
+			`available` = 1,
+			`created` = '%s',
+			`updated` = '%s'",
 			$params['fn'],
 			x($params, 'pdesc') ? $params['pdesc'] : '',
 			x($params, 'locality') ? $params['locality'] : '',
@@ -157,6 +180,8 @@ function run_submit($url)
 			dbesc($nurl),
 			intval($params['comm']),
 			x($params, 'tags') ? $params['tags'] : '',
+			$filled_fields,
+			x($params, 'last-activity') ? $params['last-activity'] : NULL,
 			dbesc(datetime_convert()),
 			dbesc(datetime_convert())
 		);
