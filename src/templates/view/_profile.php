@@ -9,8 +9,16 @@
         <div class="location">
             <?php
                 $parts = array();
-                if(!empty($profile['locality'])) $parts[] = $profile['locality'];
-                if(!empty($profile['country-name'])) $parts[] = $profile['country-name'];
+                if(!empty($profile['locality'])) {
+					$parts[] = $profile['locality'];
+				}
+                if(!empty($profile['region'])
+					&& strtolower($profile['locality']) != strtolower($profile['region'])) {
+					$parts[] = $profile['region'];
+				}
+                if(!empty($profile['country-name'])) {
+					$parts[] = $profile['country-name'];
+				}
             ?>
 
             <?php if (count($parts)): ?>
