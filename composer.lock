@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd3a6e27d657182c4a745311b88ee143",
+    "content-hash": "92a5912148dfd08b1bc438eace6cede9",
     "packages": [
         {
             "name": "asika/simple-console",
@@ -41,16 +41,16 @@
         },
         {
             "name": "mrpetovan/net_ping",
-            "version": "1.1",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MrPetovan/Net_Ping.git",
-                "reference": "56544ac3be68bac26c6698326c103b90d26ee97f"
+                "reference": "cb82b6f068012cec757c7ac93f79c5af2a3f8255"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MrPetovan/Net_Ping/zipball/56544ac3be68bac26c6698326c103b90d26ee97f",
-                "reference": "56544ac3be68bac26c6698326c103b90d26ee97f",
+                "url": "https://api.github.com/repos/MrPetovan/Net_Ping/zipball/cb82b6f068012cec757c7ac93f79c5af2a3f8255",
+                "reference": "cb82b6f068012cec757c7ac93f79c5af2a3f8255",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
                 }
             ],
             "description": "More info available on: http://pear.php.net/package/Net_Ping",
-            "time": "2018-11-08T02:40:49+00:00"
+            "time": "2018-11-08T12:14:54+00:00"
         },
         {
             "name": "pear/pear_exception",
