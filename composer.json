@@ -11,11 +11,5 @@
         "php": ">=5.3",
         "mrpetovan/net_ping": "^1.0",
         "asika/simple-console": "^1.0"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/pear/Net_Ping"
-        }
-    ]
+    }
 }
