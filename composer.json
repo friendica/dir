@@ -9,7 +9,7 @@
     },
     "require": {
         "php": ">=5.3",
-        "pear/Net_Ping": "dev-master",
+        "mrpetovan/net_ping": "^1.0",
         "asika/simple-console": "^1.0"
     },
     "repositories": [

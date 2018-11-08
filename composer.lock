@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f330bced2cb3855635512ca74f0fa779",
+    "content-hash": "cd3a6e27d657182c4a745311b88ee143",
     "packages": [
         {
             "name": "asika/simple-console",
@@ -40,17 +40,17 @@
             "time": "2018-03-08T12:05:40+00:00"
         },
         {
-            "name": "pear/net_ping",
-            "version": "dev-master",
+            "name": "mrpetovan/net_ping",
+            "version": "1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pear/Net_Ping.git",
-                "reference": "d1f370b3a6072e5a493ed855804d98aadf818fa7"
+                "url": "https://github.com/MrPetovan/Net_Ping.git",
+                "reference": "56544ac3be68bac26c6698326c103b90d26ee97f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/Net_Ping/zipball/d1f370b3a6072e5a493ed855804d98aadf818fa7",
-                "reference": "d1f370b3a6072e5a493ed855804d98aadf818fa7",
+                "url": "https://api.github.com/repos/MrPetovan/Net_Ping/zipball/56544ac3be68bac26c6698326c103b90d26ee97f",
+                "reference": "56544ac3be68bac26c6698326c103b90d26ee97f",
                 "shasum": ""
             },
             "require": {
@@ -65,40 +65,42 @@
                     "Net": "./"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "./"
             ],
             "license": [
-                "PHP License"
+                "PHP-3.01"
             ],
             "authors": [
                 {
-                    "email": "cconstantine@php.net",
                     "name": "Craig Constantine",
+                    "email": "cconstantine@php.net",
                     "role": "Lead"
                 },
                 {
-                    "email": "mj@php.net",
                     "name": "Martin Jansen",
+                    "email": "mj@php.net",
                     "role": "Developer"
                 },
                 {
-                    "email": "jan@php.net",
                     "name": "Jan Lehnardt",
+                    "email": "jan@php.net",
                     "role": "Developer"
                 },
                 {
-                    "email": "cox@php.net",
                     "name": "Thomas V.V.Cox",
+                    "email": "cox@php.net",
                     "role": "Developer"
+                },
+                {
+                    "name": "Hypolite Petovan",
+                    "email": "hypolite@mrpetovan.com",
+                    "role": "Maintainer"
                 }
             ],
             "description": "More info available on: http://pear.php.net/package/Net_Ping",
-            "support": {
-                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_Ping",
-                "source": "https://github.com/pear/Net_Ping"
-            },
-            "time": "2014-02-20T19:24:17+00:00"
+            "time": "2018-11-08T02:40:49+00:00"
         },
         {
             "name": "pear/pear_exception",
@@ -159,9 +161,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "pear/net_ping": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
