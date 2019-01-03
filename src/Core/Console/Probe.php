@@ -5,6 +5,7 @@ namespace Friendica\Directory\Core\Console;
 use Asika\SimpleConsole\CommandArgsException;
 use Asika\SimpleConsole\Console;
 use dba;
+use Friendica\Directory\App;
 use Net_Ping;
 
 require_once 'include/dba.php';
@@ -42,7 +43,7 @@ HELP;
 	{
 		global $db, $a;
 
-        $a = new \Friendica\Directory\App();
+        $a = new App();
 
 		if ($this->getOption('v')) {
 			$this->out('Class: ' . __CLASS__);

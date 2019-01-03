@@ -1,10 +1,10 @@
 <?php
 
-require_once 'boot.php';
-
 use Friendica\Directory\App;
 
-$a = new App;
+require_once 'boot.php';
+
+$a = new App();
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 error_reporting(E_ALL);

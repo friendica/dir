@@ -1,9 +1,9 @@
 <?php
 
+use Friendica\Directory\App;
+
 //Startup.
 require_once 'boot.php';
-
-use Friendica\Directory\App;
 
 // Debug stuff.
 // ini_set('display_errors', 1);
@@ -14,7 +14,7 @@ $start_maintain = time();
 
 $verbose = $argv[1] === 'verbose';
 
-$a = new App;
+$a = new App();
 
 //Config and DB.
 require_once '.htconfig.php';

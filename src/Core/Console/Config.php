@@ -7,7 +7,6 @@ use dba;
 use Friendica\Core;
 
 require_once 'include/dba.php';
-require_once 'include/text.php';
 
 /**
  * @brief tool to access the system config from the CLI

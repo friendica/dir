@@ -40,10 +40,10 @@
 
  */
 
+use Friendica\Directory\App;
+
 //Startup.
 require_once 'boot.php';
-
-use Friendica\Directory\App;
 
 // Debug stuff.
 ini_set('display_errors', 1);
@@ -52,7 +52,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 $start_syncing = time();
 
-$a = new App;
+$a = new App();
 
 //Create a simple log function for CLI use.
 global $verbose;
