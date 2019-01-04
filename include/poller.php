@@ -1,11 +1,11 @@
 <?php
 
+use Friendica\Directory\App;
+
 //Startup.
 require_once 'boot.php';
 
-use Friendica\Directory\App;
-
-$a = new App;
+$a = new App();
 
 @include('.htconfig.php');
 
